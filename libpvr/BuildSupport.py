@@ -124,7 +124,6 @@ def compilerStr(env):
     compilerInfo = Popen(baseStr, shell=True, bufsize=4096, stderr=PIPE).stderr.readlines()
     longName = compilerInfo[0].split(":")[0]
     shortName = "-".join(longName.split("-")[-3:])
-    print "Compile string:", shortName
     return shortName
 
 # ------------------------------------------------------------------------------
