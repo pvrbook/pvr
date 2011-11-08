@@ -108,3 +108,20 @@ env.Alias("lib", [headerInstall, dyLibInstall])
 env.Alias("pylib", [pyLibInstall, pyFilesInstall])
 env.Alias("pyinstall", pyInstall)
 env.Alias("pypackage", pyPackage)
+
+# ------------------------------------------------------------------------------
+# Help
+# ------------------------------------------------------------------------------
+
+try:
+    from SCons.Node.Alias import default_ans
+except ImportError:
+    pass
+else:
+    aliases = default_ans.keys()
+    aliases.sort()
+    env.Help('\n')
+    env.Help('Recognized targets:\n')
+    for alias in aliases:
+        env.Help('    %s\n' % alias)
+
