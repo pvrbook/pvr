@@ -91,14 +91,7 @@ Depends(pyPackage, pyFilesPackageInstall)
 # Default targets
 # ------------------------------------------------------------------------------
 
-"""
-env.Default(headerInstall)
-env.Default(dyLib)
-env.Default(dyLibInstall)
-env.Default(pyLib)
-env.Default(pyLibInstall)
-env.Default(pyFilesInstall)
-"""
+
 
 # ------------------------------------------------------------------------------
 # Aliases
