@@ -1,0 +1,110 @@
+# ------------------------------------------------------------------------------
+# libpvr SConscript
+# ------------------------------------------------------------------------------
+
+from BuildSupport import *
+
+# ------------------------------------------------------------------------------
+
+Import("env")
+
+# ------------------------------------------------------------------------------
+# Build libpvr
+# ------------------------------------------------------------------------------
+
+libEnv = env.Clone()
+setupLibBuildEnv(libEnv)
+
+files = Glob(join(buildDir(libEnv), "*.cpp"))
+files += Glob(join(buildDir(libEnv), "Noise", "*.cpp"))
+files += Glob(join(buildDir(libEnv), "Occluders", "*.cpp"))
+files += Glob(join(buildDir(libEnv), "Primitives", "*.cpp"))
+files += Glob(join(buildDir(libEnv), "Primitives/Rasterization", "*.cpp"))
+files += Glob(join(buildDir(libEnv), "Primitives/Instantiation", "*.cpp"))
+files += Glob(join(buildDir(libEnv), "Raymarchers", "*.cpp"))
+files += Glob(join(buildDir(libEnv), "RaymarchSamplers", "*.cpp"))
+files += Glob(join(buildDir(libEnv), "Volumes", "*.cpp"))
+
+# Declare library
+sharedLibPath = join(buildDir(libEnv), pvrName)
+dyLib = libEnv.SharedLibrary(sharedLibPath, files)
+# stLib = libEnv.Library(sharedLibPath, files)
+
+# Set up install area
+headerInstall = setupHeaderInstall(libEnv)
+# stLibInstall = libEnv.Install(join(installDir(), "lib"), [stLib])
+
+# Set up the dynamic library properly on OSX
+dylibInstall = None
+if sys.platform == "darwin":
+    dylibName = os.path.basename(str(dyLib[0]))
+    dylibInstallPath = os.path.abspath(join(installDir(libEnv), "lib", dylibName))
+    # Create the builder
+    dylibEnv = env.Clone()
+    dylibBuilder = Builder(action = setDylibInternalPath,
+                           suffix = ".dylib", src_suffix = ".dylib")
+    dylibEnv.Append(BUILDERS = {"SetDylibPath" : dylibBuilder})
+    # Call builder
+    dyLibInstall = dylibEnv.SetDylibPath(dylibInstallPath, dyLib)
+else:
+    dyLibInstall = libEnv.Install(join(installDir(libEnv), "lib"), [dyLib])
+
+# ------------------------------------------------------------------------------
+# Set up python library
+# ------------------------------------------------------------------------------
+
+pyEnv = env.Clone()
+setupPyEnv(pyEnv)
+pyFiles = Glob(join(buildDir(pyEnv), pythonVer(), "*.cpp"))
+pyLib = defineBoostPythonModule(pvrName, pyFiles, pyEnv)
+pyFiles = Glob(join(python, pvrName, "*.py"))
+pyLibInstall = env.Install(join(installDir(pyEnv), pythonVer(), pvrName), pyLib)
+pyFilesInstall = env.Install(join(installDir(pyEnv), pythonVer(), pvrName), pyFiles)
+env.Depends(pyLib, dyLibInstall)
+env.Depends(pyLib, headerInstall)
+
+# ------------------------------------------------------------------------------
+# Install
+# ------------------------------------------------------------------------------
+
+pyInstall = installPyLib(env, pyLib, pyFiles)
+Depends(pyInstall, pyLibInstall)
+Depends(pyInstall, pyFilesInstall)
+
+# ------------------------------------------------------------------------------
+# Py package
+# ------------------------------------------------------------------------------
+
+pkgEnv = env.Clone()
+pkgDir = join(installDir(pkgEnv), pythonVer() + "_package")
+pkgFile = join(pkgDir, pvrName, "_" + pvrName + ".so")
+pkgBuilder = Builder(action = makePyPackage,
+                     suffix = "", src_suffix = ".so")
+pkgEnv.Append(BUILDERS = {"MakePyPackage" : pkgBuilder})
+pyPackage = pkgEnv.MakePyPackage(pkgFile, pyLibInstall)
+pyFilesPackageInstall = pkgEnv.Install(join(pkgDir, pvrName), pyFiles)
+Depends(pyPackage, pyLibInstall)
+Depends(pyPackage, pyFilesInstall)
+Depends(pyPackage, pyFilesPackageInstall)
+
+# ------------------------------------------------------------------------------
+# Default targets
+# ------------------------------------------------------------------------------
+
+"""
+env.Default(headerInstall)
+env.Default(dyLib)
+env.Default(dyLibInstall)
+env.Default(pyLib)
+env.Default(pyLibInstall)
+env.Default(pyFilesInstall)
+"""
+
+# ------------------------------------------------------------------------------
+# Aliases
+# ------------------------------------------------------------------------------
+
+env.Alias("lib", [headerInstall, dyLibInstall])
+env.Alias("pylib", [pyLibInstall, pyFilesInstall])
+env.Alias("pyinstall", pyInstall)
+env.Alias("pypackage", pyPackage)

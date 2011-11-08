@@ -1,0 +1,6 @@
+# libpvr SConstruct file
+
+env = Environment()
+Export("env")
+
+SConscript("SConscript")
