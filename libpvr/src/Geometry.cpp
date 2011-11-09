@@ -20,11 +20,11 @@
 
 #include <boost/foreach.hpp>
 
-#include <GPD/GPD_Detail.h>
-#include <GPD/GPD_Point.h>
-#include <GPD/GPD_PrimMesh.h>
-#include <GPD/GPD_PrimPart.h>
-#include <GPD/GPD_PrimPoly.h>
+#include <GPD-pvr/GPD_Detail.h>
+#include <GPD-pvr/GPD_Point.h>
+#include <GPD-pvr/GPD_PrimMesh.h>
+#include <GPD-pvr/GPD_PrimPart.h>
+#include <GPD-pvr/GPD_PrimPoly.h>
 
 // Project includes
 

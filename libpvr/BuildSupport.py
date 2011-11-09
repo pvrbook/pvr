@@ -148,9 +148,8 @@ def setupBuildOutput(env):
 
 # ------------------------------------------------------------------------------
 
-def buildDir(env):
-    basePath = join(buildDirPath, sys.platform, compilerStr(env), 
-                    architectureStr())
+def variantDir(env):
+    basePath = join(sys.platform, compilerStr(env), architectureStr())
     variant = ""
     if isDebugBuild():
         variant += debug
@@ -160,16 +159,13 @@ def buildDir(env):
 
 # ------------------------------------------------------------------------------
 
-# todo: unify with code above
+def buildDir(env):
+    return join(buildDirPath, variantDir(env))
+
+# ------------------------------------------------------------------------------
+
 def installDir(env):
-    basePath = join(installDirPath, sys.platform, compilerStr(env), 
-                    architectureStr())
-    variant = ""
-    if isDebugBuild():
-        variant = debug
-    else:
-        variant = release
-    return join(basePath, variant)
+    return join(installDirPath, variantDir(env))
 
 # ------------------------------------------------------------------------------
 
@@ -221,11 +217,14 @@ def setupEnv(env, pathToRoot = "."):
         env.Append(LIBS = ["boost_thread-mt"])
     env.Append(LIBS = ["OpenImageIO"])
     env.Append(LIBS = ["Field3D"])
-    env.Append(LIBS = ["GPD"])
+    env.Append(LIBS = ["GPD-pvr"])
     # System libs
     env.Append(LIBS = ["z", "pthread"])
     # Hdf5 lib
     env.Append(LIBS = ["hdf5"])
+    # Externals
+    env.Append(CPPPATH = "external/include")
+    env.Append(LIBPATH = "external/libs/" + variantDir(env))
     # Compile flags
     if isDebugBuild():
         env.Append(CCFLAGS = ["-g"])

@@ -1,0 +1,24 @@
+import sys
+sys.path.append("../..")
+
+from BuildSupport import *
+
+# ------------------------------------------------------------------------------
+
+libEnv = Environment()
+setupLibBuildEnv(libEnv)
+
+libEnv.Append(CPPDEFINES = ["SESI_LITTLE_ENDIAN"])
+libEnv.Append(CPPPATH = ["export"])
+
+build = buildDir(libEnv)
+install = join(installDir(libEnv))
+
+# Files to build
+files = Glob(join(build, "*.C"))
+
+# Make lib
+libEnv.Library(join(install, "GPD-pvr"), files)
+
+# Install headers
+libEnv.Install(join("install", "include", "GPD-pvr"), Glob(join("export/*.h")))

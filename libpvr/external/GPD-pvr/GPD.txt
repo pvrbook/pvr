@@ -1,0 +1,1198 @@
+Documentation on the Public Domain Geometry Library (GPD) - Version 5
+---------------------------------------------------------------------
+
+In previous versions of Houdini source was distributed for a simple
+library to load and save .[b]geo files.  This code is no longer
+distributed as its antiquated interface had become outdated.  Instead,
+we recommend file converters be written using the HDK.  Support can
+provide at your request a copy of the source to the current GPD
+library.  Be warned its functionality does not exceed loading and
+saving files and can only act as a rough template of how to work with
+.[b]geo files.  
+
+At the end of this document are several example files (uuencoded)
+used for illustration.
+
+Binary Vs Acii
+--------------
+
+The binary .bgeo format and the ascii .geo format are very similar.
+Whereever possible the layout of the data is the same in both formats
+meaning both code paths can often be handled in the same function.
+
+Binary, of course, brings its own complexities.  Data is stored big
+endian regardless of the native bit ordering of the platform.  This
+means byte swapping is the norm for Intel architectures.
+
+Binary Data Types:
+
+    char:
+	An 8 bit unsigned integer.
+    float32:
+	A 32 bit floating point number.
+    int16:
+	A signed 16 bit integer
+    int32:
+	A signed 32 bit integer
+    uint16or32:
+	An unsigned 16 or 32 bit integer.  Which one depends on the
+	maximum size of what is being indexed.
+    uint16:
+	An unsigned 16 bit integer.
+    var16:
+	A variable length 16 bit integer.  This is an int16.  If the
+	value of the int16 is -1, an additional int32 is stored which
+	is to be taken as the actual value.
+    string:
+	A var16 giving the length of the string followed by the string
+	itself stored as chars.  Note the null terminator is *not*
+	stored nor included in the length.
+
+
+Ascii Notes:
+
+    The ascii file parser is line based.  Each '\n' terminated line is
+    read and processed individually.  The contents of a line are
+    separated by whitespace: ' ' or '\t'.
+
+    Strings are stored in a protected form.  If they contain spaces,
+    they are quoted with ".  If they contain \ or ", those characters
+    are escaped.  Note that most fields (such as group names,
+    attribute names, etc) cannot contain spaces or special characters
+    anyways.
+
+    When writing floating point values using C++ iostreams, it is
+    recommended to set the stream precision to 9 digits
+    (os.precision(9)) or you will see round off errors in the
+    conversion process.
+
+FILE FORMAT
+-----------
+
+1) Header Section
+   --------------
+
+Ascii:
+    Magic Number:	PGEOMETRY V#
+    Point/Prim Counts:	NPoints # NPrims #
+    Group Counts:	NPointGroups # NPrimGroups #
+    Attribute Counts:	NPointAttrib # NVertexAttrib # NPrimAttrib # NAttrib #
+Binary:
+    Magic Number:	int32		((((('B'<<8)|'g')<<8)|'e')<<8)|'o'
+    Version Name:	char		'V'
+    Version Number:	int32		5
+    NPoints:int32 NPrims:int32 NPointGroups:int32 NPrimGroups:int32 		
+    NPointAttrib:int32 NVertexAttrib:int32 NPrimAttrib:int32 NAttrib:int32 	
+    
+
+    In each of these cases, the # represents the number of the element
+    described.
+
+    V# is the version of the geo file format.
+
+    Groups are named and may be defined to contain either points or primitives.
+    Each point or primitive can be a member of any number of groups, thus
+    membership is not exclusive to one group.
+
+    Attributes can be assigned per point, per vertex, per primitive or on the
+    detail.  Therefore, the number of attributes is declared at the top of the
+    file.  Later, each of these attributes will be defined in full.
+
+
+2) Attribute Definitions
+   ---------------------
+
+    Internally, there are "dictionaries" to define the attributes associated
+    with each element.  These dictionaries define the name of the attribute,
+    the type of the attribute and the size of the attribute.  Also, the
+    default value of the attribute is stored in the dictionary.
+
+    When the dictionary is saved, each attribute (in a specific order)
+    is defined.  The definition is basically as follows:
+
+	Name Size Type Default
+
+    For example, the attribute name for normals is "N", so the attribute
+    definition (for Ascii) would look like:
+
+	N 3 float 0 0 0
+
+    Specifying the attribute name "N", that there are 3 elements in this
+    attribute and the type is float.  The default value would be (0, 0, 0)
+
+    Index attributes store the list of strings instead of the default
+    value.  For example, the a material index attribute of name "mat"
+    and type index which has three strings in the string table would
+    be:
+
+	mat 1 index 3 marble gold crystal_glass3
+
+    If spaces are present in the strings the string needs to be placed
+    in double quotes.  If double quotes or backslashes are required in
+    the string, they must be escaped with backslashes.
+
+    Binary Notes:
+	Name:string Size:var16 Type:uint32 Default:*
+
+	The Name field is limited to 32k characters in Houdini 9.0.  Size
+	is the number of Type-sized attribute elements.  If Type is
+	float32, the number of bytes will be four times Size.  Type is an
+	int32 but has the optional Type Info stored in the high 16 bits.
+
+	    type = Type & 0xffff;
+	    typeinfo = Type >> 16;
+
+	Values for type and typeinfo are:
+
+	    Type #	Data		Meaning
+	    0		float32		float
+	    1		int32		int
+	    2		char * 32 	string, deprecated!
+	    3		char		"mixed", should not be saved.
+	    4		int32		index
+	    5		float32 * 3	vector
+
+	    TypeInfo #	Meaning
+	    0		None
+	    1		Index Pair
+
+	The default data is stored according to the size and type
+	fields.  Thus, a size 3 float32 type will store 12 bytes for
+	the 3 float values.
+
+	The case of index attributes is different.  Index attributes
+	do not store a default: the default is always -1.  Instead,
+	they store their index table in place of the default.  The
+	index table is saved as an int32 for the number of entries in
+	the index table.  That number of strings then follows.
+
+    Following the element definition is the attribute data associated
+    with the element.  There are braces delineating the attribute data.
+    The attribute data appears in the order that the dictionary for the
+    element was defined.
+
+    Binary Notes:
+	Saved after each element is the attribute data for that
+	element.  This is stored attribute-by-attribute in the
+	order the attribute was defined.  No padding is done between
+	entries.
+
+    For example, a dictionary might look like:
+
+	PointAttrib
+	Cd 3 float 0 0 0	# Color attribute, 3 floats, default 0 0 0
+	Alpha 1 float 1		# Alpha attribute, 1 float, default 1
+	N 3 float 0 0 0		# Normal attribute
+	uv 2 float 0 0		# Texture coordinate
+
+    The data for the point might look like:
+	0 0 0 1  (1 0 0  1  0 0 1  .5 .5)
+	^^^^^^^	 ^^^^^^^^^^^^^^^^^^^^^^^^
+	Position	Attributes
+    The point would have:
+	Cd = (1, 0, 0)
+	Alpha = 1
+	N = (0 0 1)
+	uv = (.5, .5)
+
+    The types of attribute data supported are:  integer, float, string and
+    index.  The "string" type is stored as a 32 character string since
+    each attribute must have a fixed length.  The string field should not be
+    used, however: use the index type instead.  The integer and float types
+    are pretty self-explanatory.  The index attribute type is used
+    for specifying things like material.  It contains a list of strings
+    which are indexed by integer values.  Thus the storage for an index
+    attribute is an integer.  In the definition of the index attribute
+    the list of strings is given instead of the default value.
+    The default value for all index attributes is -1 indicating that
+    the attribute has not been assigned.
+
+    In addition to these types, a TypeInfo may be optionally present after the
+    type separated by a colon.  The only current typeinfo is for indexpair,
+    which has the token float:indexpair.  This is used for capture attributes
+    which are pairs of index/weight values with a -1 specifying an invalid
+    index. For these attributes, -1 index/weight pairs must be at the _end_ of
+    the attribute. In other words, valid index/weight pairs must be contiguous
+    at the beginning of the attribute.
+
+3)  Point Definitions
+    -----------------
+
+    If there are point attributes, the attribute dictionary is saved
+    before the definition of the points.
+	Dictionary Name:		PointAttrib
+	Dictionary Data:		-- Attribute Definition --
+
+    In the binary case there is no Dictionary Name.  Instead, the
+    dictionary data is stored directly.  The NPointAttrib field in the
+    header can be used to determine if the dictionary data will be
+    present.
+
+    Following the attribute dictionary, is the point data for the points.
+    Each point is stored with 4 components (x, y, z & w).  The positions
+    are not true homogeneous coordinates.  To get the homogeneous coord,
+    simply multiply each x, y & z by w.
+
+    If (and only if) there is attribute data, the attribute data is
+    defined following the point position.  The attribute data is enclosed
+    in parenthesis "()".
+
+    In the binary case, the point attribute data is saved after the
+    position with no padding or tags.
+
+4)  Primitive/Vertex Definitions
+    ----------------------------
+
+    If (and only if) there are vertex attributes, the vertex attribute
+    dictionary is found here.
+
+    Following the vertex attribute dictionary is the primitive attribute
+    dictionary (iff there are attributes for primitives).
+
+    Since every primitive may have local information which needs to be
+    saved, the format of every primitive is different.  In general, the
+    format is:
+
+    Ascii:
+	PrimKey <local_information> [primitive_attributes]
+    Binary:
+	PrimKey:int32 <local_information> [primitive_attributes]
+
+    Here, the local_information is primitive specific.
+
+    As part of the local information, a vertex or multiple vertices are
+    specified.  Each vertex is saved in the same format, which is:
+
+    Ascii:
+	point_number vertex_attribute_data
+    Binary:
+	point_number:uint16or32 vertex_attribute_data
+
+    The point numbers start at 0 and go through NPoints - 1.
+    If there is vertex attribute data, the data is delimited by
+    parenthesis "()".
+
+    If the total number of points is less than or equal to USHRT_MAX
+    (65535), 16 bit unsigned integers are used to store the point index.
+    Otherwise 32 bit unsigned integers are used.
+
+    If there is primitive attribute data, it is delimited by brackets "[]".
+
+    Each primitive has a unique identifier.  The current primitives and
+    their identifiers are:
+
+
+	PrimKey Type		Ascii		Binary
+	Polygon:		"Poly"		0x00000001
+	NURBS Curve:		"NURBCurve"	0x00000002
+	Rational Bezier Curve:	"BezierCurve"   0x00000004
+	Linear Patch:		"Mesh"		0x00000010
+	NURBS Surface		"NURBMesh"	0x00000020
+	Rational Bezier Patch:	"BezierMesh"	0x00000040
+	Paste Hierarchy:	"PasteSurf"	0x00000f00
+	Ellipse/Circle:		"Circle"	0x00001000
+	Ellipsoid/Sphere:	"Sphere"	0x00002000
+	Tube/Cone:		"Tube"		0x00004000
+	Particle System:	"Part"		0x00008000
+	Metaball		"MetaBall"	0x00100000
+	Meta Super-Quadric	"MetaSQuad"	0x00200000
+	Triangle Fans:		"TriFan"	0x01000000
+	Triangle Strips:	"TriStrip"	0x02000000
+	Triangular Beziers:	"TriBezier"	0x03000000
+	Volume			"Volume"	0x04000000
+
+	Run			"Run"		0xffffffff
+
+    The primitive keys are case sensitive.
+
+    For example:
+
+	VertexAttrib
+	uv 3 float 0 0 0
+	PrimitiveAttrib
+	Cd 3 float 0 0 0
+	Poly 3 < 0 (1 0.5 0) 1 (0 0 0) 2 (0 1 0) [1 1 0 .5]
+
+    Would specify a closed polygon (see below) which has 3 vertices
+    referencing points 0, 1 & 2.  Each vertex has 3D texture coordinates
+    specified in (), the polygon has Color and Alpha specified in [].
+    The color is yellow, with 50% alpha coverage.
+
+    When there are two or more consecutive primitives of the same type,
+    this is specified as a run of primitives.  In this case, the
+    following should appear in the file:
+
+    Ascii:
+	"Run" # PrimKey
+    Binary:
+	0xffffffff RunLength:u16 PrimKey:int32
+
+    Where # is the number of primitives in the run.  In this case, the
+    following primitives are not saved with the PrimKey (type) identifier since
+    it is implicit in the run.
+
+    Binary Notes:
+	Because only a 16 bit unsigned int is used for the run length,
+	runs longer than this are broken into multiple runs.
+
+
+4a) Local Primitive Information
+    ---------------------------
+
+    POLYGON Local Information Format
+    -------
+	Ascii:
+	    #Vtx OpenClose Vertex_List
+	Binary:
+	    #Vtx:int32 OpenClose:char Vertex_List
+
+	Where:
+	    #Vtx	= Number of vertices in the polygon
+	    OpenClose	= A single character flag:
+				    "<" = Closed face
+				    ":" = Open face
+
+    
+    NURBS/BEZIER CURVE Local Information Format
+    ------------------
+	Ascii:
+	    #Vtx OpenClose Basis Vertex_List
+	Binary:
+	    #Vtx:int32 OpenClose:char Basis Vertex_List
+
+	The basis definition for both NURBS and Bezier primitives starts with:
+
+	    Ascii:
+		Keyword Order
+	    Binary:
+		Order:int32
+
+	    Where:
+		Keyword		= "Basis"
+		Order		= The order of the basis (degree + 1)
+
+	The NURBS Basis
+	---------------
+	The NURBS basis requires an end condition flag and a list of knots
+	sorted in increasing order. The complete definition of the NURBS basis
+	is:
+
+	Ascii:
+	    Keyword Order EndCondition Knots
+	Binary:
+	    Order:int32 EndCondition:int16 zero:int16 Knots:float32
+
+	Where:
+	    EndCondition	= "end" to touch the end CVs, "noend"
+				  otherwise.  Binary format uses 0 for
+				  "noend" and 1 for "end".
+	    Knots		= Floating point numbers in increasing
+				  basis order.
+
+	The number of knots in the list is determined by the order of the
+	basis, its end conditions, the number of CVs in the Vertex_List, and 
+	the OpenClose flag. 
+
+	Let #K be the number of expected knots, and #Vtx the number of CVs. 
+	Then, if the EndCondition is false (ie. "noend"),
+	    #K = #Vtx + Order - 2 
+	The two missing end knots (and the periodicity knots if closed) are
+	generated internally.
+
+	If theEndCondition is true (ie. "end"), then:
+	    if the curve is open	#K = #Vtx - Order + 2
+	    if the curve is closed	#K = #Vtx - Order + 3
+
+	The Bezier Basis
+	----------------
+	The Bezier basis does not require a list of knots if the knots start
+	at 0 and grow with unit increments (e.g. 0 1 2 3 ...)
+	The complete definition of the Bezier basis is:
+
+	Ascii:
+	    Keyword Order Knots
+	Binary:
+	    notuniform:char [Knots:float32]
+
+	    notuniform of 0 means no knots will be present.  Instead,
+	    the basis is to start at 0 and increment by unit
+	    increments.  A value of 1 means that a sequence of knots
+	    will provide the basis values.
+	
+	The number of knots in the list is determined by the order of the
+	basis, the number of CVs in the Vertex_List, and the OpenClose flag.
+
+	Let #K be the number of expected knots, #Vtx the number of CVs. Then:
+	    if the curve is open	#K = (#Vtx-1) / (Order-1) + 1
+	    if the curve is closed	#K = (#Vtx  ) / (Order-1)
+
+	If the curve is closed, the periodicity knot is generated internally.
+
+
+    MESH Local Information Format
+    ----
+	Ascii:
+	    #Cols #Rows UWrap VWrap connectivity
+	Binary:
+	    #Cols:int32 #Rows:int32 Flags:int32 connectivity:int32
+
+	    Flags stores the uwrap and vwrap in the upper bits:
+
+	    UWrap = (Flags & 0x80000000) != 0;
+	    VWrap = (Flags & 0x40000000) != 0;
+
+	    A value of 1 means to be wrapped.
+
+	UWrap / VWrap:	"open" or "wrap" columns or rows respectively
+			Ascii	Binary	Meaning
+	connectivity:	"rows"	0	- Rows only
+			"cols"	1	- Columns only
+			"rowcol"2	- Rows & Columns
+			"tri"	3	- Triangulated quads
+			"quad"	4	- Quad
+			"atri"	5	- Alternate triangulated
+			"revtri"6	- Reverse triangulated
+
+	The connectivity is ignored in many cases, but is critical for
+	operations like sweeping or conversion to polygons.
+
+	Default triangulated ("tri") meshes are structured like:
+		+-+-+
+		|/|/|
+		+-+-+
+		|/|/|
+		+-+-+
+
+	Alternate triangulation ("atri") looks like:
+		+-+-+
+		|\|/|
+		+-+-+
+		|/|\|
+		+-+-+
+
+	Reverse triangulated ("revtri") meshes are structured like:
+		+-+-+
+		|\|\|
+		+-+-+
+		|\|\|
+		+-+-+
+
+    NURBS/BEZIER SURFACE Local Information Format
+    --------------------
+	#Cols #Rows UWrap VWrap connectivity UBasis VBasis Vertex_List Profiles
+
+	#Cols, #Rows, UWrap, VWrap, connectivity, and Vertex_List are the same
+	as for MESH. UBasis and VBasis are the same as for NURBS/BEZIER CURVE.
+
+	Profiles is an optional list of profile curves (curves on surfaces).
+	The structure of the profiles section is very similar to that of the
+	main geometry, including a header section, points, primitives, point 
+	and primitive groups. The differences are that this section doesn't
+	contain any attributes and has only three profile types: polygon,
+	NURBS curve, and Bezier curve.
+
+	The profile token is "Profiles:". It is followed by " none" if there
+	are no profiles.   In the binary format, a int32 is stored to
+	determine if there are any profiles.  0 means no profiles, 1
+	means that profiles are present.
+	
+	If there are profiles, the profile section has the
+	following structure:
+
+	    Point/Prim Counts:	NPoints # NPrims # NLoops #
+	    Group Counts:	NPointGroups # NPrimGroups #
+	    Nested trim level:	TrimLevel #
+	    Point list:		u v w  triplets
+	    Primitive list	polygons, NURBS/Bezier curves
+	    Trim Regions
+	    Point group definitions
+	    Profile group definitions
+
+	a. Header section
+	-----------------
+	Point/Prim Counts:	NPoints # NPrims # NLoops #
+	Group Counts:		NPointGroups # NPrimGroups #
+
+	In each of these cases, the # represents the number of the element
+	described.  The number is stored as an int32 for the binary case.
+
+	Nested trim level:	TrimLevel #
+
+	In this case, # is an int32 representing the sea-level for
+	nested trimmed loops, and can be either positive or negative.
+	Usually it is 0.
+
+	A primitive is a 2D profile: a polygon, a Bezier curve, or a NURBS 
+	curve living within the domain of the spline surface. The points are
+	2D locations (i.e. uv pairs with a third, w (weight) component) in
+	the surface domain.
+
+	The loops are trimming loops, also know as "trim regions", defined
+	by the primitive profiles mentioned above. It is possible to have
+	several profiles on a surface and yet no trim loops.
+
+	Groups are named and may be defined to contain either points or
+	profiles. Each point or primitive can be a member of any number of
+	groups, thus membership is not exclusive to one group.
+
+	b. Point section
+	----------------
+	Each point is stored with 3 components (x, y, w).  The positions
+	are not true homogeneous coordinates.  To get the homogeneous coord,
+	simply multiply each x, y by w.
+
+	c. Primitive section
+	--------------------
+	Since every profile may have local information which needs to be
+	saved, the format of every primitive is different.  In general, the
+	format is:
+
+	    ProfileKey <local_information>
+
+	Here, the local_information is profile specific.
+
+	As part of the local information, a vertex or multiple vertices are
+	specified.  Each vertex is saved in the same format, which is:
+
+	    point_number:uint16or32
+
+	The point numbers start at 0 and go through NPoints - 1.
+
+	Each profile has a unique identifier. The current profiles and
+	their identifiers are identical to their 3D counterparts:
+
+	    Type			Ascii		Binary		    
+	    Polygon:			"Poly"		1
+	    NURBS Curve:		"NURBCurve"	2
+	    Rational Bezier Curve:	"BezierCurve"	4
+
+	The profile keys are case sensitive.
+
+	For example:
+
+	    Poly 3 < 0 1 2
+
+	Would specify a closed polygon (see below) which has 3 vertices
+	referencing 2D points 0, 1 & 2.
+
+	When there are two or more consecutive profiles of the same type,
+	this is specified as a run of profiles.  In this case, the following
+	should appear in the file:
+
+	    Run # ProfileKey
+
+	Where # is the number of profiles in the run.  In this case, the
+	following profiles are not saved with the ProfileKey identifier since
+	it is implicit in the run.  For the binary format for Run, see
+	the 3D description.
+
+	The format of the three profile types - polygon, NURBS curve, and
+	Bezier curve - is identical to that of the 3D primitives and won't
+	be listed again here.
+
+	d. Trimming section
+	-------------------
+	If NLoops is not zero, the surface will contain one or more trim 
+	regions. Each region can contain one or more profiles.
+	
+	Typically, the profiles should intersect to form a closed loop.
+	Sometimes, though, as in the case of a loop that intersects the domain
+	boundaries, the loop is partially defined by the domain boundaries and
+	need not be explicitly closed.
+
+	Single profile loops that are open and do not intersect the domain
+	boundaries will be closed straight by houdini.
+
+	The trimming section contains one or more lines like the one below,
+	one line per trim region:
+
+	Ascii:
+	    TrimRegion [natural] #Profiles <profile_number ustart uend> ...
+
+	Binary:
+	    keepdir:int32 #Profiles:int32
+	    profile:int32 ustart:float32 uend:float32
+
+	    If keepdir is 1, the "natural" flag is set, otherwise it
+	    is not set.  The profile/ustart/uend is repeated #Profiles
+	    times.
+
+	If "natural" is specified, open profiles are treated casually, i.e.
+	their parametric direction is not checked and will not be reversed.
+
+	profile_number is the index of each profile in the current trim region.
+
+	ustart and uend are the parametric values defining the beginning and
+	end of the profile. It is thus possible to use only a section of a
+	profile for trimming.
+
+	To reverse the direction of the trim curve without reversing the
+	vertices of the profile itself, specify a ustart greater than ustop.
+	A profile can therefore used in more than one trim region, and can have
+	different orientations and lengths in each region.
+
+	When punching holes in a surface, an outer profile is needed to specify
+	the area of the surface to be kept. Usually, the outer profile is a
+	closed polygon that envelops the perimeter of the domain.
+
+	Example: TrimRegion 2   0  1 0   5 -3.5 8
+
+	The trim region has two profiles: 0 and 5. Profile 0 is reversed
+	by evaluating between 1 and 0. Profile 5 is used between -3.5 and 8.
+
+	e. Groups section
+	-------------------
+	The point groups are saved first, followed by the profile groups.
+	There is no identifier indicating the groups.  The format for
+	a group depends on whether it is ordered or unordered:
+
+	    GroupName Type NElements BitMask ElementList
+
+	GroupName	- is the name of the group.
+	Type		- is "unordered" or "ordered".
+	
+	NElements	- Specifies the total number of bits in the BitMask.
+			  This is equivalent to NPrims in the profile header.
+	BitMask		- A string of 0's and 1's, where 1 indicates membership
+			  in the group.
+	ElementList	- If the groups is ordered, the element list contains
+			  the index of each selected point or profile in
+			  selection order. The first element of the list is the
+			  number of ordered elements in the list.
+
+	For details on the binary implementation of the groups
+	section, look forward to the 3D description.
+
+    PASTE HIERARCHY Local Information Format
+    ---------------
+	#Features
+
+	followed by as many lines as feature surfaces, in the order in which
+	the surfaces are pasted. Each feature line has the format:
+
+	Feature prim_number:int32 height:float32 up_or_down:int32 <domain_xform>
+
+	prim_number is the index of the spline surface in the list of 
+	primitives. height is the elevation of the pasted surface from its
+	base. up_or_down is 1 is pasted upward, 0 if downward.
+
+	Binary Notes:
+	    The binary format lacks the Feature tag.
+
+	The domain transformation is either linear or bilinear.  In
+	Ascii, the keyword "Linear" or "Bilinear" is used.  In Binary,
+	an int32 is used: 1 is linear, 2 is bilinear.
+	
+	The data of the tranformations is stored as a series of
+	float32s in binary without the keywords present.
+
+	Linear transformation format:
+	-----------------------------
+	Linear tx ty
+	UT_Matrix2 m00 m01 m10 m11
+
+	The translation in the domain is given by (tx,ty). The rotation
+	and scaling components are captured in the 2x2 matrix.
+
+	Bilinear transformation format:
+	-------------------------------
+	Bilinear origUL origUR origLR origLL warpUL warpUR warpLR warpLL
+
+	L,U,L,R stand for Lower, Upper, Left and Right respectively. Each of
+	the eight locations is a (u,v) pair in the surface domain.
+
+	Example of a paste hierarchy with three surfaces:
+
+	PasteSurf 3
+	Feature 0  0 1
+	Linear 0 0
+	UT_Matrix2 1 0 0 1 
+	Feature 2  0.02 1  
+	Bilinear
+	0 0.6
+	0.6 0.6 
+	0.6 0
+	0 0 
+	100.1 -22
+	100.4 -22
+	100.4 -28
+	100.1 -28
+	Feature 3  0.07 0  
+	Bilinear
+	0 1
+	1 1 
+	1 0 
+	0 0 
+	100.2 -21
+	100.45 -21
+	100.45 -26
+	100.2 -26
+
+    CIRCLE Local Information Format
+    ------
+	Vertex_Info Matrix33
+
+	There is always only one vertex for a Circle.
+	The 3x3 matrix contains scaling and rotation transformations about
+	the center of the circle. Sheared circles are thus allowed.
+	circle.
+
+	The 3x3 matrix is stored as 9 float32s in binary.
+
+    SPHERE Local Information Format
+    ------
+	Vertex_Info Matrix33
+
+	There is always only one vertex for a Sphere.
+	The 3x3 matrix contains scaling and rotation transformations about
+	the center of the sphere. Sheared spheres are thus allowed.
+
+	The 3x3 matrix is stored as 9 float32s in binary.
+
+    TUBE/CONE Local Information Format
+    ---------
+	Vertex_Info Taper:float32 Closure:char Matrix33
+
+	There is always only one vertex for a Tube/Cone. The vertex lies in
+	the center of the tube (along the axis connecting the centers of the
+	top and bottom circles/ellipses). The taper value affects the radius
+	of the top circle. A regular tube has a taper value of 1. A cone's
+	taper is 0. The closure - "closed" or "open" - indicates whether the
+	tube is end-capped.
+
+	The binary Closure value is 0 for open, 1 for closed.
+
+	The 3x3 matrix contains scaling and rotation transformations about
+	the center of the tube. Sheared tubes are thus allowed.
+
+	The 3x3 matrix is stored as 9 float32s in binary.
+
+    METABALL Local Information Format
+    --------
+	Vertex_Info Kernel_Function:char Weight:float32 Matrix33
+
+	There is always only one vertex for a metaball.
+	The kernel function is one of: "wyvill", "quartic", "blinn" or "links".
+	The 3x3 matrix contains scaling and rotation transformations about
+	the center of the metaball. Sheared metaballs are thus allowed.
+
+	In binary, the kernel function is stored with a single
+	character matching the first letter of the desired kernel.
+
+    META SUPER-QUADRIC Local Information Format
+    ------------------
+	Vertex_Info XY_Exponent:float32 Z_Exponent:float32 
+	Kernel_Function:char Weight:float32 Matrix33
+
+	There is always only one vertex for a meta super-quadric.
+	The exponents are float values.
+	The kernel function is one of: "wyvill", "quartic", "blinn" or "links".
+	In binary, it is a single character.
+	The 3x3 matrix contains scaling and rotation transformations about
+	the center of the metaball. Sheared metaballs are thus allowed.
+
+    PARTICLE SYSTEM Local Information Format
+    ---------------
+	Part_Count:int32 Vertex_List
+
+	Where Part_Count is the number of particles in the system.
+
+    TRIANGLE STRIPS Local Information Format
+    ---------------
+	Vertex_Count:int32 Vertex_List
+
+	Where Vertex_Count is the number of points in the triangle
+	strip.
+	        1-3
+	       /|/| 
+	      0-2-4
+
+    TRIANGLE FANS Local Information Format
+    -------------
+	Vertex_Count:int32 Anchor_Vertex Vertex_List
+
+	Where Vertex_Count is the number of vertices in the triangle
+	fan.  The first vertex forms the anchor and each successive
+	vertex forms a point on a successive triangle:
+
+	      1-2-3
+               \|/|
+	        0-4
+
+    TRIANGULAR BEZIERS Local Information Format
+    ------------------
+	Order:int32 Vertex_List
+
+	The order is the order of the triangular patch.  There are
+	order*(order+1)/2 vertices forming the patch.  The order of
+	the vertices is, for a degree 3 patch:
+
+	      Column
+        Row +--------
+	 0  | 6 7 8 9
+	 1  | 3 4 5
+	 2  | 1 2
+	 3  | 0
+
+	The vertex index of the vertex in row/column (r,c) is found by
+	calling the GEO_PrimTriBezier::getRawIndex() function.
+
+    VOLUMES Local Information Format
+    -------
+	Vertex_Info Matrix33
+
+	    This controls the size and orienation of the volume
+
+	Version:int32
+	
+	    Negative version number, -2 is the defined version.
+	    Later versions may have a lower number.
+
+	xres:int32 yres:int32 zres:int32
+	
+	    Resolution of the volume voxel array in voxels.  The voxel
+	    data is stored in the center of the voxels, so the total
+	    number of samples is xres*yres*zres
+
+	bordertype:int32 bordervalue:float32 
+
+	    Defines the end conditions of the volume.  bordervalue is
+	    a float for out of bounds values to use.
+
+	    bordertype is one of:  (binary - ascii)
+		0 - constant
+		    Use bordervalue for outside reads
+		1 - repeat
+		    Read opposite side of volume for outside reads
+		2 - streak
+		    Closest point on the volume will be used
+		3 - sdf
+		    Closest point plus the distance to that point,
+		    ensures signed distance fields are valid
+		    everywhere.
+
+	compression_tolerance:float32
+	
+	    Controls how much lossy compression is allowed.
+
+	volumevistype:int32 visiso:float32 visdensity:float32
+
+	    Controls visualization of volume in viewport.
+
+	    volumevistype is one of: (binary - ascii)
+		0 - smoke
+		    Render as a cloud with self shadowing
+		1 - rainbow
+		    Render as uniformly lit cloud coloured with
+		    bounding box values
+		2 - iso
+		    Render as an isosurface using the visio value
+		3 - invisible
+		    Do not render at all
+	    visiso is the isosurface to render in that mode.
+	    visdensity is how opaque the could renders should be.
+
+	volumedata:float32
+	    
+	    The actual volume values are stored as xres*yres*zres
+	    space delimitted floating point values.  The order used
+	    is:
+
+		for (z = 0; z < zres; z++)
+		    for (y = 0; y < yres; y++)
+			for (x = 0; x < xres; x++)
+			    store voxel(x, y, z);
+
+5)  Detail Attributes
+    -----------------
+
+    The Detail Attribute Dictionary is saved after the Primitives
+    and before the group information.
+
+6)  Point/Primitive Group Definitions
+    ---------------------------------
+
+    The Point groups are saved first, followed by the primitive groups.
+    There is no identifier indicating the groups.  The format for
+    a group depends on whether it is ordered or unordered:
+
+    Ascii:
+	GroupName Type NElements BitMask ElementList
+
+	GroupName	- is the name of the group.
+	Type		- is "unordered" or "ordered".
+	
+	NElements	- Specifies the total number of bits in the
+			  BitMask. This is equivalent to the number of
+			  elements in the detail.
+	BitMask		- In the ASCII format, this is a string of 0's
+			  and 1's, where 1 indicates membership in the
+			  group.
+	ElementList	- If the groups is ordered, the element list
+			  contains the index of each selected point or
+			  primitive in selection order.  The first
+			  element of the list is the number of ordered
+			  elements in the list. In the case of
+			  primitive lists a second profile element may
+			  be described by appending a period and a
+			  secondary index number to each element.  For
+			  example 5 specified the fifth primitive
+			  while 5.12 specifies the twelfth profile
+			  curve of the fifth primitive.
+
+			  The list must be empty if the group is unordered.
+    Binary:
+	[Ordered:char] GroupName:char* 
+	NElements:int32 BitMask:int32
+	[NumOrdered:int32 Primary:int32 [Secondary:int32]]
+
+	Ordered		- If this is an ordered group it is the
+			  integer 1.  If it is not an ordered group,
+			  it is not saved to the file!  Thus, when you
+			  read the ordered flag, if it is not exactly
+			  1, it should be treated as the first
+			  character of the group name.
+	GroupName	- A null terminated string of char.  This is
+			  not the standard string type (which stores
+			  length and then the ascii characters) but a
+			  standard C string.
+	NElements	- The number of bits (as opposed to set bits)
+			  in the group.  For a point group, this would
+			  be the number of points.
+	BitMask		- The bit mask is stored as a sequence of
+			  int32s.  The endianess of these need to be
+			  corrected as they are loaded.  The total
+			  number is floor((NElements + 31)/32).
+	
+	If the group is ordered, the list of ordered elements comes
+	next.
+
+	NumOrdered	- The number of elements present in the
+			  ordered group.
+	Primary		- The primitive number to add to the group.
+			  If it is negative, it must be transformed by
+			  (-n - 1) to get the actual primitive number.
+
+
+
+7)  Other Information
+    -----------------
+
+    This is meant for saving global information.
+
+    The section is delimited by special tokens:
+
+	beginExtra
+	endExtra
+
+    In binary, the char 0x00 is written to mark the start of the extra
+    block.  Each packet will then start with an additional 0x00.  The
+    end of the extra block is marked with a 0xff.
+
+    After the 0x00 signifying the start of a packet, the actual packet
+    data consists of:
+    
+	classid:int16 signature:int16 datalen:int32 data
+
+    classid is 1 for extra packets.  Signature determines which type
+    of extra packet it is.  The datalen is the length in bytes of the
+    packet data.
+
+    Valid contents of the extra section are:
+    
+    Particle Render (signature 1):
+	Ascii:
+	    prender { blur ONOFF snml ONOFF size 1.0 btime 1.0 type TYPE }
+
+	    The prender command starts with the prender token.  It
+	    then has a brace delimited list on one line.  The list
+	    consists of keyword/value pairs.  ONOFF is either "on" or
+	    "off" to represent being enabled or not.  1.0 stands for
+	    an floating point number.
+
+	    TYPE is one of sphere, line, tube, capped, rounded, or
+	    circle.
+
+	Binary:
+	    flag:int32 size:float32 blurtime:float32 type:int32
+
+	    Flag is a bit field:
+
+		do motion blur		0x1
+		sphere normals		0x2
+		virtual			0x4
+
+	    Type is an integer:
+
+		sphere			0
+		circle			1
+		line			2
+		tube			3
+		capped tubes		4
+		round tubes		5
+
+Example File
+-------------
+
+To extract the information:
+    save to a file
+    run uudecode on the file
+    This should generate all.geo.Z
+    Run "uncompress all.geo.Z" which will create "all.geo" - a file containing
+    all the primitives, groups, and attributes.
+
+--- Begin UUENCODED data --
+begin 664 all.geo.Z
+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
+2!B)"$<`#.2$,*(!8]S%#I@(`
+`
+end
+--- End UUENCODED data --
