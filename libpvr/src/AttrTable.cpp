@@ -281,6 +281,7 @@ std::vector<std::string> AttrTable::stringAttrNames() const
 
 //----------------------------------------------------------------------------//
 
+//! \todo Not exception safe.
 AttrRef AttrTable::addIntAttr(const std::string &attrName, const size_t size,
                               const vector<int> &defaults)
 {
@@ -291,6 +292,7 @@ AttrRef AttrTable::addIntAttr(const std::string &attrName, const size_t size,
 
 //----------------------------------------------------------------------------//
 
+//! \todo Not exception safe.
 AttrRef AttrTable::addFloatAttr(const std::string &attrName, const size_t size,
                                 const vector<float> &defaults)
 {
@@ -301,6 +303,7 @@ AttrRef AttrTable::addFloatAttr(const std::string &attrName, const size_t size,
 
 //----------------------------------------------------------------------------//
 
+//! \todo Not exception safe.
 AttrRef AttrTable::addVectorAttr(const std::string &attrName, 
                                 const Imath::V3f &defaults)
 {
@@ -313,6 +316,7 @@ AttrRef AttrTable::addVectorAttr(const std::string &attrName,
 
 //----------------------------------------------------------------------------//
 
+//! \todo Not exception safe.
 AttrRef AttrTable::addStringAttr(const std::string &attrName)
 {
   checkForExistingAttr(m_stringIdxAttrs, attrName);

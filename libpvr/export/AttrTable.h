@@ -223,27 +223,25 @@ public:
 
   // Main methods --------------------------------------------------------------
 
-  //! Resizes the entire attribute table. Will destroy any existing data but
-  //! will retain attribute definitions.
-  void resize(const size_t size);
-
-  //! Returns size of table
-  size_t size() const;
-
   //! Adds elements to the table. Items are inserted at the back of the 
   //! table.
-  void addElems(const size_t numItems);
+  void   addElems(const size_t numItems);
+  //! Resizes the entire attribute table. Will destroy any existing data but
+  //! will retain attribute definitions.
+  void   resize  (const size_t size);
+  //! Returns size of table
+  size_t size    () const;
 
-  // ---------------------------------------------------------------------------
+  // Attribute names -----------------------------------------------------------
 
   /*! \{
     \name Attribute names
   */
 
   //! Returns the names of the int attributes
-  StringVec intAttrNames() const;
+  StringVec intAttrNames   () const;
   //! Returns the names of the float attributes
-  StringVec floatAttrNames() const;
+  StringVec floatAttrNames () const;
   //! Returns the names of the vector attributes
   StringVec vectorAttrNames() const;
   //! Returns the names of the string attributes
@@ -251,7 +249,7 @@ public:
 
   //! \}
 
-  // ---------------------------------------------------------------------------
+  // Adding attributes ---------------------------------------------------------
 
   /*! \{
     \name Adding attributes
@@ -263,11 +261,10 @@ public:
   //! \param defaults Vector of default values. Must be same length as size
   //! \returns        Reference to the created attribute
   //! \throws         AddAttrException if adding fails
-  AttrRef addIntAttr(const std::string &attrName, const size_t size,
-                     const std::vector<int> &defaults);
-  AttrRef addFloatAttr(const std::string &attrName, const size_t size,
-                       const std::vector<float> &defaults);
-
+  AttrRef addIntAttr   (const std::string &attrName, const size_t size,
+                        const std::vector<int> &defaults);
+  AttrRef addFloatAttr (const std::string &attrName, const size_t size,
+                        const std::vector<float> &defaults);
   //! Add attribute to AttrTable
   //! \param attrName Name of attribute to add
   //! \returns        The index of the newly created attribute
@@ -282,7 +279,7 @@ public:
 
   //! \}
 
-  // ---------------------------------------------------------------------------
+  // Attribute references ------------------------------------------------------
 
   /*! \{
     \name Attribute references
@@ -291,33 +288,83 @@ public:
   //! Returns a reference to an attribute
   //! \param attrName Name of attribute to find
   //! \returns An 'invalid' AttrRef if the attribute couldn't be found.
-  AttrRef intAttrRef(const std::string &attrName) const;
-  AttrRef floatAttrRef(const std::string &attrName) const;
+  AttrRef intAttrRef   (const std::string &attrName) const;
+  AttrRef floatAttrRef (const std::string &attrName) const;
   AttrRef vectorAttrRef(const std::string &attrName) const;
   AttrRef stringAttrRef(const std::string &attrName) const;
 
   //! \}
 
-  // ---------------------------------------------------------------------------
+  // Attribute read access -----------------------------------------------------
 
   /*! \{
     \name Access to attribute values (by-value)
   */
-
+  
   //! Read access to int attributes
-  int intAttr (const AttrRef &ref, const size_t elem, size_t arrayIdx) const;
-
+  int        intAttr   (const AttrRef &ref, const size_t elem, 
+                        size_t arrayIdx) const;
   //! Read access to float attributes
-  float floatAttr (const AttrRef &ref, const size_t elem, 
-                   size_t arrayIdx) const;
-
+  float      floatAttr (const AttrRef &ref, const size_t elem, 
+                        size_t arrayIdx) const;
   //! Read access to vector attributes
   Imath::V3f vectorAttr(const AttrRef &ref, const size_t elem) const;
+
+  //! \}
+
+  // Attribute write access ----------------------------------------------------
+
+  /*! \{
+    \name Write access to attributes
+  */
+
+  //! Sets the int attribute value of the given element
+  void setIntAttr   (const AttrRef &ref, const size_t elem, 
+                     const size_t arrayIdx, const int value);
+  //! Sets the float attribute value of the given element
+  void setFloatAttr (const AttrRef &ref, const size_t elem, 
+                     const size_t arrayIdx, const float value);
+  //! Sets the vector attribute value of the given element
+  void setVectorAttr(const AttrRef &ref, const size_t elem, 
+                     const Imath::V3f &value);
+
+  //! \}
+
+  // String attribute access ---------------------------------------------------
+
+  /*! \{
+    \name String attribute methods
+  */
 
   //! Read access to string index attributes.
   //! \note This only returns the string -index-. To get the actual string,
   //! pass the index to the stringFromTable() method.
-  size_t stringIdxAttr (const AttrRef &ref, const size_t elem) const;
+  size_t             stringIdxAttr   (const AttrRef &ref, 
+                                      const size_t elem) const;
+  //! Sets the string attribute value of the given element
+  void               setStringIdxAttr(const AttrRef &ref, 
+                                      const size_t elem, 
+                                      const size_t value);
+  //! Shortcut for getting a string directly from an element. 
+  //! \warning Please note that this is slow if called repeatedly for each 
+  //! element.
+  const std::string& stringAttr      (const AttrRef &ref, 
+                                      const size_t elem) const;
+  //! Shortcut for setting a string directly. Slow if used repeatedly.
+  void               setStringAttr   (const AttrRef &ref, 
+                                      const size_t elem, 
+                                      const std::string &value);
+  //! Retrieves a string from the string table.
+  //! \param ref Reference to the attribute. Use stringAttr() to get a 
+  //! reference.
+  //! \param strIdx String index to fetch. Use stringIdxAttr() to get the
+  //! string index.
+  const std::string& stringFromTable (const AttrRef &ref, 
+                                      const size_t strIdx) const;
+  //! Write access to string table
+  //! \returns Index of string added
+  size_t             addStringToTable(const AttrRef &ref, 
+                                      const std::string &s);
 
   //! \}
 
@@ -340,60 +387,6 @@ public:
   const StringIdxVec&     stringIdxAttrElems  (const AttrRef &ref) const;
 
   //! \}
-
-  // ---------------------------------------------------------------------------
-
-  /*! \{
-    \name Write access to attributes
-  */
-
-  //! Sets the int attribute value of the given element
-  void setIntAttr          (const AttrRef &ref, const size_t elem, 
-                            const size_t arrayIdx, const int value);
-  //! Sets the float attribute value of the given element
-  void setFloatAttr        (const AttrRef &ref, const size_t elem, 
-                            const size_t arrayIdx, const float value);
-  //! Sets the vector attribute value of the given element
-  void setVectorAttr       (const AttrRef &ref, const size_t elem, 
-                            const Imath::V3f &value);
-  //! Sets the string attribute value of the given element
-  void setStringIdxAttr    (const AttrRef &ref, const size_t elem, 
-                            const size_t value);
-
-  //! \}
-
-  // ---------------------------------------------------------------------------
-
-  /*! \{
-    \name String attribute methods
-  */
-
-  //! Shortcut for getting a string directly from an element. 
-  //! \warning Please note that this is slow if called repeatedly for each 
-  //! element.
-  const std::string& stringAttr   (const AttrRef &ref, 
-                                   const size_t elem) const;
-
-  //! Shortcut for setting a string directly. Slow if used repeatedly.
-  void               setStringAttr(const AttrRef &ref, const size_t elem, 
-                                   const std::string &value);
-
-  //! Retrieves a string from the string table.
-  //! \param ref Reference to the attribute. Use stringAttr() to get a 
-  //! reference.
-  //! \param strIdx String index to fetch. Use stringIdxAttr() to get the
-  //! string index.
-  const std::string& stringFromTable(const AttrRef &ref, 
-                                     const size_t strIdx) const;
-
-  //! Write access to string table
-  //! \returns Index of string added
-  size_t             addStringToTable(const AttrRef &ref, 
-                                      const std::string &s);
-
-  //! \}
-
-  // ---------------------------------------------------------------------------
 
 private:
 
