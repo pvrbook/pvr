@@ -38,7 +38,7 @@ __stdRaymarcherParams = {
 
 # ------------------------------------------------------------------------------
 
-def __baseLight(renderer, parms, resMult):
+def __baseLight(renderer, parms, resMult, rmParams):
     light = PointLight()
     # Position
     light.setPosition(parms["position"])
@@ -53,29 +53,29 @@ def __baseLight(renderer, parms, resMult):
     raymarcherType = "Naive"
     samplerType = "ScatteringSampler"
     setupTransmittanceMap(renderer, light, resolution, quat, parms["fov"], 
-                          raymarcherType, __stdRaymarcherParams, samplerType)
+                          raymarcherType, rmParams, samplerType)
     return light
     
 # ------------------------------------------------------------------------------
 
-def standardKey(renderer, resMult):
-    return __baseLight(renderer, __stdKeyLight, resMult)
+def standardKey(renderer, resMult, rmParams = __stdRaymarcherParams):
+    return __baseLight(renderer, __stdKeyLight, resMult, rmParams)
 
 # ------------------------------------------------------------------------------
 
-def standardFill(renderer, resMult):
-    return __baseLight(renderer, __stdFillLight, resMult)
+def standardFill(renderer, resMult, rmParams = __stdRaymarcherParams):
+    return __baseLight(renderer, __stdFillLight, resMult, rmParams)
 
 # ------------------------------------------------------------------------------
 
-def standardRim(renderer, resMult):
-    return __baseLight(renderer, __stdRimLight, resMult)
+def standardRim(renderer, resMult, rmParams = __stdRaymarcherParams):
+    return __baseLight(renderer, __stdRimLight, resMult, rmParams)
 
 # ------------------------------------------------------------------------------
 
-def standardThreePoint(renderer, resMult):
-    return [standardKey(renderer, resMult), 
-            standardFill(renderer, resMult), 
-            standardRim(renderer, resMult)]
+def standardThreePoint(renderer, resMult, rmParams = __stdRaymarcherParams):
+    return [standardKey(renderer, resMult, rmParams), 
+            standardFill(renderer, resMult, rmParams), 
+            standardRim(renderer, resMult, rmParams)]
 
 # ------------------------------------------------------------------------------
