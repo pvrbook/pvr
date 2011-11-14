@@ -24,6 +24,7 @@
 // Project headers
 
 #include "pvr/FrustumMapping.h"
+#include "pvr/GaussianInterp.h"
 #include "pvr/Volumes/Volume.h"
 #include "pvr/VoxelBuffer.h"
 
@@ -123,6 +124,14 @@ public:
 
   DECLARE_SMART_PTRS(VoxelVolume);
 
+  // Enums ---------------------------------------------------------------------
+  
+  enum InterpType {
+    NoInterp,
+    LinearInterp,
+    GaussianInterp
+  };
+
   // Exceptions ----------------------------------------------------------------
 
   DECLARE_PVR_RT_EXC(MissingBufferException, "No buffer in VoxelVolume");
@@ -130,6 +139,8 @@ public:
   DECLARE_PVR_RT_EXC(UnsupportedMappingException, "Unsupported mapping type");
 
   // Ctor, factory -------------------------------------------------------------
+
+  //! \todo Need constructor for enum initialization.
 
   //! Specific factory method
   static Ptr create()
@@ -149,8 +160,12 @@ public:
 
   // Main methods --------------------------------------------------------------
 
+  //! Loads a Field3D file from disk. 
   void load(const std::string &filename);
+  //! Sets the voxel buffer.
   void setBuffer(VoxelBuffer::Ptr buffer);
+  //! Sets the interpolator type to use for lookups.
+  void setInterpolation(const InterpType interpType);
 
 protected:
 
@@ -164,6 +179,15 @@ protected:
   VoxelBuffer::Ptr m_buffer;
   //! Handles ray/buffer intersection tests
   BufferIntersection::CPtr m_intersectionHandler;
+  //! Interpolation type to use for lookups
+  InterpType m_interpType;
+  //! Linear interpolator
+  Field3D::LinearFieldInterp<Imath::V3f> m_linearInterp;
+  //! Cubic interpolator
+  // 
+  //! Gaussian interpolator
+  Field3D::GaussianFieldInterp<Imath::V3f> m_gaussInterp;
+
 };
 
 //----------------------------------------------------------------------------//

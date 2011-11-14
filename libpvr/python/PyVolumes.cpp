@@ -46,11 +46,18 @@ void exportVolumes()
 
   // VoxelVolume ---
 
+  enum_<VoxelVolume::InterpType>("InterpType")
+    .value("NoInterp", VoxelVolume::NoInterp)
+    .value("LinearInterp", VoxelVolume::LinearInterp)
+    .value("GaussianInterp", VoxelVolume::GaussianInterp)
+    ;
+
   class_<VoxelVolume, bases<Volume>, VoxelVolume::Ptr>
     ("VoxelVolume")
-    .def("__init__",  make_constructor(VoxelVolume::create))
-    .def("load",      &VoxelVolume::load)
-    .def("setBuffer", &VoxelVolume::setBuffer)
+    .def("__init__",         make_constructor(VoxelVolume::create))
+    .def("load",             &VoxelVolume::load)
+    .def("setBuffer",        &VoxelVolume::setBuffer)
+    .def("setInterpolation", &VoxelVolume::setInterpolation)
     ;
 
   implicitly_convertible<VoxelVolume::Ptr, VoxelVolume::CPtr>();
