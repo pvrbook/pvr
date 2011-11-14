@@ -70,12 +70,16 @@ Renderer::Params::Params()
 
 Renderer::Ptr Renderer::clone()
 {
+  //! \todo Fails if m_scene is null
+  
   // First copy everything from this
   Ptr renderer(new Renderer(*this));
   // Deep-copy the non-const data members
   renderer->m_primary = m_primary->clone();
   renderer->m_transmittanceMap = m_transmittanceMap->clone();
-  renderer->m_scene = m_scene->clone();
+  if (m_scene) {
+    renderer->m_scene = m_scene->clone();
+  }
   return renderer;
 }
 
