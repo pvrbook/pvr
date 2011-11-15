@@ -16,6 +16,7 @@ struct VoxelBuffer {
   { m_data[index(i, j, k)] = value; }
   void read(const char *filename)	
   {
+    std::vector<float>().swap(m_data);
     std::ifstream in(filename);
     in >> m_sizeX >> m_sizeY >> m_sizeZ;
     std::copy(std::istream_iterator<float>(in),
