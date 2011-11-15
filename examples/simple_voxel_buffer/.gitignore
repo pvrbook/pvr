@@ -1,0 +1,4 @@
+*.dblite
+*.o
+*.txt
+simple_voxel_buffer
