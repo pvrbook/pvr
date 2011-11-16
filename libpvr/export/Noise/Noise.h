@@ -191,79 +191,13 @@ class fBm : public Fractal
 public:
   DECLARE_SMART_PTRS(fBm);
   fBm(NoiseFunction::CPtr noise,
-      float scale, float octaves, float octaveGain, float lacunarity)
-    : m_noise(noise), m_scale(scale), m_octaves(octaves), 
-      m_octaveGain(octaveGain), m_lacunarity(lacunarity)
-  {
-    
-  }
+      float scale, float octaves, float octaveGain, float lacunarity);
   static Ptr create(NoiseFunction::CPtr noise,
                     float scale, float octaves, float octaveGain,
-                    float lacunarity)
-  { return Ptr(new fBm(noise, scale, octaves, octaveGain, lacunarity)); }
-  virtual float eval(const Imath::V3f &p) const
-  {
-    // Scale the lookup point
-    Imath::V3f noiseP(p / m_scale);
-    // Initialize iteration variables
-    float result = 0.0f;
-    float octaveContribution = 1.0f;
-    float octaves = m_octaves;
-    // Loop over octaves
-    for (; octaves > 1.0f; octaves -= 1.0f) {
-      // Add in noise function
-      result += m_noise->eval(noiseP) * octaveContribution;
-      // Scale amplitude of next octave
-      octaveContribution *= m_octaveGain;
-      // Scale lookup points of next octave
-      noiseP *= m_lacunarity;
-    }
-    // If there is a partial octave left, apply fraction of last octave
-    if (octaves > 0.0f) {
-      result += m_noise->eval(noiseP) * octaveContribution * octaves;
-    }
-    return result ;
-  }
-  virtual Imath::V3f evalVec(const Imath::V3f &p) const
-  {
-    // Scale the lookup point
-    Imath::V3f noiseP(p / m_scale);
-    // Initialize iteration variables
-    Imath::V3f result(0.0f);
-    float octaveContribution = 1.0f;
-    float octaves = m_octaves;
-    // Loop over octaves
-    for (; octaves > 1.0f; octaves -= 1.0f) {
-      // Add in noise function
-      result += m_noise->evalVec(noiseP) * octaveContribution;
-      // Scale amplitude of next octave
-      octaveContribution *= m_octaveGain;
-      // Scale lookup points of next octave
-      noiseP *= m_lacunarity;
-    }
-    // If there is a partial octave left, apply fraction of last octave
-    if (octaves > 0.0f) {
-      result += m_noise->evalVec(noiseP) * octaveContribution * octaves;
-    }
-    return result ;
-  }
-  virtual Range range() const
-  {
-    Range noiseRange = m_noise->range(), range = std::make_pair(0.0f, 0.0f);
-    float octaveContribution = 1.0f;
-    float octaves = m_octaves;
-    // Loop over octaves
-    for (; octaves > 1.0f; octaves -= 1.0f) {
-      range.first += noiseRange.first * octaveContribution;
-      range.second += noiseRange.second * octaveContribution;
-      octaveContribution *= m_octaveGain;
-    }
-    if (octaves > 0.0f) {
-      range.first += noiseRange.first * octaveContribution * octaves;
-      range.second += noiseRange.second * octaveContribution * octaves;
-    }
-    return range;
-  }
+                    float lacunarity);
+  virtual float eval(const Imath::V3f &p) const;
+  virtual Imath::V3f evalVec(const Imath::V3f &p) const;
+  virtual Range range() const;
 private:
   NoiseFunction::CPtr m_noise;
   float m_scale;
