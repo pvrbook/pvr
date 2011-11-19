@@ -17,11 +17,11 @@
 // Library includes
 
 #include <Field3D/Field3DFile.h>
+#include <Field3D/FieldMapping.h>
 
 // Project headers
 
 #include "pvr/Constants.h"
-#include "pvr/FrustumMapping.h"
 #include "pvr/Log.h"
 #include "pvr/Primitives/InstantiationPrim.h"
 #include "pvr/Primitives/RasterizationPrim.h"
@@ -194,22 +194,14 @@ void Modeler::updateBounds()
         m_buffer.reset();
         return;
       }
-      FrustumMapping::Ptr mapping(new FrustumMapping);
-      mapping->setCamera(m_camera);
-      mapping->calculateClipPlanes(wsBounds);
-      m_buffer->setMapping(mapping);
+      setupFrustumMapping(wsBounds);
       Log::print("Using frustum mapping");
     }
     break;
   case MatrixMappingType:
   default:
     {
-      MatrixFieldMapping::Ptr mapping(new MatrixFieldMapping);
-      Matrix offset, scaling;
-      offset.setTranslation(wsBounds.min);
-      scaling.setScale(wsBounds.size());
-      mapping->setLocalToWorld(scaling * offset);
-      m_buffer->setMapping(mapping);
+      setupMatrixMapping(wsBounds);
       Log::print("Using uniform/matrix mapping");
     }
   }
@@ -370,6 +362,51 @@ void Modeler::saveBuffer(const std::string &filename) const
 VoxelBuffer::Ptr Modeler::buffer() const
 {
   return m_buffer;
+}
+
+//----------------------------------------------------------------------------//
+
+void Modeler::setupFrustumMapping(const BBox &wsBounds) const
+{
+  using namespace Render;
+
+  // Clone the camera so we can change the clip planes
+  PerspectiveCamera::Ptr cam = m_camera->clone();
+  // Check each corner vertex
+  double near = std::numeric_limits<double>::max(), far = 0.0f;
+  std::vector<Vector> wsCornerPoints = Math::cornerPoints(wsBounds);
+  BOOST_FOREACH (const Vector &wsP, wsCornerPoints) {
+    Vector csP = m_camera->worldToCamera(wsP, PTime(0.0));
+    near = std::min(near, -csP.z);
+    far = std::max(far, -csP.z);
+  }
+  // Clip at zero
+  near = std::max(near, 0.0);
+  far = std::max(far, 0.0);
+  // Set clip planes on cloned camera
+  cam->setClipPlanes(near, far);
+  // Copy the transforms from the camera
+  FrustumFieldMapping::Ptr mapping(new FrustumFieldMapping);
+  const Camera::MatrixVec& ssToWs = cam->screenToWorldMatrices();
+  const Camera::MatrixVec& csToWs = cam->cameraToWorldMatrices();
+  const size_t numSamples = ssToWs.size();
+  for (size_t i = 0; i < numSamples; ++i) {
+    float t = static_cast<float>(i) / (numSamples - 1);
+    mapping->setTransforms(t, ssToWs[i], csToWs[i]);
+  }
+  m_buffer->setMapping(mapping);
+}
+
+//----------------------------------------------------------------------------//
+
+void Modeler::setupMatrixMapping(const BBox &wsBounds) const
+{
+  MatrixFieldMapping::Ptr mapping(new MatrixFieldMapping);
+  Matrix offset, scaling;
+  offset.setTranslation(wsBounds.min);
+  scaling.setScale(wsBounds.size());
+  mapping->setLocalToWorld(scaling * offset);
+  m_buffer->setMapping(mapping);
 }
 
 //----------------------------------------------------------------------------//

@@ -56,6 +56,9 @@ public:
 
   DECLARE_SMART_PTRS(Modeler);
 
+  typedef Field3D::FrustumFieldMapping::Ptr FrustumMappingPtr;
+  typedef Field3D::MatrixFieldMapping::Ptr MatrixMappingPtr;
+
   // Enums ---------------------------------------------------------------------
 
   //! Enumerates mapping types supported by modeler
@@ -132,6 +135,9 @@ public:
   VoxelBuffer::Ptr buffer() const;
 
 private:
+
+  void setupFrustumMapping(const BBox &wsBounds) const;
+  void setupMatrixMapping(const BBox &wsBounds) const;
 
   // Protected data members ----------------------------------------------------
 

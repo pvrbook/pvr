@@ -76,6 +76,8 @@ public:
 
   DECLARE_SMART_PTRS(Camera);
 
+  typedef std::vector<Matrix> MatrixVec;
+
   // Exceptions ----------------------------------------------------------------
 
   //! Thrown if zero number of time samples given
@@ -109,11 +111,18 @@ public:
 
   //! Sets the number of time samples
   void setNumTimeSamples(const uint numSamples);
+  //! Returns the number of time samples
+  uint numTimeSamples() const ;
 
   //! Returns the camera-space coordinate given a world-space coordinate.
   Vector worldToCamera(const Vector &wsP, const PTime time) const;
   //! Returns the world-space coordinate given a camera-space coordinate.
   Vector cameraToWorld(const Vector &csP, const PTime time) const;
+
+  //! Returns the world to camera transform matrices
+  const MatrixVec& worldToCameraMatrices() const;
+  //! Returns the camera to world transform matrices
+  const MatrixVec& cameraToWorldMatrices() const;
 
   //! Returns the screen-space coordinate given a world-space coordinate.
   virtual Vector worldToScreen(const Vector &wsP, const PTime time) const = 0;
@@ -143,7 +152,7 @@ protected:
 
   //! Transforms the given point by interpolating between the two closest
   //! matrix transformations, given a [0,1] parametric time sample
-  Vector transformPoint(const Vector &p, const std::vector<Matrix> &matrices,
+  Vector transformPoint(const Vector &p, const MatrixVec &matrices,
                         const PTime time) const;
 
   //! Computes the camera to world transform at the given time
@@ -165,10 +174,10 @@ protected:
 
   //! Transformation matrices representing camera to world transform
   //! for the [0,dt] time interval
-  std::vector<Matrix> m_cameraToWorld;
+  MatrixVec m_cameraToWorld;
   //! Transformation matrices representing world to camera transform
   //! for the [0,dt] time interval
-  std::vector<Matrix> m_worldToCamera;
+  MatrixVec m_worldToCamera;
   
 };
 
@@ -206,6 +215,11 @@ public:
   //! Sets the animation curve for the vertical field-of-view. 
   void setVerticalFOV(const Util::FloatCurve &curve);
 
+  //! Returns the world to screen transform matrices
+  const MatrixVec& worldToScreenMatrices() const;
+  //! Returns the world to screen transform matrices
+  const MatrixVec& screenToWorldMatrices() const;
+
   // From Camera ---------------------------------------------------------------
   
   PVR_DEFINE_STATIC_CLONE_FUNC(PerspectiveCamera);
@@ -214,6 +228,11 @@ public:
   virtual Vector screenToWorld(const Vector &ssP, const PTime time) const;
   virtual Vector worldToRaster(const Vector &wsP, const PTime time) const;
   virtual Vector rasterToWorld(const Vector &rsP, const PTime time) const;
+
+  // Cloning -------------------------------------------------------------------
+
+  PerspectiveCamera::Ptr clone() const
+  { return PerspectiveCamera::Ptr(rawClone()); }
 
 protected:
   
@@ -240,13 +259,13 @@ protected:
   double m_far;
 
   //! Transformation matrix representing world to screen transform
-  std::vector<Matrix> m_worldToScreen;
+  MatrixVec m_worldToScreen;
   //! Transformation matrix representing screen to world transform
-  std::vector<Matrix> m_screenToWorld;
+  MatrixVec m_screenToWorld;
   //! Transformation matrix representing world to raster transform
-  std::vector<Matrix> m_worldToRaster;
+  MatrixVec m_worldToRaster;
   //! Transformation matrix representing raster to world transform
-  std::vector<Matrix> m_rasterToWorld;
+  MatrixVec m_rasterToWorld;
 
 private:
 

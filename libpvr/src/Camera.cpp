@@ -110,6 +110,11 @@ void Camera::setNumTimeSamples(const uint numSamples)
   recomputeTransforms();
 }
 
+uint Camera::numTimeSamples() const
+{
+  return m_numSamples;
+}
+
 //----------------------------------------------------------------------------//
 
 Vector Camera::worldToCamera(const Vector &wsP, const PTime time) const
@@ -122,6 +127,20 @@ Vector Camera::worldToCamera(const Vector &wsP, const PTime time) const
 Vector Camera::cameraToWorld(const Vector &csP, const PTime time) const
 {
   return transformPoint(csP, m_cameraToWorld, time);
+}
+
+//----------------------------------------------------------------------------//
+
+const Camera::MatrixVec& Camera::worldToCameraMatrices() const
+{
+  return m_worldToCamera;
+}
+
+//----------------------------------------------------------------------------//
+
+const Camera::MatrixVec& Camera::cameraToWorldMatrices() const
+{
+  return m_cameraToWorld;
 }
 
 //----------------------------------------------------------------------------//
@@ -220,6 +239,21 @@ void PerspectiveCamera::setVerticalFOV(const Util::FloatCurve &curve)
 {
   m_verticalFOV = curve;
   recomputeTransforms();
+}
+
+//----------------------------------------------------------------------------//
+
+const Camera::MatrixVec& PerspectiveCamera::worldToScreenMatrices() const
+{
+  return m_worldToScreen;
+}
+
+
+//----------------------------------------------------------------------------//
+
+const Camera::MatrixVec& PerspectiveCamera::screenToWorldMatrices() const
+{
+  return m_screenToWorld;
 }
 
 //----------------------------------------------------------------------------//

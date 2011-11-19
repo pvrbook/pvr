@@ -1,3 +1,4 @@
+
 //-*-c++-*--------------------------------------------------------------------//
 
 /*! \file GaussInterp.h
@@ -39,7 +40,28 @@ template <class Data_T>
 class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
 {
  public:
+  
+  // Typedefs ------------------------------------------------------------------
+
   typedef boost::intrusive_ptr<GaussianFieldInterp> Ptr;
+
+  // RTTI replacement ----------------------------------------------------------
+
+  typedef GaussianFieldInterp class_type;
+  DEFINE_FIELD_RTTI_CONCRETE_CLASS;
+
+  static const char *staticClassName()
+  {
+    return "ProceduralFieldLookup";
+  }
+
+  static const char* classType()
+  {
+    return class_type::ms_classType.name();
+  }
+  
+  // From FieldInterp ----------------------------------------------------------
+
   virtual Data_T sample(const Field<Data_T> &data, const V3d &vsP) const
   {
     // Voxel centers are at .5 coordinates
@@ -79,6 +101,7 @@ class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
     return value / normalization;
 
   }
+
   struct Gaussian
   {
     Gaussian(float alpha, float width)
@@ -96,7 +119,25 @@ class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
   private:
     float m_alpha, m_width, m_exp;
   };
+
+private:
+
+  // Static data members -------------------------------------------------------
+
+  static TemplatedFieldType<GaussianFieldInterp<Data_T> > ms_classType;
+
+  // Typedefs ------------------------------------------------------------------
+
+  //! Convenience typedef for referring to base class
+  typedef RefBase base;
+
 };
+
+//----------------------------------------------------------------------------//
+// Static data member instantiation
+//----------------------------------------------------------------------------//
+
+FIELD3D_CLASSTYPE_TEMPL_INSTANTIATION(GaussianFieldInterp);
 
 //----------------------------------------------------------------------------//
 

@@ -113,7 +113,7 @@ IntervalVec UniformMappingIntersection::intersect(const Ray &wsRay,
 //----------------------------------------------------------------------------//
 
 FrustumMappingIntersection::FrustumMappingIntersection
-(FrustumMapping::Ptr mapping)
+(Field3D::FrustumFieldMapping::Ptr mapping)
   : m_mapping(mapping)
 {
   typedef std::vector<Vector> PointVec;
@@ -275,9 +275,9 @@ void VoxelVolume::updateIntersectionHandler()
     throw MissingMappingException();
   }
   MatrixFieldMapping::Ptr matrixMapping = 
-    dynamic_pointer_cast<MatrixFieldMapping>(m_buffer->mapping());
-  FrustumMapping::Ptr frustumMapping = 
-    dynamic_pointer_cast<FrustumMapping>(m_buffer->mapping());
+    field_dynamic_cast<MatrixFieldMapping>(m_buffer->mapping());
+  FrustumFieldMapping::Ptr frustumMapping = 
+    field_dynamic_cast<FrustumFieldMapping>(m_buffer->mapping());
   if (matrixMapping) {
     m_intersectionHandler.reset(new UniformMappingIntersection(matrixMapping));
   } else if (frustumMapping) {

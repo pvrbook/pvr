@@ -21,8 +21,6 @@
 
 #include "pvr/ClassFactory.h"
 
-#include "pvr/FrustumMapping.h"
-
 #include "pvr/Lights/PointLight.h"
 #include "pvr/Occluders/RaymarchOccluder.h"
 #include "pvr/Occluders/TransmittanceMapOccluder.h"

@@ -21,9 +21,10 @@
 
 #include <boost/foreach.hpp>
 
+#include <Field3D/FieldMapping.h>
+
 // Project headers
 
-#include "pvr/FrustumMapping.h"
 #include "pvr/GaussianInterp.h"
 #include "pvr/Volumes/Volume.h"
 #include "pvr/VoxelBuffer.h"
@@ -89,7 +90,7 @@ public:
 
   // Ctor ----------------------------------------------------------------------
 
-  FrustumMappingIntersection(FrustumMapping::Ptr mapping);
+  FrustumMappingIntersection(Field3D::FrustumFieldMapping::Ptr mapping);
 
   // From BufferIntersection ---------------------------------------------------
 
@@ -100,7 +101,7 @@ private:
   // Data members --------------------------------------------------------------
 
   //! Pointer to frustum mapping
-  FrustumMapping::Ptr m_mapping;
+  Field3D::FrustumFieldMapping::Ptr m_mapping;
   //! The six planes that make up the frustum
   //! \note Order of planes: Left, Right, Bottom, Top, Near, Far
   Plane m_planes[6];
