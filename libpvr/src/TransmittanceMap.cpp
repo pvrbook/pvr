@@ -90,6 +90,18 @@ void TransmittanceMap::setPixel(const size_t x, const size_t y,
   
 //----------------------------------------------------------------------------//
 
+Util::TransmittanceFunction::Ptr 
+TransmittanceMap::pixelFunction(const size_t x, const size_t y) const
+{
+  assert(x < m_width && "Pixel x coordinate out of bounds");
+  assert(y < m_height && "Pixel y coordinate out of bounds");
+  return Util::TransmittanceFunction::Ptr
+    (new Util::TransmittanceFunction(m_pixels[x + y * m_width]));
+}
+
+
+//----------------------------------------------------------------------------//
+
 Color TransmittanceMap::lerp(const float rsX, const float rsY, const float z) const
 {
   const size_t zero = 0;

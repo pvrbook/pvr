@@ -74,6 +74,9 @@ public:
   void setPixel(const size_t x, const size_t y, 
                 const Util::TransmittanceFunction::CPtr func);
 
+  Util::TransmittanceFunction::Ptr 
+  pixelFunction(const size_t x, const size_t y) const;
+
   //! Interpolated transmittance at a given raster coordinate and depth.
   Color lerp(const float rsX, const float rsY, const float z) const;
 

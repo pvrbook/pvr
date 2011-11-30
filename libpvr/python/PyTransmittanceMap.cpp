@@ -36,8 +36,9 @@ void exportTransmittanceMap()
 
   class_<TransmittanceMap, TransmittanceMap::Ptr>
     ("TransmittanceMap", no_init)
-    .def("__init__",   make_constructor(TransmittanceMap::create))
-    .def("printStats", &TransmittanceMap::printStats)
+    .def("__init__",      make_constructor(TransmittanceMap::create))
+    .def("pixelFunction", &TransmittanceMap::pixelFunction)
+    .def("printStats",    &TransmittanceMap::printStats)
     ;
   
   implicitly_convertible<TransmittanceMap::Ptr, 
