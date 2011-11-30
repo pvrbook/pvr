@@ -46,6 +46,18 @@ namespace pvr {
 //----------------------------------------------------------------------------//
 
 template <typename T>
+boost::python::list vecToList(const std::vector<T> &vec)
+{
+  boost::python::list values;
+  for (typename std::vector<T>::const_iterator i = vec.begin(), end = vec.end();
+       i != end; ++i) {
+    values.append(*i);
+  }
+  return values;
+}
+
+//----------------------------------------------------------------------------//
+template <typename T>
 std::vector<T> pyListValues(boost::python::list l)
 {
   using namespace boost::python;
