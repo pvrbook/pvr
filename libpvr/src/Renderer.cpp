@@ -59,7 +59,8 @@ namespace Render {
 //----------------------------------------------------------------------------//
 
 Renderer::Params::Params()
-  : doPrimary(true), doTransmittanceMap(false), doRandomizePixelSamples(false)
+  : doPrimary(true), doLuminanceMap(false), doTransmittanceMap(false), 
+    doRandomizePixelSamples(false)
 { 
   
 }
@@ -77,6 +78,7 @@ Renderer::Ptr Renderer::clone()
   // Deep-copy the non-const data members
   renderer->m_primary = m_primary->clone();
   renderer->m_transmittanceMap = m_transmittanceMap->clone();
+  renderer->m_luminanceMap = m_luminanceMap->clone();
   if (m_scene) {
     renderer->m_scene = m_scene->clone();
   }
@@ -102,6 +104,8 @@ void Renderer::setCamera(Camera::CPtr camera)
   m_primary->setSize(res.x, res.y);
   m_transmittanceMap = TransmittanceMap::create();
   m_transmittanceMap->setSize(res.x, res.y);
+  m_luminanceMap = TransmittanceMap::create();
+  m_luminanceMap->setSize(res.x, res.y);
 }
 
 //----------------------------------------------------------------------------//
@@ -143,6 +147,13 @@ void Renderer::setPrimaryEnabled(const bool enabled)
 void Renderer::setTransmittanceMapEnabled(const bool enabled)
 {
   m_params.doTransmittanceMap = enabled;
+}
+
+//----------------------------------------------------------------------------//
+
+void Renderer::setLuminanceMapEnabled(const bool enabled)
+{
+  m_params.doLuminanceMap = enabled;
 }
 
 //----------------------------------------------------------------------------//
@@ -205,6 +216,9 @@ void Renderer::execute()
     if (result.transmittanceFunction) {
       m_transmittanceMap->setPixel(i.x, i.y, result.transmittanceFunction);
     }
+    if (result.luminanceFunction) {
+      m_luminanceMap->setPixel(i.x, i.y, result.luminanceFunction);
+    }
   }
 
   Log::print("  Time elapsed: " + str(timer.elapsed()));
@@ -222,6 +236,13 @@ Raymarcher::CPtr Renderer::raymarcher() const
 TransmittanceMap::Ptr Renderer::transmittanceMap() const
 {
   return m_transmittanceMap;
+}
+
+//----------------------------------------------------------------------------//
+
+TransmittanceMap::Ptr Renderer::luminanceMap() const
+{
+  return m_luminanceMap;
 }
 
 //----------------------------------------------------------------------------//
@@ -250,6 +271,7 @@ IntegrationResult Renderer::integrateRay(const float x, const float y,
   state.wsRay = setupRay(x, y, time);
   state.time = time;
   state.doOutputTransmittanceFunction = m_params.doTransmittanceMap;
+  state.doOutputLuminanceFunction = m_params.doLuminanceMap;
   state.scene = m_scene;  
   state.camera = m_camera;
   return m_raymarcher->integrate(state);

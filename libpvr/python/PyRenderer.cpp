@@ -50,10 +50,12 @@ void exportRenderer()
     .def("addLight",                   &Renderer::addLight)
     .def("setPrimaryEnabled",          &Renderer::setPrimaryEnabled)
     .def("setTransmittanceMapEnabled", &Renderer::setTransmittanceMapEnabled)
+    .def("setLuminanceMapEnabled",     &Renderer::setLuminanceMapEnabled)
     .def("setDoRandomizePixelSamples", &Renderer::setDoRandomizePixelSamples)
     .def("execute",                    &Renderer::execute)
     .def("raymarcher",                 &Renderer::raymarcher)
     .def("transmittanceMap",           &Renderer::transmittanceMap)
+    .def("luminanceMap",               &Renderer::luminanceMap)
     .def("saveImage",                  &Renderer::saveImage)
     ;
 

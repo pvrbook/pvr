@@ -129,6 +129,15 @@ NaiveRaymarcher::integrate(const RenderState &state) const
     tf->addSample(intervals[0].t0, Colors::one());
   }
 
+  // Output luminance function ---
+
+  TransmittanceFunction::Ptr lf;
+
+  if (state.doOutputLuminanceFunction) {
+    lf = TransmittanceFunction::create();
+    lf->addSample(intervals[0].t0, Colors::zero());
+  }
+
   // Ray integration variables ---
 
   VolumeSampleState sampleState(state);
@@ -166,14 +175,10 @@ NaiveRaymarcher::integrate(const RenderState &state) const
     // Raymarch loop ---
  
     bool doTerminate = false;
-    bool skip = false;
-    float skipDepth;
-    Color skipT;
 
     while (stepT0 < tEnd) {
 
       const double stepLength = stepT1 - stepT0;
-
       const double t = (stepT0 + stepT1) * 0.5;
       sampleState.wsP = state.wsRay(t);
 
@@ -191,24 +196,17 @@ NaiveRaymarcher::integrate(const RenderState &state) const
         doTerminate = true;
       }
 
-      if (tf) {
+      if (tf || lf) {
+        // Z depth of camera is not equal to t (t is true distance)
+        // Note that we always sample time at t=0.0 for the transmittance
+        // function
         Vector csP = state.camera->worldToCamera(sampleState.wsP, PTime(0.0));
         float depth = -csP.z;
-        if (Math::max(sample.attenuation) > 0.0f) {
-          // Check if we need to add previous sample back in
-          if (skip) {
-            tf->addSample(skipDepth, skipT);
-          }
-          // No longer skipping samples
-          skip = false;
-          // Z depth of camera is not equal to t (t is true distance)
-          // Note that we always sample time at t=0.0 for the transmittance
-          // function
+        if (tf) {
           tf->addSample(depth, T);
-        } else {
-          skip = true;
-          skipDepth = depth;
-          skipT = T;
+        }
+        if (lf) {
+          lf->addSample(depth, L);
         }
       }
 
@@ -223,7 +221,15 @@ NaiveRaymarcher::integrate(const RenderState &state) const
 
   } // end for each interval
 
-  return IntegrationResult(L, T, tf);
+  if (tf) {
+    tf->removeDuplicates();
+  }
+
+  if (lf) {
+    lf->removeDuplicates();
+  }
+
+  return IntegrationResult(L, lf, T, tf);
 }
 
 //----------------------------------------------------------------------------//

@@ -45,14 +45,17 @@ struct IntegrationResult
   IntegrationResult(const Color &L, const Color &T)
     : luminance(L), transmittance(T)
   { }
-  IntegrationResult(const Color &L, const Color &T, 
-                    Util::TransmittanceFunction::CPtr Tf)
-    : luminance(L), transmittance(T), transmittanceFunction(Tf)
+  IntegrationResult(const Color &L, Util::TransmittanceFunction::CPtr Lf,
+                    const Color &T, Util::TransmittanceFunction::CPtr Tf)
+    : luminance(L), transmittance(T), 
+      luminanceFunction(Lf), transmittanceFunction(Tf)
   { }
   //! Ray's incoming radiance
   Color luminance;
   //! Ray's total transmittance
   Color transmittance;
+  //! Luminance function defined by raymarch. May be NULL if not computed.
+  Util::TransmittanceFunction::CPtr luminanceFunction;
   //! Transmittance function defined by raymarch. May be NULL if not computed.
   Util::TransmittanceFunction::CPtr transmittanceFunction;
 };

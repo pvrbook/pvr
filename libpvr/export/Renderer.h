@@ -95,8 +95,11 @@ public:
   //! and false when rendering a seconary pass, such as the transmittance map.
   void setPrimaryEnabled(const bool enabled);
 
-  //! Sets whether to enable computation of the transmittance map.
+  //! Sets whether to enable computation of the deep transmittance map.
   void setTransmittanceMapEnabled(const bool enabled);
+
+  //! Sets whether to enable computation of the deep luminance map.
+  void setLuminanceMapEnabled(const bool enabled);
 
   //! Sets whether to randomize pixel samples
   void setDoRandomizePixelSamples(const bool enabled);
@@ -109,6 +112,9 @@ public:
 
   //! Returns a pointer to the transmittance map
   TransmittanceMap::Ptr transmittanceMap() const;
+
+  //! Returns a pointer to the luminance map
+  TransmittanceMap::Ptr luminanceMap() const;
 
   //! Saves the rendered image to the given filename
   void saveImage(const std::string &filename) const;
@@ -127,6 +133,7 @@ private:
   struct Params {
     Params();
     bool doPrimary;
+    bool doLuminanceMap;
     bool doTransmittanceMap;
     bool doRandomizePixelSamples;
   };
@@ -148,8 +155,11 @@ private:
   //! Primary image output. 
   Image::Ptr m_primary;
 
-  //! Pointer to transmittance map
+  //! Pointer to deep transmittance map
   TransmittanceMap::Ptr m_transmittanceMap;
+
+  //! Pointer to deep luminance map
+  TransmittanceMap::Ptr m_luminanceMap;
 
   //! Pointer to scene
   Scene::Ptr m_scene;

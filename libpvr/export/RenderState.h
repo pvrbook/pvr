@@ -58,6 +58,7 @@ struct RenderState
       rayDepth(0), 
       rayType(FullRaymarch),
       time(0.0f),
+      doOutputLuminanceFunction(false),
       doOutputTransmittanceFunction(false)
   { }
   Ray                             wsRay;
@@ -66,6 +67,7 @@ struct RenderState
   size_t                          rayDepth;
   RayType                         rayType;
   PTime                           time;
+  bool                            doOutputLuminanceFunction;
   bool                            doOutputTransmittanceFunction;
   boost::shared_ptr<const Scene>  scene;
   boost::shared_ptr<const Camera> camera;
