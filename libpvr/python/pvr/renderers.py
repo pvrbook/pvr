@@ -15,12 +15,16 @@ __stdRaymarcherParams = {
 
 # ------------------------------------------------------------------------------
 
-def standard():
+def standard(params):
+    # Merge dictionaries
+    p = __stdRaymarcherParams.copy()
+    p.update(params)
+    # Set up Renderer
     renderer = Renderer()
     sampler = createRaymarchSampler("ScatteringSampler")
     raymarcher = createRaymarcher("Naive")
     raymarcher.setRaymarchSampler(sampler)
-    raymarcher.setParams(__stdRaymarcherParams)
+    raymarcher.setParams(p)
     renderer.setRaymarcher(raymarcher)
     return renderer
 
