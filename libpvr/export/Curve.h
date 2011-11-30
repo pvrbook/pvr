@@ -93,6 +93,12 @@ public:
   size_t numSamples() const
   { return m_samples.size(); }
   
+  //! Returns the sample locations
+  std::vector<float> samplePoints() const;
+
+  //! Returns the sample values
+  std::vector<T> sampleValues() const;
+
 private:
   
   // Structs -------------------------------------------------------------------
@@ -190,6 +196,32 @@ T Curve<T>::interpolate(const float t) const
   const Sample &lower = *(--i);
   const float interpT = Imath::lerpfactor(t, lower.first, upper.first);
   return lerp(lower, upper, interpT);
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+std::vector<float> Curve<T>::samplePoints() const
+{
+  std::vector<float> result;
+  for (typename SampleVec::const_iterator i = m_samples.begin(), 
+         end = m_samples.end(); i != end; ++i) {
+    result.push_back(i->first);
+  }
+  return result;
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+std::vector<T> Curve<T>::sampleValues() const
+{
+  std::vector<T> result;
+  for (typename SampleVec::const_iterator i = m_samples.begin(), 
+         end = m_samples.end(); i != end; ++i) {
+    result.push_back(i->second);
+  }
+  return result;
 }
 
 //----------------------------------------------------------------------------//

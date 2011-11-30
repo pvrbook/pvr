@@ -21,6 +21,8 @@
 
 #include <pvr/Camera.h>
 
+#include "Common.h"
+
 //----------------------------------------------------------------------------//
 // Namespaces
 //----------------------------------------------------------------------------//
@@ -40,17 +42,26 @@ using pvr::Render::calculateVerticalFOV;
 template <typename T>
 struct BindCurve
 {
+  static boost::python::list samplePoints(Curve<T> &self)
+  { return vecToList(self.samplePoints()); }
+
+  static boost::python::list sampleValues(Curve<T> &self)
+  { return vecToList(self.sampleValues()); }
+
   static void bind(const char *name)
   {
     using namespace boost::python;
 
     class_<Curve<T>, typename Curve<T>::Ptr>(name, no_init)
-      .def("__init__",    make_constructor(Curve<T>::create))
-      .def("addSample",   &Curve<T>::addSample)
-      .def("interpolate", &Curve<T>::interpolate)
+      .def("__init__",     make_constructor(Curve<T>::create))
+      .def("addSample",    &Curve<T>::addSample)
+      .def("interpolate",  &Curve<T>::interpolate)
+      .def("samplePoints", &samplePoints)
+      .def("sampleValues", &sampleValues)
       ;
 
     implicitly_convertible<T, Curve<T> >();
+    implicitly_convertible<typename Curve<T>::Ptr, typename Curve<T>::CPtr>();
   }
 };
 
@@ -63,6 +74,7 @@ void exportCurve()
   using namespace boost::python;
 
   BindCurve<float>::bind("FloatCurve");
+  BindCurve<Color>::bind("ColorCurve");
   BindCurve<Vector>::bind("VectorCurve");
   BindCurve<Quat>::bind("QuatCurve");
 }
