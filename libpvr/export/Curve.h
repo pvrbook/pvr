@@ -99,6 +99,9 @@ public:
   //! Returns the sample values
   std::vector<T> sampleValues() const;
 
+  //! Removes duplicated values
+  void removeDuplicates();
+
 private:
   
   // Structs -------------------------------------------------------------------
@@ -222,6 +225,37 @@ std::vector<T> Curve<T>::sampleValues() const
     result.push_back(i->second);
   }
   return result;
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+void Curve<T>::removeDuplicates()
+{
+  // New sample vector
+  SampleVec newSamples;
+  // Vector size
+  size_t size = m_samples.size();
+  if (size == 1) {
+    return;
+  }
+  // First point
+  if (m_samples[0] != m_samples[1]) {
+    newSamples.push_back(m_samples[0]);
+  }
+  // Interior points
+  for (size_t i = 1; i < size - 1; i++) {
+    if (m_samples[i].second != m_samples[i - 1].second || 
+        m_samples[i].second != m_samples[i + 1].second) {
+      newSamples.push_back(m_samples[i]);
+    } 
+  }
+  // Last points
+  if (m_samples[size - 1] != m_samples[size - 2]) {
+    newSamples.push_back(m_samples[size - 1]);
+  }
+  // Swap contents of m_samples with new sample vector.
+  m_samples.swap(newSamples);
 }
 
 //----------------------------------------------------------------------------//
