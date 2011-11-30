@@ -166,6 +166,9 @@ NaiveRaymarcher::integrate(const RenderState &state) const
     // Raymarch loop ---
  
     bool doTerminate = false;
+    bool skip = false;
+    float skipDepth;
+    Color skipT;
 
     while (stepT0 < tEnd) {
 
@@ -188,12 +191,25 @@ NaiveRaymarcher::integrate(const RenderState &state) const
         doTerminate = true;
       }
 
-      if (tf && Math::max(sample.attenuation) > 0.0f) {
-        // Z depth of camera is not equal to t (t is true distance)
-        // Note that we always sample time at t=0.0 for the transmittance
-        // function
+      if (tf) {
         Vector csP = state.camera->worldToCamera(sampleState.wsP, PTime(0.0));
-        tf->addSample(std::abs(csP.z), T);
+        float depth = -csP.z;
+        if (Math::max(sample.attenuation) > 0.0f) {
+          // Check if we need to add previous sample back in
+          if (skip) {
+            tf->addSample(skipDepth, skipT);
+          }
+          // No longer skipping samples
+          skip = false;
+          // Z depth of camera is not equal to t (t is true distance)
+          // Note that we always sample time at t=0.0 for the transmittance
+          // function
+          tf->addSample(depth, T);
+        } else {
+          skip = true;
+          skipDepth = depth;
+          skipT = T;
+        }
       }
 
       stepT0 = stepT1;
