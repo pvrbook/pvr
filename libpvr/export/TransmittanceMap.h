@@ -129,6 +129,7 @@ TransmittanceMap::pixel(const size_t x, const size_t y)
   assert(x < m_width  && "TransmittanceMap::pixel(): x out of range");
   assert(y < m_height && "TransmittanceMap::pixel(): y out of range");
   return m_pixels[x + y * m_height];
+  return m_pixels[x + y * m_width];
 }
 
 //----------------------------------------------------------------------------//
