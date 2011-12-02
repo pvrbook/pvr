@@ -71,8 +71,6 @@ Renderer::Params::Params()
 
 Renderer::Ptr Renderer::clone()
 {
-  //! \todo Fails if m_scene is null
-  
   // First copy everything from this
   Ptr renderer(new Renderer(*this));
   // Deep-copy the non-const data members
@@ -165,6 +163,7 @@ void Renderer::setDoRandomizePixelSamples(const bool enabled)
 
 //----------------------------------------------------------------------------//
 
+//! \todo Replace RNG with a proper Sampler
 void Renderer::execute()
 {
   Log::print("Rendering image size " + str(m_primary->size()));
@@ -210,6 +209,7 @@ void Renderer::execute()
     PTime pTime(m_rng.nextf());
     // Render pixel
     IntegrationResult result = integrateRay(xSample, ySample, pTime);
+    // Update resulting image and transmittance/luminance maps
     Color alpha = Colors::one() - result.transmittance;
     i.setPixel(result.luminance);
     i.setPixelAlpha((alpha.x + alpha.y + alpha.z) / 3.0f);
@@ -256,9 +256,13 @@ void Renderer::saveImage(const std::string &filename) const
 
 Ray Renderer::setupRay(const float x, const float y, const PTime time) const
 {
+  // Find camera position at current time. This will serve as the Ray's origin
   const Vector wsEye = m_camera->position(time);
+  // Compute direction by transforming pixel position in raster space to
+  // world space
   const Vector rsP(x, y, 0.0);
   Vector wsP = m_camera->rasterToWorld(rsP, time);
+
   return Ray(wsEye, wsP);
 }
 
@@ -267,13 +271,17 @@ Ray Renderer::setupRay(const float x, const float y, const PTime time) const
 IntegrationResult Renderer::integrateRay(const float x, const float y,
                                          const PTime time) const
 {
+  // Create default RenderState. Rely on its constructor to set reasonable
+  // defaults
   RenderState state;
-  state.wsRay = setupRay(x, y, time);
-  state.time = time;
-  state.doOutputTransmittanceFunction = m_params.doTransmittanceMap;
-  state.doOutputLuminanceFunction = m_params.doLuminanceMap;
-  state.scene = m_scene;  
-  state.camera = m_camera;
+  // Update the values that are non-default
+  state.wsRay         = setupRay(x, y, time);
+  state.time          = time;
+  state.doOutputDeepT = m_params.doTransmittanceMap;
+  state.doOutputDeepL = m_params.doLuminanceMap;
+  state.scene         = m_scene;  
+  state.camera        = m_camera;
+  // Let the Raymarcher do the integration work
   return m_raymarcher->integrate(state);
 }
 

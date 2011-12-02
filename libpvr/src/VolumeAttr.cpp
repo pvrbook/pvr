@@ -1,25 +1,20 @@
-//-*-c++-*--------------------------------------------------------------------//
-
-/*! \file Scene.h
-  Contains the Scene class and related functions.
- */
-
 //----------------------------------------------------------------------------//
 
-#ifndef __INCLUDED_PVR_SCENE_H__
-#define __INCLUDED_PVR_SCENE_H__
+/*! \file VolumeAttr.cpp
+  Contains implementations of VolumeAttr class.
+ */
 
 //----------------------------------------------------------------------------//
 // Includes
 //----------------------------------------------------------------------------//
 
-// System headers
+// Header include
 
-// Library headers
+#include "pvr/VolumeAttr.h"
 
-// Project headers
+// Project includes
 
-#include "pvr/Types.h"
+
 
 //----------------------------------------------------------------------------//
 // Namespaces
@@ -29,53 +24,52 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// Forward declarations
+// VolumeAttr implementations
 //----------------------------------------------------------------------------//
 
-class Light;
-class Volume;
-
-//----------------------------------------------------------------------------//
-// Scene
-//----------------------------------------------------------------------------//
-
-/*! \class Scene
-  \brief Contains the scene elements (Volume and Light instances)
- */
-
-//----------------------------------------------------------------------------//
-
-class Scene
-{
-public:
-  // Typedefs
-  DECLARE_SMART_PTRS(Scene);
-  typedef Util::SPtr<const Volume>::type VolumePtr;
-  typedef Util::SPtr<const Light>::type  LightPtr;
-  typedef std::vector<LightPtr>          LightVec;
-  // Cloning
-  Ptr clone() const;
-  // Data members
-  VolumePtr volume;
-  LightVec  lights;
-};
-
-//----------------------------------------------------------------------------//
-// Implementations
-//----------------------------------------------------------------------------//
-
-inline Scene::Ptr Scene::clone() const
+VolumeAttr::VolumeAttr(const std::string &name)
+  : m_name(name), m_index(IndexNotSet)
 { 
-  return Ptr(new Scene(*this)); 
+  // Empty
+}
+
+//----------------------------------------------------------------------------//
+
+const std::string& VolumeAttr::name() const
+{ 
+  return m_name; 
+}
+  
+//----------------------------------------------------------------------------//
+
+int VolumeAttr::index() const
+{ 
+  return m_index; 
+}
+
+//----------------------------------------------------------------------------//
+
+void VolumeAttr::setIndex(const int index) const
+{ 
+  if (m_index != IndexNotSet) {
+    throw SetIndexException("Trying to set index more than once");
+  }
+  if (index < 0) {
+    throw SetIndexException("Index provided was less than zero");
+  }
+  m_index = index; 
+}
+
+//----------------------------------------------------------------------------//
+
+void VolumeAttr::setIndexInvalid() const
+{ 
+  m_index = IndexInvalid; 
 }
 
 //----------------------------------------------------------------------------//
 
 } // namespace Render
 } // namespace pvr
-
-//----------------------------------------------------------------------------//
-
-#endif // Include guard
 
 //----------------------------------------------------------------------------//

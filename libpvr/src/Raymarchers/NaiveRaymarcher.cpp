@@ -124,7 +124,7 @@ NaiveRaymarcher::integrate(const RenderState &state) const
 
   TransmittanceFunction::Ptr tf;
 
-  if (state.doOutputTransmittanceFunction) {
+  if (state.doOutputDeepT) {
     tf = TransmittanceFunction::create();
     tf->addSample(intervals[0].t0, Colors::one());
   }
@@ -133,7 +133,7 @@ NaiveRaymarcher::integrate(const RenderState &state) const
 
   TransmittanceFunction::Ptr lf;
 
-  if (state.doOutputLuminanceFunction) {
+  if (state.doOutputDeepL) {
     lf = TransmittanceFunction::create();
     lf->addSample(intervals[0].t0, Colors::zero());
   }

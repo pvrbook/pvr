@@ -55,8 +55,7 @@ struct LightSample
 
 /*! \class Light
   \brief Base class for all lights.
-
-
+  \todo Put implementations in .cpp file
  */
 
 //----------------------------------------------------------------------------//
@@ -69,14 +68,20 @@ public:
 
   DECLARE_SMART_PTRS(Light);
 
+  // Constructor, destructor ---------------------------------------------------
+
   Light()
     : m_occluder(NullOccluder::create())
   { }
   virtual ~Light()
   { }
-  // To be implemented by subclasses
+
+  // To be implemented by subclasses -------------------------------------------
+
   virtual LightSample sample(const LightSampleState &state) const = 0;
-  // Main methods 
+
+  // Main methods --------------------------------------------------------------
+
   void setIntensity(const Color &intensity)
   { m_intensity = intensity; }
   void setOccluder(Occluder::CPtr occluder)
@@ -86,7 +91,11 @@ public:
   }
   Occluder::CPtr occluder() const
   { return m_occluder; }
+
 protected:
+
+  // Data members --------------------------------------------------------------
+
   Color m_intensity;
   Occluder::CPtr m_occluder;
 };

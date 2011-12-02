@@ -63,7 +63,8 @@ public:
 // Utility functions
 //----------------------------------------------------------------------------//
 
-//! Sets the attribute index if names match, otherwise sets it to IndexInvalid
+//! Sets the attribute index if attribute.name() == name, otherwise sets it to 
+//! IndexInvalid
 void setupVolumeAttr(const VolumeAttr &attribute, const std::string &name,
                      const int index);
   

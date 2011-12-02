@@ -59,39 +59,22 @@ public:
 
   // Constructors --------------------------------------------------------------
 
-  VolumeAttr(const std::string &name)
-    : m_name(name), m_index(IndexNotSet)
-  { }
+  VolumeAttr(const std::string &name);
 
   // Main methods --------------------------------------------------------------
 
   //! Returns the name of the attribute
-  const std::string& name() const
-  { return m_name; }
-  
+  const std::string& name() const;
   //! Returns the index of the attribute
-  int index() const
-  { return m_index; }
-
+  int index() const;
   //! Sets the index of the attribute.
   //! \note This is const, because the value always needs to be set on first
   //! use, and re-setting is prohibited.
   //! \throws SetIndexException if trying to set the index more than once
-  void setIndex(const int index) const
-  { 
-    if (m_index != IndexNotSet) {
-      throw SetIndexException("Trying to set index more than once");
-    }
-    if (index < 0) {
-      throw SetIndexException("Index provided was less than zero");
-    }
-    m_index = index; 
-  }
-
+  void setIndex(const int index) const;
   //! Marks the index as invalid. This is set whenever a Volume decides it
   //! can't provide the requested attribute
-  void setIndexInvalid() const
-  { m_index = IndexInvalid; }
+  void setIndexInvalid() const;
 
 private:
 
@@ -99,7 +82,6 @@ private:
 
   //! Name of attribute
   std::string m_name;
-
   //! Index of attribute. This is IndexNotSet by default.
   mutable int m_index;
 
