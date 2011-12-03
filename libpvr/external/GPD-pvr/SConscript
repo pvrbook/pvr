@@ -11,6 +11,9 @@ setupLibBuildEnv(libEnv)
 libEnv.Append(CPPDEFINES = ["SESI_LITTLE_ENDIAN"])
 libEnv.Append(CPPPATH = ["export"])
 
+# Disable warnings because GPD is a warning fest.
+libEnv.Append(CPPFLAGS = ["-w"])
+
 build = buildDir(libEnv)
 install = join(installDir(libEnv))
 
