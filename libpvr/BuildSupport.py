@@ -138,13 +138,13 @@ def pythonVer():
 
 def setupBuildOutput(env):
     if ARGUMENTS.get("verbose") != "1":
-        env["ARCOMSTR"] = "AR $TARGET"
-        env["CXXCOMSTR"] = "Compiling " + targetColor("$TARGET")
-        env["SHCXXCOMSTR"] = "Compiling shared " + targetColor("$TARGET")
-        env["LDMODULECOMSTR"] = "Compiling shared " + targetColor("$TARGET")
-        env["LINKCOMSTR"] = "Linking " + targetColor("$TARGET")
-        env["SHLINKCOMSTR"] = "Linking shared " + targetColor("$TARGET")
-        env["INSTALLSTR"] = "Installing " + targetColor("$TARGET")
+        env["ARCOMSTR"]       = "Running ar " + targetColor("$TARGET")
+        env["CXXCOMSTR"]      = "Compiling  " + targetColor("$TARGET")
+        env["SHCXXCOMSTR"]    = "Compiling  " + targetColor("$TARGET")
+        env["LDMODULECOMSTR"] = "Compiling  " + targetColor("$TARGET")
+        env["LINKCOMSTR"]     = "Linking    " + targetColor("$TARGET")
+        env["SHLINKCOMSTR"]   = "Linking    " + targetColor("$TARGET")
+        env["INSTALLSTR"]     = "Installing " + targetColor("$TARGET")
 
 # ------------------------------------------------------------------------------
 
@@ -340,6 +340,7 @@ def defineBoostPythonModule(name, files, env):
 # ------------------------------------------------------------------------------
 
 def installPyLib(env, lib, files):
+    setupBuildOutput(env)
     if "PVR_PYTHON_PATH" not in os.environ.keys():
         print "$PVR_PYTHON_PATH was not set. Can't install."
     installDir = os.environ["PVR_PYTHON_PATH"]
