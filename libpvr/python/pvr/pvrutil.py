@@ -112,11 +112,11 @@ def makeLights(filename, renderer, mult = 1.0):
 def setupTransmittanceMap(baseRenderer, light, resolution, orientation, fov, 
                           raymarcherType, raymarcherParams, samplerType):
     rend = baseRenderer.clone()
-    raymarcher = createRaymarcher(raymarcherType)
-    raymarcher.setParams(raymarcherParams)
-    sampler = createRaymarchSampler(samplerType)
-    raymarcher.setRaymarchSampler(sampler)
-    rend.setRaymarcher(raymarcher)
+    # raymarcher = createRaymarcher(raymarcherType)
+    # raymarcher.setParams(raymarcherParams)
+    # sampler = createRaymarchSampler(samplerType)
+    # raymarcher.setRaymarchSampler(sampler)
+    # rend.setRaymarcher(raymarcher)
     cam = PerspectiveCamera()
     cam.setPosition(light.position())
     cam.setOrientation(orientation)
