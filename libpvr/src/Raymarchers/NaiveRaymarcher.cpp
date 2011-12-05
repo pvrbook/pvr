@@ -184,18 +184,24 @@ NaiveRaymarcher::integrate(const RenderState &state) const
 
       RaymarchSample sample = m_raymarchSampler->sample(sampleState);
 
+      // Accept sample ---
+
+      // ... Add to luminance
       L += sample.luminance * T * stepLength;
 
+      // ... Update transmittance
       if (Math::max(sample.attenuation) > 0.0f) {
         T *= exp(-sample.attenuation * stepLength);
       }
 
+      // Early termination
       if (m_params.doEarlyTermination &&
           Math::max(T) < m_params.earlyTerminationThreshold) {
         T = Colors::zero();
         doTerminate = true;
       }
 
+      // Update transmittance and luminance functions
       if (tf || lf) {
         // Z depth of camera is not equal to t (t is true distance)
         // Note that we always sample time at t=0.0 for the transmittance
@@ -210,9 +216,11 @@ NaiveRaymarcher::integrate(const RenderState &state) const
         }
       }
 
+      // Set up next steps
       stepT0 = stepT1;
       stepT1 = min(tEnd, stepT1 + baseStepLength);
 
+      // Terminate if requested
       if (doTerminate) {
         break;
       }
