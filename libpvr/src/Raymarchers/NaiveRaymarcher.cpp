@@ -186,13 +186,13 @@ NaiveRaymarcher::integrate(const RenderState &state) const
 
       // Accept sample ---
 
-      // ... Add to luminance
-      L += sample.luminance * T * stepLength;
-
       // ... Update transmittance
       if (Math::max(sample.attenuation) > 0.0f) {
         T *= exp(-sample.attenuation * stepLength);
       }
+
+      // ... Add to luminance
+      L += sample.luminance * T * stepLength;
 
       // Early termination
       if (m_params.doEarlyTermination &&
