@@ -1,0 +1,14 @@
+# Alter these as needed
+
+program    = "attr_visitor"
+srcDir     = "src"
+pathToRoot = "../.."
+
+# Standard script below
+
+import sys
+sys.path.append(pathToRoot)
+from BuildSupport import *
+
+env = Environment()
+makeSimpleProgram(env, pathToRoot, program, srcDir)
