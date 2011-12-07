@@ -223,8 +223,8 @@ def setupEnv(env, pathToRoot = "."):
     # Hdf5 lib
     env.Append(LIBS = ["hdf5"])
     # Externals
-    env.Append(CPPPATH = "external/include")
-    env.Append(LIBPATH = "external/libs/" + variantDir(env))
+    env.Append(CPPPATH = join(pathToRoot, "external/include"))
+    env.Append(LIBPATH = join(pathToRoot, "external/libs/" + variantDir(env)))
     # Compile flags
     if isDebugBuild():
         env.Append(CCFLAGS = ["-g"])
@@ -360,5 +360,15 @@ def makePyPackage(target, source, env):
     cmd = "RecursiveLdd.py "
     cmd += srcName + " " + tgtDir
     os.system(cmd)
+
+# ------------------------------------------------------------------------------
+
+def makeSimpleProgram(env, pathToRoot, program, srcDir):
+    setupEnv(env, pathToRoot)
+    addLibPVR(env, pathToRoot)
+    env.VariantDir(buildDir(env), srcDir, duplicate=0)
+    files = Glob(join(buildDir(env), "*.cpp"))
+    env.Program(program, files)
+
 
 # ------------------------------------------------------------------------------
