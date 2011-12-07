@@ -62,7 +62,7 @@ std::string TransmittanceMapOccluder::typeName() const
 
 //----------------------------------------------------------------------------//
 
-Color 
+Color
 TransmittanceMapOccluder::transmittance(const OcclusionSampleState &state) const
 {
   // Error checking

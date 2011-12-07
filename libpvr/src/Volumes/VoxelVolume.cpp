@@ -72,7 +72,7 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// BufferIntersection
+// UniformMappingIntersection
 //----------------------------------------------------------------------------//
 
 UniformMappingIntersection::UniformMappingIntersection
@@ -110,6 +110,8 @@ IntervalVec UniformMappingIntersection::intersect(const Ray &wsRay,
   }
 }
   
+//----------------------------------------------------------------------------//
+// FrustumMappingIntersection
 //----------------------------------------------------------------------------//
 
 FrustumMappingIntersection::FrustumMappingIntersection
@@ -174,6 +176,14 @@ IntervalVec FrustumMappingIntersection::intersect(const Ray &wsRay,
 // VoxelVolume
 //----------------------------------------------------------------------------//
 
+VoxelVolume::VoxelVolume()
+  : m_interpType(LinearInterp)
+{
+  // Empty
+}
+
+//----------------------------------------------------------------------------//
+
 Volume::AttrNameVec VoxelVolume::attributeNames() const
 {
   return AttrNameVec(1, m_buffer->attribute);
@@ -200,6 +210,21 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
 
   V3f value(0.0);
 
+  switch (m_interpType) {
+  case LinearInterp:
+    value = m_linearInterp.sample(*m_buffer, vsP);
+    break;
+  case GaussianInterp:
+    value = m_gaussInterp.sample(*m_buffer, vsP);
+    break;
+  case NoInterp:
+  default:
+    V3i dvsP = contToDisc(vsP);
+    value = m_buffer->value(dvsP.x, dvsP.y, dvsP.z);
+    break;
+  }
+
+#if 0
   if (m_interpType == NoInterp) {
     V3i dvsP = contToDisc(vsP);
     value = m_buffer->value(dvsP.x, dvsP.y, dvsP.z);
@@ -208,6 +233,7 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
   } else if (m_interpType == GaussianInterp) {
     value = m_gaussInterp.sample(*m_buffer, vsP);
   }
+#endif
 
   return value;
 }

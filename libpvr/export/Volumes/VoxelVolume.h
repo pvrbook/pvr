@@ -50,9 +50,12 @@ public:
 
   // To be implemented by subclasses -------------------------------------------
 
+  //! Returns a list of intersections for the given ray and time.
   virtual IntervalVec intersect(const Ray &wsRay, const PTime time) const = 0;
 };
 
+//----------------------------------------------------------------------------//
+// UniformMappingIntersection
 //----------------------------------------------------------------------------//
 
 class UniformMappingIntersection : public BufferIntersection
@@ -78,6 +81,8 @@ private:
   Matrix m_localToWorld, m_worldToLocal, m_worldToVoxel;
 };
 
+//----------------------------------------------------------------------------//
+// FrustumMappingIntersection
 //----------------------------------------------------------------------------//
 
 class FrustumMappingIntersection : public BufferIntersection
@@ -141,7 +146,8 @@ public:
 
   // Ctor, factory -------------------------------------------------------------
 
-  //! \todo Need constructor for enum initialization.
+  //! Default constructor. Initializes interp type.
+  VoxelVolume();
 
   //! Specific factory method
   static Ptr create()
