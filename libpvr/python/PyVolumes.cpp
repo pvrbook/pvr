@@ -47,9 +47,11 @@ void exportVolumes()
   // VoxelVolume ---
 
   enum_<VoxelVolume::InterpType>("InterpType")
-    .value("NoInterp", VoxelVolume::NoInterp)
-    .value("LinearInterp", VoxelVolume::LinearInterp)
-    .value("GaussianInterp", VoxelVolume::GaussianInterp)
+    .value("NoInterp",             VoxelVolume::NoInterp)
+    .value("LinearInterp",         VoxelVolume::LinearInterp)
+    .value("CubicInterp",          VoxelVolume::CubicInterp)
+    .value("MonotonicCubicInterp", VoxelVolume::MonotonicCubicInterp)
+    .value("GaussianInterp",       VoxelVolume::GaussianInterp)
     ;
 
   class_<VoxelVolume, bases<Volume>, VoxelVolume::Ptr>

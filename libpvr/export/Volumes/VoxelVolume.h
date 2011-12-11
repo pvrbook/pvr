@@ -25,6 +25,7 @@
 
 // Project headers
 
+#include "pvr/CubicInterp.h"
 #include "pvr/GaussianInterp.h"
 #include "pvr/Volumes/Volume.h"
 #include "pvr/VoxelBuffer.h"
@@ -135,6 +136,8 @@ public:
   enum InterpType {
     NoInterp,
     LinearInterp,
+    CubicInterp, 
+    MonotonicCubicInterp, 
     GaussianInterp
   };
 
@@ -191,7 +194,9 @@ protected:
   //! Linear interpolator
   Field3D::LinearFieldInterp<Imath::V3f> m_linearInterp;
   //! Cubic interpolator
-  // 
+  Field3D::TriCubicFieldInterp<Imath::V3f> m_cubicInterp;
+  //! Monotonic cubic interpolator
+  Field3D::CubicFieldInterp<Imath::V3f> m_monotonicCubicInterp;
   //! Gaussian interpolator
   Field3D::GaussianFieldInterp<Imath::V3f> m_gaussInterp;
 

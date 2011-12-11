@@ -214,6 +214,12 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
   case LinearInterp:
     value = m_linearInterp.sample(*m_buffer, vsP);
     break;
+  case CubicInterp:
+    value = m_cubicInterp.sample(*m_buffer, vsP);
+    break;
+  case MonotonicCubicInterp:
+    value = m_monotonicCubicInterp.sample(*m_buffer, vsP);
+    break;
   case GaussianInterp:
     value = m_gaussInterp.sample(*m_buffer, vsP);
     break;
@@ -223,17 +229,6 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
     value = m_buffer->value(dvsP.x, dvsP.y, dvsP.z);
     break;
   }
-
-#if 0
-  if (m_interpType == NoInterp) {
-    V3i dvsP = contToDisc(vsP);
-    value = m_buffer->value(dvsP.x, dvsP.y, dvsP.z);
-  } else if (m_interpType == LinearInterp) {
-    value = m_linearInterp.sample(*m_buffer, vsP);
-  } else if (m_interpType == GaussianInterp) {
-    value = m_gaussInterp.sample(*m_buffer, vsP);
-  }
-#endif
 
   return value;
 }
