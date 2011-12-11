@@ -52,6 +52,7 @@ void exportVolumes()
     .value("CubicInterp",          VoxelVolume::CubicInterp)
     .value("MonotonicCubicInterp", VoxelVolume::MonotonicCubicInterp)
     .value("GaussianInterp",       VoxelVolume::GaussianInterp)
+    .value("MitchellInterp",       VoxelVolume::MitchellInterp)
     ;
 
   class_<VoxelVolume, bases<Volume>, VoxelVolume::Ptr>

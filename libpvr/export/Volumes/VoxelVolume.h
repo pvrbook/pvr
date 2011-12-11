@@ -27,6 +27,7 @@
 
 #include "pvr/CubicInterp.h"
 #include "pvr/GaussianInterp.h"
+#include "pvr/MitchellInterp.h"
 #include "pvr/Volumes/Volume.h"
 #include "pvr/VoxelBuffer.h"
 
@@ -138,7 +139,8 @@ public:
     LinearInterp,
     CubicInterp, 
     MonotonicCubicInterp, 
-    GaussianInterp
+    GaussianInterp,
+    MitchellInterp
   };
 
   // Exceptions ----------------------------------------------------------------
@@ -199,6 +201,8 @@ protected:
   Field3D::CubicFieldInterp<Imath::V3f> m_monotonicCubicInterp;
   //! Gaussian interpolator
   Field3D::GaussianFieldInterp<Imath::V3f> m_gaussInterp;
+  //! Mitchell-Netravali interpolator
+  Field3D::MitchellFieldInterp<Imath::V3f> m_mitchellInterp;
 
 };
 

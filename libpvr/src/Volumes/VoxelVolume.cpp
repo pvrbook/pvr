@@ -223,6 +223,9 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
   case GaussianInterp:
     value = m_gaussInterp.sample(*m_buffer, vsP);
     break;
+  case MitchellInterp:
+    value = m_mitchellInterp.sample(*m_buffer, vsP);
+    break;
   case NoInterp:
   default:
     V3i dvsP = contToDisc(vsP);

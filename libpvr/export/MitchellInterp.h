@@ -1,14 +1,13 @@
-
 //-*-c++-*--------------------------------------------------------------------//
 
-/*! \file GaussInterp.h
-  Contains the GaussInterp class and related functions.
+/*! \file MitchellInterp.h
+  Contains the MitchellInterp class and related functions.
  */
 
 //----------------------------------------------------------------------------//
 
-#ifndef __INCLUDED_PVR_GAUSSINTERP_H__
-#define __INCLUDED_PVR_GAUSSINTERP_H__
+#ifndef __INCLUDED_PVR_MITCHELLINTERP_H__
+#define __INCLUDED_PVR_MITCHELLINTERP_H__
 
 //----------------------------------------------------------------------------//
 // Includes
@@ -24,8 +23,6 @@
 
 // Project headers
 
-
-
 //----------------------------------------------------------------------------//
 // Namespaces
 //----------------------------------------------------------------------------//
@@ -33,26 +30,26 @@
 namespace Field3D {
 
 //----------------------------------------------------------------------------//
-// GaussianFieldInterp
+// MitchellFieldInterp
 //----------------------------------------------------------------------------//
 
 template <class Data_T>
-class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
+class MitchellFieldInterp : public Field3D::FieldInterp<Data_T>
 {
  public:
   
   // Typedefs ------------------------------------------------------------------
 
-  typedef boost::intrusive_ptr<GaussianFieldInterp> Ptr;
+  typedef boost::intrusive_ptr<MitchellFieldInterp> Ptr;
 
   // RTTI replacement ----------------------------------------------------------
 
-  typedef GaussianFieldInterp class_type;
+  typedef MitchellFieldInterp class_type;
   DEFINE_FIELD_RTTI_CONCRETE_CLASS;
 
   static const char *staticClassName()
   {
-    return "ProceduralFieldLookup";
+    return "MitchellFieldInterp";
   }
 
   static const char* classType()
@@ -79,16 +76,16 @@ class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
           static_cast<int>(floor(p.y)) - 1, 
           static_cast<int>(floor(p.z)) - 1);
     
-    Gaussian gaussian(2.0, 2.0);
+    MitchellNetravali filter(1.0/3.0, 1.0/3.0);
     
     Data_T value(0.0f);
     float normalization = 0.0f;
     for (int k = c.z; k < c.z + 4; ++k) {
       for (int j = c.y; j < c.y + 4; ++j) {
         for (int i = c.x; i < c.x + 4; ++i) {
-          float weight = gaussian.eval(discToCont(i) - clampedVsP.x,
-                                       discToCont(j) - clampedVsP.y,
-                                       discToCont(k) - clampedVsP.z);
+          float weight = filter.eval(discToCont(i) - clampedVsP.x,
+                                     discToCont(j) - clampedVsP.y,
+                                     discToCont(k) - clampedVsP.z);
           int ic = std::max(dataWindow.min.x, std::min(i, dataWindow.max.x));
           int jc = std::max(dataWindow.min.y, std::min(j, dataWindow.max.y));
           int kc = std::max(dataWindow.min.z, std::min(k, dataWindow.max.z));
@@ -101,29 +98,38 @@ class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
     return value / normalization;
   }
 
-  struct Gaussian
+  struct MitchellNetravali
   {
-    Gaussian(float alpha, float width)
-      : m_alpha(alpha), m_width(width),
-        m_exp(std::exp(-alpha * width * width))
+    MitchellNetravali(float B, float C)
+      : m_B(B), m_C(C)
     { /* Empty */ }
     float eval(float x)
     {
-      return std::max(0.0f, std::exp(-m_alpha * x * x) - m_exp);
+      float ax = std::abs(x);
+      if (ax < 1) {
+        return ((12 - 9 * m_B - 6 * m_C) * ax * ax * ax +
+                (-18 + 12 * m_B + 6 * m_C) * ax * ax + (6 - 2 * m_B)) / 6;
+      } else if ((ax >= 1) && (ax < 2)) {
+        return ((-m_B - 6 * m_C) * ax * ax * ax +
+                (6 * m_B + 30 * m_C) * ax * ax + (-12 * m_B - 48 * m_C) *
+                ax + (8 * m_B + 24 * m_C)) / 6;
+      } else {
+        return 0;
+      }
     }
     float eval(float x, float y, float z)
     {
       return eval(x) * eval(y) * eval(z);
     }
   private:
-    float m_alpha, m_width, m_exp;
+    float m_B, m_C;
   };
-
+  
 private:
 
   // Static data members -------------------------------------------------------
 
-  static TemplatedFieldType<GaussianFieldInterp<Data_T> > ms_classType;
+  static TemplatedFieldType<MitchellFieldInterp<Data_T> > ms_classType;
 
   // Typedefs ------------------------------------------------------------------
 
@@ -136,7 +142,7 @@ private:
 // Static data member instantiation
 //----------------------------------------------------------------------------//
 
-FIELD3D_CLASSTYPE_TEMPL_INSTANTIATION(GaussianFieldInterp);
+FIELD3D_CLASSTYPE_TEMPL_INSTANTIATION(MitchellFieldInterp);
 
 //----------------------------------------------------------------------------//
 
