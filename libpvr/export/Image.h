@@ -63,25 +63,7 @@ public:
 
   // Structs -------------------------------------------------------------------
 
-  //! Used to conveniently iterate over all the pixels in an image
-  //! Not a proper STL iterator
-  struct pixel_iterator
-  {
-    // Public methods
-    pixel_iterator(Image &image, const size_t xPos, const size_t yPos);
-    const pixel_iterator& operator ++ ();
-    bool operator != (const pixel_iterator &rhs) const;
-    void setPixel(const Color &color);
-    void setPixelAlpha(const float alpha);
-    float progress() const;
-    float rsX() const;
-    float rsY() const;
-    // Public data members
-    size_t x, y;
-  private:
-    Image& m_image;
-    Imath::Vec2<size_t> m_size;
-  };
+  struct pixel_iterator;
   
   // Constructor, destructor, factory ------------------------------------------
 
@@ -129,6 +111,28 @@ private:
   //! Internal representation of RGBA image.
   OpenImageIO::ImageBuf m_buf;
 
+};
+
+//----------------------------------------------------------------------------//
+
+//! Used to conveniently iterate over all the pixels in an image
+//! \note Not a proper STL iterator
+struct Image::pixel_iterator
+{
+  // Public methods
+  pixel_iterator(Image &image, const size_t xPos, const size_t yPos);
+  const pixel_iterator& operator ++ ();
+  bool operator != (const pixel_iterator &rhs) const;
+  void setPixel(const Color &color);
+  void setPixelAlpha(const float alpha);
+  float progress() const;
+  float rsX() const;
+  float rsY() const;
+  // Public data members
+  size_t x, y;
+private:
+  Image& m_image;
+  Imath::Vec2<size_t> m_size;
 };
 
 //----------------------------------------------------------------------------//
