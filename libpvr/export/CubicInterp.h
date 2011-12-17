@@ -115,8 +115,6 @@ class TriCubicFieldInterp : public Field3D::FieldInterp<Data_T>
     // Interpolation coords
     V3f x(p.x - floor(p.x), p.y - floor(p.y), p.z - floor(p.z));
     
-    using namespace std;
-
     Data_T values[4][4][4];
     for (int k = c.z, ki = 0; k < c.z + 4; k++, ki++) {
       for (int j = c.y, ji = 0; j < c.y + 4; j++, ji++) {

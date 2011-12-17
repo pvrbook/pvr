@@ -64,67 +64,35 @@ class MitchellFieldInterp : public Field3D::FieldInterp<Data_T>
     // Voxel centers are at .5 coordinates
     // NOTE: Don't use contToDisc for this, we're looking for sample
     // point locations, not coordinate shifts.
-    V3d clampedVsP(std::max(0.5, vsP.x),
-                   std::max(0.5, vsP.y),
-                   std::max(0.5, vsP.z));
-    FIELD3D_VEC3_T<double> p(clampedVsP - FIELD3D_VEC3_T<double>(0.5));
+    FIELD3D_VEC3_T<double> p(vsP - FIELD3D_VEC3_T<double>(0.5));
     
-    const Box3i &dataWindow = data.dataWindow();
+    // Data window
+    const Box3i &dw = data.dataWindow();
   
     // Lower left corner
     V3i c(static_cast<int>(floor(p.x)) - 1, 
           static_cast<int>(floor(p.y)) - 1, 
           static_cast<int>(floor(p.z)) - 1);
+
+    // Position of filter
+    V3f x(p.x - floor(p.x), p.y - floor(p.y), p.z - floor(p.z));
     
-    MitchellNetravali filter(1.0/3.0, 1.0/3.0);
-    
-    Data_T value(0.0f);
-    float normalization = 0.0f;
-    for (int k = c.z; k < c.z + 4; ++k) {
-      for (int j = c.y; j < c.y + 4; ++j) {
-        for (int i = c.x; i < c.x + 4; ++i) {
-          float weight = filter.eval(discToCont(i) - clampedVsP.x,
-                                     discToCont(j) - clampedVsP.y,
-                                     discToCont(k) - clampedVsP.z);
-          int ic = std::max(dataWindow.min.x, std::min(i, dataWindow.max.x));
-          int jc = std::max(dataWindow.min.y, std::min(j, dataWindow.max.y));
-          int kc = std::max(dataWindow.min.z, std::min(k, dataWindow.max.z));
-          value += weight * data.value(ic, jc, kc);
-          normalization += weight;
+    pvr::Filter::MitchellNetravali filter;
+
+    Data_T values[4][4][4];
+    for (int k = c.z, ki = 0; k < c.z + 4; k++, ki++) {
+      for (int j = c.y, ji = 0; j < c.y + 4; j++, ji++) {
+        for (int i = c.x, ii = 0; i < c.x + 4; i++, ii++) {
+          int iIdx = std::min(std::max(i, dw.min.x), dw.max.x);
+          int jIdx = std::min(std::max(j, dw.min.y), dw.max.y);
+          int kIdx = std::min(std::max(k, dw.min.z), dw.max.z);
+          values[ii][ji][ki] = data.value(iIdx, jIdx, kIdx);
         }
       }
     }
-
-    return value / normalization;
+    return pvr::Filter::filter3D(x.x, x.y, x.z, values, filter);
   }
 
-  struct MitchellNetravali
-  {
-    MitchellNetravali(float B, float C)
-      : m_B(B), m_C(C)
-    { /* Empty */ }
-    float eval(float x)
-    {
-      float ax = std::abs(x);
-      if (ax < 1) {
-        return ((12 - 9 * m_B - 6 * m_C) * ax * ax * ax +
-                (-18 + 12 * m_B + 6 * m_C) * ax * ax + (6 - 2 * m_B)) / 6;
-      } else if ((ax >= 1) && (ax < 2)) {
-        return ((-m_B - 6 * m_C) * ax * ax * ax +
-                (6 * m_B + 30 * m_C) * ax * ax + (-12 * m_B - 48 * m_C) *
-                ax + (8 * m_B + 24 * m_C)) / 6;
-      } else {
-        return 0;
-      }
-    }
-    float eval(float x, float y, float z)
-    {
-      return eval(x) * eval(y) * eval(z);
-    }
-  private:
-    float m_B, m_C;
-  };
-  
 private:
 
   // Static data members -------------------------------------------------------

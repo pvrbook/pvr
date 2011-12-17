@@ -214,6 +214,9 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
   case LinearInterp:
     value = m_linearInterp.sample(*m_buffer, vsP);
     break;
+  case TriLinearInterp:
+    value = m_triLinearInterp.sample(*m_buffer, vsP);
+    break;
   case CubicInterp:
     value = m_cubicInterp.sample(*m_buffer, vsP);
     break;
@@ -272,7 +275,7 @@ void VoxelVolume::load(const std::string &filename)
   
   updateIntersectionHandler();
 }
-  
+
 //----------------------------------------------------------------------------//
 
 void VoxelVolume::setBuffer(VoxelBuffer::Ptr buffer)

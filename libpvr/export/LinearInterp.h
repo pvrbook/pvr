@@ -1,14 +1,13 @@
-
 //-*-c++-*--------------------------------------------------------------------//
 
-/*! \file GaussInterp.h
-  Contains the GaussInterp class and related functions.
+/*! \file LinearInterp.h
+  Contains the LinearInterp class and related functions.
  */
 
 //----------------------------------------------------------------------------//
 
-#ifndef __INCLUDED_PVR_GAUSSINTERP_H__
-#define __INCLUDED_PVR_GAUSSINTERP_H__
+#ifndef __INCLUDED_PVR_LINEARINTERP_H__
+#define __INCLUDED_PVR_LINEARINTERP_H__
 
 //----------------------------------------------------------------------------//
 // Includes
@@ -24,8 +23,6 @@
 
 // Project headers
 
-#include "Filter.h"
-
 //----------------------------------------------------------------------------//
 // Namespaces
 //----------------------------------------------------------------------------//
@@ -33,26 +30,58 @@
 namespace Field3D {
 
 //----------------------------------------------------------------------------//
-// GaussianFieldInterp
+// Interpolation functions
+//----------------------------------------------------------------------------//
+
+template <class Data_T, class Coord_T>
+Data_T linearInterp(Coord_T x, Data_T p[2])
+{
+  return (1.0 - x) * p[0] + x * p[1];
+}
+
+//----------------------------------------------------------------------------//
+
+template <class Data_T, class Coord_T>
+Data_T bilinearInterp(Coord_T x, Coord_T y, Data_T p[2][2]) 
+{
+  Data_T yInterps[2];
+  yInterps[0] = linearInterp(y, p[0]);
+  yInterps[1] = linearInterp(y, p[1]);
+  return linearInterp(x, yInterps);
+}
+
+//----------------------------------------------------------------------------//
+
+template <class Data_T, class Coord_T>
+Data_T trilinearInterp(Coord_T x, Coord_T y, Coord_T z, Data_T p[2][2][2]) 
+{
+  Data_T yzInterps[2];
+  yzInterps[0] = bilinearInterp(y, z, p[0]);
+  yzInterps[1] = bilinearInterp(y, z, p[1]);
+  return linearInterp(x, yzInterps);
+}
+
+//----------------------------------------------------------------------------//
+// TriLinearFieldInterp
 //----------------------------------------------------------------------------//
 
 template <class Data_T>
-class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
+class TriLinearFieldInterp : public Field3D::FieldInterp<Data_T>
 {
  public:
   
   // Typedefs ------------------------------------------------------------------
 
-  typedef boost::intrusive_ptr<GaussianFieldInterp> Ptr;
+  typedef boost::intrusive_ptr<TriLinearFieldInterp> Ptr;
 
   // RTTI replacement ----------------------------------------------------------
 
-  typedef GaussianFieldInterp class_type;
+  typedef TriLinearFieldInterp class_type;
   DEFINE_FIELD_RTTI_CONCRETE_CLASS;
 
   static const char *staticClassName()
   {
-    return "GaussianFieldInterp";
+    return "TriLinearFieldInterp";
   }
 
   static const char* classType()
@@ -69,23 +98,22 @@ class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
     // point locations, not coordinate shifts.
     FIELD3D_VEC3_T<double> p(vsP - FIELD3D_VEC3_T<double>(0.5));
     
-    // Data window
     const Box3i &dw = data.dataWindow();
   
     // Lower left corner
-    V3i c(static_cast<int>(floor(p.x)) - 1, 
-          static_cast<int>(floor(p.y)) - 1, 
-          static_cast<int>(floor(p.z)) - 1);
+    V3i c(static_cast<int>(floor(p.x)), 
+          static_cast<int>(floor(p.y)), 
+          static_cast<int>(floor(p.z)));
 
-    // Position of filter
+    // Interpolation coords
     V3f x(p.x - floor(p.x), p.y - floor(p.y), p.z - floor(p.z));
     
-    pvr::Filter::Gaussian filter;
+    using namespace std;
 
-    Data_T values[4][4][4];
-    for (int k = c.z, ki = 0; k < c.z + 4; k++, ki++) {
-      for (int j = c.y, ji = 0; j < c.y + 4; j++, ji++) {
-        for (int i = c.x, ii = 0; i < c.x + 4; i++, ii++) {
+    Data_T values[2][2][2];
+    for (int k = c.z, ki = 0; k < c.z + 2; k++, ki++) {
+      for (int j = c.y, ji = 0; j < c.y + 2; j++, ji++) {
+        for (int i = c.x, ii = 0; i < c.x + 2; i++, ii++) {
           int iIdx = std::min(std::max(i, dw.min.x), dw.max.x);
           int jIdx = std::min(std::max(j, dw.min.y), dw.max.y);
           int kIdx = std::min(std::max(k, dw.min.z), dw.max.z);
@@ -93,14 +121,15 @@ class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
         }
       }
     }
-    return pvr::Filter::filter3D(x.x, x.y, x.z, values, filter);
+
+    return trilinearInterp(x.x, x.y, x.z, values);
   }
 
 private:
 
   // Static data members -------------------------------------------------------
 
-  static TemplatedFieldType<GaussianFieldInterp<Data_T> > ms_classType;
+  static TemplatedFieldType<TriLinearFieldInterp<Data_T> > ms_classType;
 
   // Typedefs ------------------------------------------------------------------
 
@@ -113,7 +142,7 @@ private:
 // Static data member instantiation
 //----------------------------------------------------------------------------//
 
-FIELD3D_CLASSTYPE_TEMPL_INSTANTIATION(GaussianFieldInterp);
+FIELD3D_CLASSTYPE_TEMPL_INSTANTIATION(TriLinearFieldInterp);
 
 //----------------------------------------------------------------------------//
 
