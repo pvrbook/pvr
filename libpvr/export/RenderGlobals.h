@@ -38,11 +38,6 @@ public:
   DECLARE_PVR_RT_EXC(BadFpsException, "Bad frames per second value:");
   DECLARE_PVR_RT_EXC(BadShutterException, "Bad shutter value:");
 
-  // Initialization ------------------------------------------------------------
-
-  //! Initializes the RenderGlobals. Safe to call multiple times
-  static void init();
-
   // Main methods --------------------------------------------------------------
 
   //! Sets the motion blur settings

@@ -42,13 +42,6 @@ float RenderGlobals::ms_shutter = 0.0f;
 // RenderGlobals implementations
 //----------------------------------------------------------------------------//
 
-void RenderGlobals::init()
-{
-  
-}
-
-//----------------------------------------------------------------------------//
-
 void RenderGlobals::setupMotionBlur(const float fps, const float shutter)
 {
   // Error handling and sanity checks
