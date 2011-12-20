@@ -17,7 +17,7 @@ import pvr.renderers
 # Settings
 # ------------------------------------------------------------------------------
 
-reduceRes  =    2
+reduceRes  =    4
 frustumRes =    V3i(2048 / reduceRes, 1556 / reduceRes, 200 / reduceRes)
 camResMult =    1 / float(reduceRes)
 lightResMult =  1 / float(reduceRes)
@@ -107,7 +107,7 @@ renderer.execute()
 if not os.path.exists("out"):
     os.mkdir("out")
 renderer.saveImage("out/image.exr")
-renderer.saveImage("out/image.jpg")
+renderer.saveImage("out/image.png")
 
 # ------------------------------------------------------------------------------
 

@@ -92,7 +92,7 @@ modeler.execute()
 # Renderer
 # ------------------------------------------------------------------------------
 
-renderer = pvr.renderers.standard()
+renderer = pvr.renderers.standard(raymarcherParams)
 
 # ------------------------------------------------------------------------------
 # Scene setup
@@ -121,8 +121,6 @@ renderer.execute()
 if not os.path.exists("out"):
     os.mkdir("out")
 renderer.saveImage("out/image.exr")
-renderer.saveImage("out/image.jpg")
-renderer.saveImage("out/image.tif")
 renderer.saveImage("out/image.png")
 
 # ------------------------------------------------------------------------------

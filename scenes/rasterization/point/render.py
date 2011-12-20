@@ -74,7 +74,7 @@ modeler.execute()
 # Renderer
 # ------------------------------------------------------------------------------
 
-renderer = pvr.renderers.standard()
+renderer = pvr.renderers.standard(raymarcherParams)
 
 # ------------------------------------------------------------------------------
 # Scene setup

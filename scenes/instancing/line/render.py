@@ -33,7 +33,7 @@ primParams = {
     "radius"                         : 0.1,
     # Base per-prim
     "instance_radius"                : 0.002, 
-    "num_points"                     : 1000000, 
+    "num_points"                     : 1000000 / 10, 
     "fill"                           : 1, 
     # Noise per-prim
     "density_noise_scale"            : V3f(0.5, 0.5, 0.1),
@@ -94,7 +94,7 @@ modeler.execute()
 # Renderer
 # ------------------------------------------------------------------------------
 
-renderer = pvr.renderers.standard()
+renderer = pvr.renderers.standard(raymarcherParams)
 
 # ------------------------------------------------------------------------------
 # Scene setup
@@ -123,7 +123,7 @@ renderer.execute()
 if not os.path.exists("out"):
     os.mkdir("out")
 renderer.saveImage("out/image.exr")
-renderer.saveImage("out/image.jpg")
+renderer.saveImage("out/image.png")
 
 # ------------------------------------------------------------------------------
 

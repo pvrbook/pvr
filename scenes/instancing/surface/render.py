@@ -17,7 +17,7 @@ import pvr.renderers
 # Settings
 # ------------------------------------------------------------------------------
 
-reduceRes  =    2
+reduceRes  =    4
 frustumRes =    V3i(2048 / reduceRes, 1556 / reduceRes, 200 / reduceRes)
 camResMult =    1 / float(reduceRes)
 lightResMult =  1 / float(reduceRes)
@@ -33,7 +33,7 @@ primParams = {
     "thickness"                      : 0.1,
     # Base per-prim
     "instance_radius"                : 0.002, 
-    "num_points"                     : 8000000, 
+    "num_points"                     : 800000, 
     "fill"                           : 1, 
     # Noise per-prim
     "density_noise_scale"            : V3f(0.2, 0.2, 0.4),
@@ -96,7 +96,7 @@ modeler.execute()
 # Renderer
 # ------------------------------------------------------------------------------
 
-renderer = pvr.renderers.standard()
+renderer = pvr.renderers.standard(raymarcherParams)
 
 # ------------------------------------------------------------------------------
 # Scene setup
@@ -125,7 +125,7 @@ renderer.execute()
 if not os.path.exists("out"):
     os.mkdir("out")
 renderer.saveImage("out/image.exr")
-renderer.saveImage("out/image.jpg")
+renderer.saveImage("out/image.png")
 
 # ------------------------------------------------------------------------------
 
