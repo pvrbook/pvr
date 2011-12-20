@@ -78,8 +78,7 @@ namespace Render {
 UniformMappingIntersection::UniformMappingIntersection
 (Field3D::MatrixFieldMapping::Ptr mapping)
 {
-  m_localToWorld = mapping->localToWorld();
-  m_worldToLocal = m_localToWorld.inverse();
+  m_worldToLocal = mapping->localToWorld().inverse();
   m_worldToVoxel = mapping->worldToVoxel();
 }
   
@@ -211,12 +210,12 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
   V3f value(0.0);
 
   switch (m_interpType) {
-  case LinearInterp:
-    value = m_linearInterp.sample(*m_buffer, vsP);
-    break;
-  case TriLinearInterp:
-    value = m_triLinearInterp.sample(*m_buffer, vsP);
-    break;
+  case NoInterp:
+    {
+      V3i dvsP = contToDisc(vsP);
+      value = m_buffer->value(dvsP.x, dvsP.y, dvsP.z);
+      break;
+    }
   case CubicInterp:
     value = m_cubicInterp.sample(*m_buffer, vsP);
     break;
@@ -229,10 +228,9 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
   case MitchellInterp:
     value = m_mitchellInterp.sample(*m_buffer, vsP);
     break;
-  case NoInterp:
+  case LinearInterp:
   default:
-    V3i dvsP = contToDisc(vsP);
-    value = m_buffer->value(dvsP.x, dvsP.y, dvsP.z);
+    value = m_linearInterp.sample(*m_buffer, vsP);
     break;
   }
 
