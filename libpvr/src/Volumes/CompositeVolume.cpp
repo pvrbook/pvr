@@ -77,6 +77,7 @@ namespace Render {
 // CompositeVolume
 //----------------------------------------------------------------------------//
 
+//! \todo Finish implementing
 Volume::AttrNameVec CompositeVolume::attributeNames() const
 {
   AttrNameVec attrs;
@@ -96,38 +97,17 @@ Color CompositeVolume::sample(const VolumeSampleState &state,
                               const VolumeAttr &attribute) const
 {
   if (attribute.index() == VolumeAttr::IndexNotSet) {
-    ChildAttrsVec::const_iterator i = 
-      find_if(m_childAttrs.begin(), m_childAttrs.end(), 
-              MatchName(attribute.name()));
-    if (i != m_childAttrs.end()) {
-      // Attribute already exists, so set index directly
-      attribute.setIndex(i - m_childAttrs.begin());
-    } else {
-      // Attribute does not yet exist, look for it among children
-      AttrNameVec attrs = attributeNames();
-      if (find(attrs.begin(), attrs.end(), attribute.name()) != attrs.end()) {
-        // One or more children have the attribute
-        ChildAttrs newAttr;
-        newAttr.name = attribute.name();
-        newAttr.attrs.resize(m_volumes.size(), VolumeAttr(attribute.name()));
-        m_childAttrs.push_back(newAttr);
-        attribute.setIndex(m_childAttrs.size() - 1);
-      } else {
-        // No child has the attribute. Mark as invalid
-        attribute.setIndexInvalid();
-      }
-    }
+    setupAttribute(attribute);
   }
   if (attribute.index() == VolumeAttr::IndexInvalid) {
     return Colors::zero();
   }
 
-  // At this point we know the attribute index is valid ---
-
   Color value = Colors::zero();
+  int attrIndex = attribute.index();
 
   for (size_t i = 0, size = m_volumes.size(); i < size; ++i) {
-    const VolumeAttr &childAttr = m_childAttrs[attribute.index()].attrs[i];
+    const VolumeAttr &childAttr = m_childAttrs[attrIndex].attrs[i];
     value += m_volumes[i]->sample(state, childAttr);
   }
   
@@ -152,6 +132,34 @@ IntervalVec CompositeVolume::intersect(const RenderState &state) const
 void CompositeVolume::add(Volume::CPtr child)
 {
   m_volumes.push_back(child);
+}
+
+//----------------------------------------------------------------------------//
+
+void CompositeVolume::setupAttribute(const VolumeAttr &attribute) const
+{
+  ChildAttrsVec::const_iterator i = 
+    find_if(m_childAttrs.begin(), m_childAttrs.end(), 
+            MatchName(attribute.name()));
+
+  if (i != m_childAttrs.end()) {
+    // Attribute already exists in m_childAttrs, so set index directly
+    attribute.setIndex(i - m_childAttrs.begin());
+  } else {
+    // Attribute does not yet exist, look for it among children
+    AttrNameVec attrs = attributeNames();
+    if (find(attrs.begin(), attrs.end(), attribute.name()) != attrs.end()) {
+      // One or more children have the attribute
+      ChildAttrs newAttr;
+      newAttr.name = attribute.name();
+      newAttr.attrs.resize(m_volumes.size(), VolumeAttr(attribute.name()));
+      m_childAttrs.push_back(newAttr);
+      attribute.setIndex(m_childAttrs.size() - 1);
+    } else {
+      // No child has the attribute. Mark as invalid
+      attribute.setIndexInvalid();
+    }
+  }
 }
 
 //----------------------------------------------------------------------------//

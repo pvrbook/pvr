@@ -49,6 +49,9 @@ public:
 
   // Structs -------------------------------------------------------------------
 
+  //! This struct is used to hold a set of VolumeAttr instances that can be
+  //! used to sample the child volumes. In general, ChildAtts::attrs will be
+  //! the same length as CompositeVolume::m_volumes.
   struct ChildAttrs
   {
     std::string             name; 
@@ -85,6 +88,8 @@ public:
 protected:
 
   // Utility methods -----------------------------------------------------------
+
+  void setupAttribute(const VolumeAttr &attribute) const;
 
   // Protected data members ----------------------------------------------------
 
