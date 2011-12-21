@@ -94,6 +94,7 @@ protected:
     AttrState()
       : wsCenter   ("P"), 
         wsVelocity ("v"), 
+        orientation("orientation"), 
         radius     ("radius",         1.0f), 
         density    ("density",        Imath::V3f(1.0f)),
         seed       ("seed",           1), 
@@ -108,7 +109,7 @@ protected:
         absNoise   ("absolute_noise", 1),
         antialiased("antialiased", 1)
     { }
-    
+     
     // Main methods ---
 
     //! Updates the point attributes
@@ -118,6 +119,7 @@ protected:
 
     Geo::Attr<Imath::V3f> wsCenter;
     Geo::Attr<Imath::V3f> wsVelocity;
+    Geo::Attr<Imath::V3f> orientation;
     Geo::Attr<float>      radius;
     Geo::Attr<Imath::V3f> density;
     Geo::Attr<int>        seed;
@@ -131,6 +133,7 @@ protected:
     Geo::Attr<int>        pyroclastic;
     Geo::Attr<int>        absNoise;
     Geo::Attr<int>        antialiased;
+    Matrix                rotation;
     Noise::Fractal::CPtr  fractal;
   };
 

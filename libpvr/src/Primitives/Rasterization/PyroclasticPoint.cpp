@@ -129,7 +129,8 @@ void PyroclasticPoint::getSample(const RasterizationState &state,
 {
   // Transform to the point's local coordinate system
   float radius = m_attrs.radius;
-  Vector lsP = (state.wsP - m_attrs.wsCenter.as<Vector>()) / radius;
+  Vector lsP, lsPUnrot = (state.wsP - m_attrs.wsCenter.as<Vector>()) / radius;
+  m_attrs.rotation.multVecMatrix(lsPUnrot, lsP);
   Vector nsP = m_attrs.displace2D ? lsP.normalized() : lsP;
   // Offset by seed
   Rand32 rng(m_attrs.seed.value());
@@ -200,6 +201,7 @@ AttrState::update(const Geo::AttrVisitor::const_iterator &i)
   // Update point attributes
   i.update(wsCenter);
   i.update(wsVelocity);
+  i.update(orientation);
   i.update(radius);
   i.update(density);
   i.update(seed);
@@ -222,6 +224,8 @@ AttrState::update(const Geo::AttrVisitor::const_iterator &i)
   }
   fractal = Fractal::CPtr(new fBm(noise, scale, octaves, 
                                   octaveGain, lacunarity));
+  // Set up rotation matrix
+  rotation = Euler(orientation.value()).toMatrix44().transpose();
 }
 
 //----------------------------------------------------------------------------//
