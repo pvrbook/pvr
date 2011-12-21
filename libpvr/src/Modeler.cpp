@@ -85,7 +85,7 @@ namespace Model {
 //----------------------------------------------------------------------------//
 
 Modeler::Modeler()
-  : m_mapping(MatrixMappingType), 
+  : m_mapping(UniformMappingType), 
     m_dataStructure(DenseBufferType),
     m_sparseBlockSize(SparseBlockSize16)
 { 
@@ -198,10 +198,10 @@ void Modeler::updateBounds()
       Log::print("Using frustum mapping");
     }
     break;
-  case MatrixMappingType:
+  case UniformMappingType:
   default:
     {
-      setupMatrixMapping(wsBounds);
+      setupUniformMapping(wsBounds);
       Log::print("Using uniform/matrix mapping");
     }
   }
@@ -399,7 +399,7 @@ void Modeler::setupFrustumMapping(const BBox &wsBounds) const
 
 //----------------------------------------------------------------------------//
 
-void Modeler::setupMatrixMapping(const BBox &wsBounds) const
+void Modeler::setupUniformMapping(const BBox &wsBounds) const
 {
   MatrixFieldMapping::Ptr mapping(new MatrixFieldMapping);
   Matrix offset, scaling;

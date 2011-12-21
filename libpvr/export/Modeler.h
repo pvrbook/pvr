@@ -57,13 +57,13 @@ public:
   DECLARE_SMART_PTRS(Modeler);
 
   typedef Field3D::FrustumFieldMapping::Ptr FrustumMappingPtr;
-  typedef Field3D::MatrixFieldMapping::Ptr MatrixMappingPtr;
+  typedef Field3D::MatrixFieldMapping::Ptr UniformMappingPtr;
 
   // Enums ---------------------------------------------------------------------
 
   //! Enumerates mapping types supported by modeler
   enum Mapping {
-    MatrixMappingType,
+    UniformMappingType,
     FrustumMappingType
   };
 
@@ -139,7 +139,7 @@ private:
   //! Builds a frustum mapping using m_camera and the provided bounds
   void setupFrustumMapping(const BBox &wsBounds) const;
   //! Builds a uniform/matrix mapping using the provided bounds.
-  void setupMatrixMapping(const BBox &wsBounds) const;
+  void setupUniformMapping(const BBox &wsBounds) const;
 
   // Protected data members ----------------------------------------------------
 

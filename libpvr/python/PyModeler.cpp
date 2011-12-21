@@ -69,7 +69,7 @@ void exportModeler()
     ;
 
   enum_<Modeler::Mapping>("Mapping")
-    .value("MatrixMappingType",  Modeler::MatrixMappingType)
+    .value("UniformMappingType",  Modeler::UniformMappingType)
     .value("FrustumMappingType", Modeler::FrustumMappingType)
     ;
 
