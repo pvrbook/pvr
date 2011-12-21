@@ -58,12 +58,16 @@ namespace Render {
   orientation, resolution. Also defines the base worldToCamera/cameraToWorld
   transforms and defines the common interface that subclasses must implement.
 
-  A note on the definition of time. The start time of the current frame being
-  rendered is always 0.0. The end of the shutter open/close interval is
-  always Globals::dt(). 
+  A note on the definition of time. The start time (in seconds) of the current 
+  frame being rendered is always 0.0. The end time (in seconds) of the shutter 
+  open/close interval is always Globals::dt(). 
 
-  The time in the curves that describe the camera's motion are all defined
-  in PTime.
+  PTime refers to the time between shutter open and shutter close, which 
+  defines its own [0,1] interval.
+
+  It is assumed that the Curve<T> instances used to provide parameters to
+  the camera are adjusted so that 0.0 refers to shutter open and 1.0 refers to
+  shutter close time.
  */
 
 //----------------------------------------------------------------------------//

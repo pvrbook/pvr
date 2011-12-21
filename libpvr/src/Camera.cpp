@@ -110,6 +110,8 @@ void Camera::setNumTimeSamples(const uint numSamples)
   recomputeTransforms();
 }
 
+//----------------------------------------------------------------------------//
+
 uint Camera::numTimeSamples() const
 {
   return m_numSamples;
@@ -182,13 +184,6 @@ Vector Camera::transformPoint(const Vector &p,
   // Transform point twice
   Vector t0 = p * matrices[first];
   Vector t1 = p * matrices[second];
-  // Log::print("time: " + str(time));
-  // Log::print("stepSize: " + str(stepSize));
-  // Log::print("slicePos: " + str(slicePos));
-  // Log::print("first: " + str(first));
-  // Log::print("second: " + str(second));
-  // Log::print("lerpFactor: " + str(lerpFactor));
-  // Log::print(": " + str());
   // Interpolate transformed positions
   return lerp(t0, t1, lerpFactor);
 }
