@@ -159,12 +159,6 @@ void Camera::recomputeTransforms()
     // Compute transformation matrix at given time
     m_cameraToWorld[i] = computeCameraToWorld(PTime(fraction));
     m_worldToCamera[i] = m_cameraToWorld[i].inverse();
-#if 0
-    Log::print("fraction: " + str(fraction));
-    Log::print("time: " + str(time));
-    Log::print("c2w: " + str(m_cameraToWorld[i]));
-    Log::print("w2c: " + str(m_cameraToWorld[i]));
-#endif
   }
 }
 
