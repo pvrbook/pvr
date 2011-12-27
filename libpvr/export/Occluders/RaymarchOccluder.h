@@ -57,7 +57,7 @@ public:
 
   // From Occluder -------------------------------------------------------------
 
-  virtual Color transmittance(const OcclusionSampleState &state) const;
+  virtual Color sample(const OcclusionSampleState &state) const;
 
   // Main methods --------------------------------------------------------------
 

@@ -63,7 +63,7 @@ std::string TransmittanceMapOccluder::typeName() const
 //----------------------------------------------------------------------------//
 
 Color
-TransmittanceMapOccluder::transmittance(const OcclusionSampleState &state) const
+TransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
 {
   // Error checking
   if (!m_camera) {

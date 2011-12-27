@@ -58,7 +58,7 @@ public:
 
   // To be implemented by subclasses -------------------------------------------
 
-  virtual Color transmittance(const OcclusionSampleState &state) const = 0;
+  virtual Color sample(const OcclusionSampleState &state) const = 0;
 };
 
 //----------------------------------------------------------------------------//
@@ -76,7 +76,7 @@ public:
   DECLARE_CREATE_FUNC(NullOccluder);
   virtual std::string typeName() const
   { return "NullOccluder"; }
-  virtual Color transmittance(const OcclusionSampleState &state) const
+  virtual Color sample(const OcclusionSampleState &state) const
   { return Colors::one(); }
 };
 
