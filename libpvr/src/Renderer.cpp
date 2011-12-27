@@ -33,7 +33,37 @@ namespace {
 
   //--------------------------------------------------------------------------//
 
-  
+  void printVolumeInfo(pvr::Render::Volume::CPtr volume, 
+                       const int &indentLevel = 0)
+  {
+    using namespace pvr::Render;
+    using namespace pvr::Util;
+
+    std::string indentStr = "  ";
+    std::string indent;
+    for (int i = 0; i < indentLevel; i++) {
+      indent += indentStr;
+    }
+
+    Volume::AttrNameVec attrs = volume->attributeNames();
+    Volume::StringVec info    = volume->info();
+    Volume::CVec inputs       = volume->inputs();
+
+    Log::print(indent + "(" + volume->typeName() + ")");
+
+    BOOST_FOREACH (const std::string &attr, attrs) {
+      Log::print(indent + indentStr + "- " + attr);
+    }
+
+    BOOST_FOREACH (const std::string &line, info) {
+      Log::print(indent + indentStr + indentStr + line);
+    }
+
+    BOOST_FOREACH (Volume::CPtr volume, inputs) {
+      printVolumeInfo(volume, indentLevel + 1);
+    }
+
+  }
 
   //--------------------------------------------------------------------------//
 
@@ -135,6 +165,22 @@ void Renderer::addLight(Light::CPtr light)
 
 //----------------------------------------------------------------------------//
 
+void Renderer::printSceneInfo() const
+{
+  if (!m_scene) {
+    throw MissingSceneException();
+  }
+
+  if (!m_scene->volume) {
+    throw MissingVolumeException();
+  }
+
+  Log::print("Scene info:");
+  printVolumeInfo(m_scene->volume, 1);
+}
+
+//----------------------------------------------------------------------------//
+
 void Renderer::setPrimaryEnabled(const bool enabled)
 {
   m_params.doPrimary = enabled;
@@ -184,12 +230,11 @@ void Renderer::execute()
     throw MissingRaymarcherException();
   }
 
-  Timer timer;
-  ProgressReporter progress(2.5f, "  ");
-
   // Initialization ---
 
   m_rng.init(0);
+  Timer timer;
+  ProgressReporter progress(2.5f, "  ");
 
   // For each pixel ---
 

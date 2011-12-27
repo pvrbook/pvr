@@ -206,7 +206,7 @@ void Modeler::updateBounds()
     }
   }
 
-  m_buffer->attribute = "scattering";
+  m_buffer->attribute = "density";
   m_buffer->name = "pvr";
 }
 

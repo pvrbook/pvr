@@ -169,6 +169,7 @@ public:
   virtual Color sample(const VolumeSampleState &state,
                        const VolumeAttr &attribute) const;
   virtual IntervalVec intersect(const RenderState &state) const;
+  virtual StringVec info() const;
 
   // Main methods --------------------------------------------------------------
 
@@ -176,6 +177,9 @@ public:
   void load(const std::string &filename);
   //! Sets the voxel buffer.
   void setBuffer(VoxelBuffer::Ptr buffer);
+  //! Adds an attribute to be exposed. The supplied value acts as a scaling
+  //! factor on top of the density value sampled from the voxel buffer.
+  void addAttribute(const std::string &attrName, const Imath::V3f &value);
   //! Sets the interpolator type to use for lookups.
   void setInterpolation(const InterpType interpType);
 
@@ -189,6 +193,10 @@ protected:
 
   //! Voxel buffer
   VoxelBuffer::Ptr m_buffer;
+  //! Attribute names
+  AttrNameVec m_attrNames;
+  //! Attribute scaling values
+  std::vector<Imath::V3f> m_attrValues;
   //! Handles ray/buffer intersection tests
   BufferIntersection::CPtr m_intersectionHandler;
   //! Interpolation type to use for lookups

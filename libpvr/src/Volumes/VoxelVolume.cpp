@@ -185,7 +185,7 @@ VoxelVolume::VoxelVolume()
 
 Volume::AttrNameVec VoxelVolume::attributeNames() const
 {
-  return AttrNameVec(1, m_buffer->attribute);
+  return m_attrNames;
 }
 
 //----------------------------------------------------------------------------//
@@ -193,19 +193,31 @@ Volume::AttrNameVec VoxelVolume::attributeNames() const
 Color VoxelVolume::sample(const VolumeSampleState &state,
                           const VolumeAttr &attribute) const
 {
+  // Check (and set up) attribute index ---
+
   if (attribute.index() == VolumeAttr::IndexNotSet) {
-    setupVolumeAttr(attribute, m_buffer->attribute, 0);
+    AttrNameVec::const_iterator i = 
+      std::find(m_attrNames.begin(), m_attrNames.end(), attribute.name());
+    if (i != m_attrNames.end()) {
+      attribute.setIndex(std::distance(i, m_attrNames.begin()));
+    } else {
+      attribute.setIndexInvalid();
+    }
   }
   if (attribute.index() == VolumeAttr::IndexInvalid) {
     return Colors::zero();
   }
 
+  // Transform to voxel space for sampling ---
+  
   Vector vsP;
   m_buffer->mapping()->worldToVoxel(state.wsP, vsP);
 
   if (!isInBounds(vsP, m_buffer->dataWindow())) {
     return Colors::zero();
   }
+
+  // Interpolate voxel value ---
 
   V3f value(0.0);
 
@@ -234,7 +246,7 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
     break;
   }
 
-  return value;
+  return m_attrValues[attribute.index()] * value;
 }
 
 //----------------------------------------------------------------------------//
@@ -243,6 +255,17 @@ IntervalVec VoxelVolume::intersect(const RenderState &state) const
 {
   assert (m_intersectionHandler && "Missing intersection handler");
   return m_intersectionHandler->intersect(state.wsRay, state.time);
+}
+
+//----------------------------------------------------------------------------//
+
+Volume::StringVec VoxelVolume::info() const
+{
+  StringVec info;
+  for (size_t i = 0; i < m_attrNames.size(); ++i) {
+    info.push_back(m_attrNames[i] + " : " + str(m_attrValues[i]));
+  }
+  return info;
 }
 
 //----------------------------------------------------------------------------//
@@ -280,6 +303,15 @@ void VoxelVolume::setBuffer(VoxelBuffer::Ptr buffer)
 {
   m_buffer = buffer;
   updateIntersectionHandler();
+}
+
+//----------------------------------------------------------------------------//
+
+void VoxelVolume::addAttribute(const std::string &attrName, 
+                               const Imath::V3f &value)
+{
+  m_attrNames.push_back(attrName);
+  m_attrValues.push_back(value);
 }
 
 //----------------------------------------------------------------------------//

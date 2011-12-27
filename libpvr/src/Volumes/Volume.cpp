@@ -29,14 +29,16 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-void setupVolumeAttr(const VolumeAttr &attribute, const std::string &name,
-                     const int index) 
+Volume::StringVec Volume::info() const
 {
-  if (attribute.name() == name) {
-    attribute.setIndex(index);
-  } else {
-    attribute.setIndexInvalid();
-  }
+  return StringVec();
+}
+
+//----------------------------------------------------------------------------//
+
+Volume::CVec Volume::inputs() const
+{
+  return Volume::CVec();
 }
 
 //----------------------------------------------------------------------------//

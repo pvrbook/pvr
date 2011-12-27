@@ -60,6 +60,7 @@ void exportVolumes()
     .def("__init__",         make_constructor(VoxelVolume::create))
     .def("load",             &VoxelVolume::load)
     .def("setBuffer",        &VoxelVolume::setBuffer)
+    .def("addAttribute",     &VoxelVolume::addAttribute)
     .def("setInterpolation", &VoxelVolume::setInterpolation)
     ;
 

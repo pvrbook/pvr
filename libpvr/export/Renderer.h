@@ -89,6 +89,8 @@ public:
   void addVolume(Volume::CPtr volume);
   //! Adds a Light to the scene
   void addLight(Light::CPtr light);
+  //! Prints the scene contents
+  void printSceneInfo() const;
 
   // Options -------------------------------------------------------------------
 
