@@ -186,9 +186,9 @@ AdaptiveRaymarcher::integrate(const RayState &state) const
 
       // Check sample ---
 
-      if (Math::max(sample.attenuation) > 0.0) {
+      if (Math::max(sample.extinction) > 0.0) {
         // Find the maximum allowed step length
-        const double meanFreePath = 1.0 / Math::max(sample.attenuation);
+        const double meanFreePath = 1.0 / Math::max(sample.extinction);
         const double suggestedStep = 
           m_params.threshold * meanFreePath / std::sqrt(Math::max(T));
         // Check if we need to reduce the step size
@@ -212,13 +212,13 @@ AdaptiveRaymarcher::integrate(const RayState &state) const
       // Accept sample ---
 
       // ... Update transmittance
-      if (Math::max(sample.attenuation) > 0.0f) {
+      if (Math::max(sample.extinction) > 0.0f) {
         if (m_params.doTrapezoidIntegration) {
-          Color transmittanceTerm = exp(-sample.attenuation * stepLength);
+          Color transmittanceTerm = exp(-sample.extinction * stepLength);
           T *= (transmittanceTerm + previousT) * 0.5;
           previousT = transmittanceTerm;
         } else {
-          T *= exp(-sample.attenuation * stepLength);
+          T *= exp(-sample.extinction * stepLength);
         }
       }
 

@@ -182,8 +182,8 @@ NaiveRaymarcher::integrate(const RayState &state) const
       // Accept sample ---
 
       // ... Update transmittance
-      if (Math::max(sample.attenuation) > 0.0f) {
-        T *= exp(-sample.attenuation * stepLength);
+      if (Math::max(sample.extinction) > 0.0f) {
+        T *= exp(-sample.extinction * stepLength);
       }
 
       // ... Add to luminance

@@ -36,21 +36,26 @@ namespace Render {
 //----------------------------------------------------------------------------//
 
 //! \brief Stores the result of a RaymarchSampler's sample call (luminance and
-//! attenuation).
+//! extinction).
 struct RaymarchSample
 {
+  // Constructors --------------------------------------------------------------
+
   RaymarchSample()
-    : luminance(Colors::zero()), attenuation(Colors::zero())
+    : luminance(Colors::zero()), extinction(Colors::zero())
   { }
   RaymarchSample(const Color &L, const Color &A)
-    : luminance(L), attenuation(A)
+    : luminance(L), extinction(A)
   { }
+  
+  // Public data members -------------------------------------------------------
+
   //! Radiance at the sample's point in space. This should not be scaled
   //! by the step length.
   Color luminance;
-  //! Attenuation coefficient for the sample's point in space. This should
+  //! Extinction coefficient for the sample's point in space. This should
   //! not be scaled by the step length
-  Color attenuation;
+  Color extinction;
 };
 
 //----------------------------------------------------------------------------//
@@ -61,7 +66,7 @@ struct RaymarchSample
    \brief Base class for raymarch samplers. 
 
    These classes perform the task of sampling arbitrary attributes in the 
-   scene, and turning them into Luminance and Attenuation, which the 
+   scene, and turning them into Luminance and Extinction, which the 
    Raymarcher can understand.
  */
 
@@ -70,8 +75,15 @@ struct RaymarchSample
 class RaymarchSampler : public Util::ParamBase
 {
 public:
+
+  // Typedefs ------------------------------------------------------------------
+
   DECLARE_SMART_PTRS(RaymarchSampler);
+
+  // To be implemented by subclasses -------------------------------------------
+
   virtual RaymarchSample sample(const VolumeSampleState &state) const = 0;
+
 };
 
 //----------------------------------------------------------------------------//
