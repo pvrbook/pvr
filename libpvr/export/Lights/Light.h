@@ -37,15 +37,17 @@ namespace Render {
 
 struct LightSample
 {
+  //! Default constructor
   LightSample()
     : luminance(Colors::zero()), wsP(Vectors::zero())
   { }
+  //! Construct from luminance and position values
   LightSample(const Color &L, const Vector &wsPos)
     : luminance(L), wsP(wsPos)
   { }
-  //! \todo should be radiance?
+  //! Luminance arriving at sampled location
   Color  luminance;
-  //! Position of light source
+  //! Position of light source that was sampled
   Vector wsP;
 };
 
@@ -70,33 +72,33 @@ public:
 
   // Constructor, destructor ---------------------------------------------------
 
-  Light()
-    : m_occluder(NullOccluder::create())
-  { }
-  virtual ~Light()
-  { }
+  Light();
+  virtual ~Light();
 
   // To be implemented by subclasses -------------------------------------------
 
+  //! Samples the given light.
+  //! \note This should compute the luminance arriving at a given position
+  //! withouth taking into consideration occlusion.
   virtual LightSample sample(const LightSampleState &state) const = 0;
 
   // Main methods --------------------------------------------------------------
 
-  void setIntensity(const Color &intensity)
-  { m_intensity = intensity; }
-  void setOccluder(Occluder::CPtr occluder)
-  { 
-    assert(occluder != NULL && "Light::setOccluder got null pointer");
-    m_occluder = occluder; 
-  }
-  Occluder::CPtr occluder() const
-  { return m_occluder; }
+  //! Sets the intesity of the light source.
+  void setIntensity(const Color &intensity);
+  //! Sets the Occluder to use for the light. By default, each light has the
+  //! NullOccluder assigned.
+  void setOccluder(Occluder::CPtr occluder);
+  //! Returns the light's Occluder.
+  Occluder::CPtr occluder() const;
 
 protected:
 
   // Data members --------------------------------------------------------------
 
+  //! Intensity of light source
   Color m_intensity;
+  //! Pointer to the light's Occluder
   Occluder::CPtr m_occluder;
 };
 
