@@ -146,7 +146,7 @@ private:
 //----------------------------------------------------------------------------//
 
 typedef Curve<float>  FloatCurve;
-typedef Curve<Color>  TransmittanceFunction;
+typedef Curve<Color>  ColorCurve;
 typedef Curve<Vector> VectorCurve;
 typedef Curve<Quat>   QuatCurve;
 

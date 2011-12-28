@@ -111,8 +111,6 @@ NaiveRaymarcher::integrate(const RenderState &state) const
 {
   // Integration intervals ---
 
-  // Gather all intervals to be raymarched and make a vector of non-overlapping
-  // ones
   IntervalVec rawIntervals = state.scene->volume->intersect(state);
   IntervalVec intervals = splitIntervals(rawIntervals);
 
@@ -120,21 +118,17 @@ NaiveRaymarcher::integrate(const RenderState &state) const
     return IntegrationResult();
   }
 
-  // Output transmittance function ---
+  // Output transmittance function and luminance function ---
 
-  TransmittanceFunction::Ptr tf;
+  ColorCurve::Ptr lf, tf;
 
   if (state.doOutputDeepT) {
-    tf = TransmittanceFunction::create();
+    tf = ColorCurve::create();
     tf->addSample(intervals[0].t0, Colors::one());
   }
 
-  // Output luminance function ---
-
-  TransmittanceFunction::Ptr lf;
-
   if (state.doOutputDeepL) {
-    lf = TransmittanceFunction::create();
+    lf = ColorCurve::create();
     lf->addSample(intervals[0].t0, Colors::zero());
   }
 

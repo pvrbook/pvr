@@ -121,19 +121,19 @@ AdaptiveRaymarcher::integrate(const RenderState &state) const
 
   // Output transmittance function ---
 
-  TransmittanceFunction::Ptr tf;
+  ColorCurve::Ptr tf;
 
   if (state.doOutputDeepT) {
-    tf = TransmittanceFunction::create();
+    tf = ColorCurve::create();
     tf->addSample(intervals[0].t0, Colors::one());
   }
 
   // Output luminance function ---
 
-  TransmittanceFunction::Ptr lf;
+  ColorCurve::Ptr lf;
 
   if (state.doOutputDeepL) {
-    lf = TransmittanceFunction::create();
+    lf = ColorCurve::create();
     lf->addSample(intervals[0].t0, Colors::zero());
   }
 

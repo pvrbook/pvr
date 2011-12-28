@@ -45,6 +45,7 @@ void exportAttrTable();
 void exportCameraFunctions();
 void exportClassFactory();
 void exportCurve();
+void exportDeepImage();
 void exportGeometry();
 void exportGlobals();
 void exportField3D();
@@ -63,7 +64,6 @@ void exportPrimitive();
 void exportRaymarchers();
 void exportRaymarchSamplers();
 void exportRenderer();
-void exportTransmittanceMap();
 void exportVolumes();
 
 //----------------------------------------------------------------------------//
@@ -367,6 +367,7 @@ BOOST_PYTHON_MODULE(_pvr)
   exportCameraFunctions();
   exportClassFactory();
   exportCurve();
+  exportDeepImage();
   exportField3D();
   exportGeometry();
   exportGlobals();
@@ -375,18 +376,18 @@ BOOST_PYTHON_MODULE(_pvr)
   exportLog();
   exportModeler();
   exportModelerInput();
-  exportNoiseFunctions();
   exportNoiseClasses();
+  exportNoiseFunctions();
   exportOccluders();
   exportParticles();
   exportPerspectiveCamera();
   exportPolygons();
   exportPrimitive();
-  exportRaymarchers();
   exportRaymarchSamplers();
+  exportRaymarchers();
   exportRenderer();
-  exportTransmittanceMap();
   exportVolumes();
+
 }
 
 //----------------------------------------------------------------------------//

@@ -1,13 +1,13 @@
 //-*-c++-*--------------------------------------------------------------------//
 
-/*! \file TransmittanceMap.h
-  Contains the TransmittanceMap class and related functions.
+/*! \file DeepImage.h
+  Contains the DeepImage class and related functions.
  */
 
 //----------------------------------------------------------------------------//
 
-#ifndef __INCLUDED_PVR_TRANSMITTANCEMAP_H__
-#define __INCLUDED_PVR_TRANSMITTANCEMAP_H__
+#ifndef __INCLUDED_PVR_DEEPIMAGE_H__
+#define __INCLUDED_PVR_DEEPIMAGE_H__
 
 //----------------------------------------------------------------------------//
 // Includes
@@ -34,23 +34,23 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// TransmittanceMap
+// DeepImage
 //----------------------------------------------------------------------------//
 
-/*! \class TransmittanceMap 
-  \brief Stores a 2d array of transmittance functions (a deep depth map)
+/*! \class DeepImage 
+  \brief Stores a 2d array of Curve<Color> (a deep image)
 
  */
 
 //----------------------------------------------------------------------------//
 
-class TransmittanceMap
+class DeepImage
 {
 public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(TransmittanceMap);
+  DECLARE_SMART_PTRS(DeepImage);
 
   // Constructor, destructor, factory ------------------------------------------
 
@@ -64,44 +64,44 @@ public:
 
   // Main methods --------------------------------------------------------------
 
-  //! Sets the size of the map
+  //! Sets the size of the image
   void setSize(const size_t width, const size_t height);
 
-  //! Returns the size of the map
+  //! Returns the size of the image
   Imath::V2i size() const;
 
   //! Sets the transmittance function of a pixel
   void setPixel(const size_t x, const size_t y, 
-                const Util::TransmittanceFunction::CPtr func);
+                const Util::ColorCurve::CPtr func);
 
-  Util::TransmittanceFunction::Ptr 
+  Util::ColorCurve::Ptr 
   pixelFunction(const size_t x, const size_t y) const;
 
   //! Interpolated transmittance at a given raster coordinate and depth.
   Color lerp(const float rsX, const float rsY, const float z) const;
 
-  //! Prints statistics about the transmittance map
+  //! Prints statistics about the image
   void printStats() const;
 
 private:
   
   // Typedefs ------------------------------------------------------------------
 
-  typedef std::vector<Util::TransmittanceFunction> PixelsVec;
+  typedef std::vector<Util::ColorCurve> PixelsVec;
 
   // Utility methods -----------------------------------------------------------
 
-  //! Returns a const reference to the given pixel's transmittance function
-  const Util::TransmittanceFunction& pixel(const size_t x, 
+  //! Returns a const reference to the given pixel's color curve
+  const Util::ColorCurve& pixel(const size_t x, 
                                            const size_t y) const;
 
-  //! Returns a reference to the given pixel's transmittance function.
-  Util::TransmittanceFunction& pixel(const size_t x, 
+  //! Returns a reference to the given pixel's color curve.
+  Util::ColorCurve& pixel(const size_t x, 
                                      const size_t y);
 
   // Private data members ------------------------------------------------------
 
-  //! Stores the samples that define the TransmittanceMap.
+  //! Stores the samples that define the DeepImage.
   PixelsVec  m_pixels;
   size_t     m_width;
   size_t     m_height;
@@ -112,25 +112,25 @@ private:
 // Inline methods
 //----------------------------------------------------------------------------//
 
-inline const Util::TransmittanceFunction& 
-TransmittanceMap::pixel(const size_t x, const size_t y) const
+inline const Util::ColorCurve& 
+DeepImage::pixel(const size_t x, const size_t y) const
 {
-  assert(x >= 0 && "TransmittanceMap::pixel(): x less than zero");
-  assert(y >= 0 && "TransmittanceMap::pixel(): y less than zero");
-  assert(x < m_width  && "TransmittanceMap::pixel(): x out of range");
-  assert(y < m_height && "TransmittanceMap::pixel(): y out of range");
+  assert(x >= 0 && "DeepImage::pixel(): x less than zero");
+  assert(y >= 0 && "DeepImage::pixel(): y less than zero");
+  assert(x < m_width  && "DeepImage::pixel(): x out of range");
+  assert(y < m_height && "DeepImage::pixel(): y out of range");
   return m_pixels[x + y * m_width];
 }
 
 //----------------------------------------------------------------------------//
 
-inline Util::TransmittanceFunction& 
-TransmittanceMap::pixel(const size_t x, const size_t y) 
+inline Util::ColorCurve& 
+DeepImage::pixel(const size_t x, const size_t y) 
 {
-  assert(x >= 0 && "TransmittanceMap::pixel(): x less than zero");
-  assert(y >= 0 && "TransmittanceMap::pixel(): y less than zero");
-  assert(x < m_width  && "TransmittanceMap::pixel(): x out of range");
-  assert(y < m_height && "TransmittanceMap::pixel(): y out of range");
+  assert(x >= 0 && "DeepImage::pixel(): x less than zero");
+  assert(y >= 0 && "DeepImage::pixel(): y less than zero");
+  assert(x < m_width  && "DeepImage::pixel(): x out of range");
+  assert(y < m_height && "DeepImage::pixel(): y out of range");
   return m_pixels[x + y * m_width];
 }
 

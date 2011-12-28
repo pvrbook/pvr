@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------//
 
-/*! \file TransmittanceMap.cpp
-  Contains implementations of TransmittanceMap class and related functions.
+/*! \file DeepImage.cpp
+  Contains implementations of DeepImage class and related functions.
  */
 
 //----------------------------------------------------------------------------//
@@ -10,7 +10,7 @@
 
 // Header include
 
-#include "pvr/TransmittanceMap.h"
+#include "pvr/DeepImage.h"
 
 // Library includes
 
@@ -46,24 +46,24 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// TransmittanceMap
+// DeepImage
 //----------------------------------------------------------------------------//
 
-TransmittanceMap::Ptr TransmittanceMap::create()
+DeepImage::Ptr DeepImage::create()
 { 
-  return Ptr(new TransmittanceMap); 
+  return Ptr(new DeepImage); 
 }
 
 //----------------------------------------------------------------------------//
 
-TransmittanceMap::Ptr TransmittanceMap::clone() const
+DeepImage::Ptr DeepImage::clone() const
 { 
-  return Ptr(new TransmittanceMap(*this)); 
+  return Ptr(new DeepImage(*this)); 
 }
 
 //----------------------------------------------------------------------------//
 
-void TransmittanceMap::setSize(const size_t width, const size_t height)
+void DeepImage::setSize(const size_t width, const size_t height)
 {
   m_width = width;
   m_height = height;
@@ -73,15 +73,15 @@ void TransmittanceMap::setSize(const size_t width, const size_t height)
 
 //----------------------------------------------------------------------------//
 
-Imath::V2i TransmittanceMap::size() const
+Imath::V2i DeepImage::size() const
 { 
   return Imath::V2i(m_width, m_height); 
 }
 
 //----------------------------------------------------------------------------//
 
-void TransmittanceMap::setPixel(const size_t x, const size_t y, 
-                                const Util::TransmittanceFunction::CPtr func)
+void DeepImage::setPixel(const size_t x, const size_t y, 
+                                const Util::ColorCurve::CPtr func)
 {
   assert(x < m_width && "Pixel x coordinate out of bounds");
   assert(y < m_height && "Pixel y coordinate out of bounds");
@@ -90,19 +90,19 @@ void TransmittanceMap::setPixel(const size_t x, const size_t y,
   
 //----------------------------------------------------------------------------//
 
-Util::TransmittanceFunction::Ptr 
-TransmittanceMap::pixelFunction(const size_t x, const size_t y) const
+Util::ColorCurve::Ptr 
+DeepImage::pixelFunction(const size_t x, const size_t y) const
 {
   assert(x < m_width && "Pixel x coordinate out of bounds");
   assert(y < m_height && "Pixel y coordinate out of bounds");
-  return Util::TransmittanceFunction::Ptr
-    (new Util::TransmittanceFunction(m_pixels[x + y * m_width]));
+  return Util::ColorCurve::Ptr
+    (new Util::ColorCurve(m_pixels[x + y * m_width]));
 }
 
 
 //----------------------------------------------------------------------------//
 
-Color TransmittanceMap::lerp(const float rsX, const float rsY, const float z) const
+Color DeepImage::lerp(const float rsX, const float rsY, const float z) const
 {
   const size_t zero = 0;
   size_t xMin = std::floor(rsX);
@@ -123,15 +123,15 @@ Color TransmittanceMap::lerp(const float rsX, const float rsY, const float z) co
 
 //----------------------------------------------------------------------------//
 
-void TransmittanceMap::printStats() const 
+void DeepImage::printStats() const 
 {
   using namespace Util;
   
-  Log::print("Transmittance map stats:");
+  Log::print("Deep image stats:");
 
   // Count samples
   size_t numSamples = 0;
-  BOOST_FOREACH (const Util::TransmittanceFunction &p, m_pixels) {
+  BOOST_FOREACH (const Util::ColorCurve &p, m_pixels) {
     numSamples += p.numSamples();
   }
 

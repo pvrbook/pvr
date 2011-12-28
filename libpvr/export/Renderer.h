@@ -25,7 +25,7 @@
 #include "pvr/Image.h"
 #include "pvr/Exception.h"
 #include "pvr/Scene.h"
-#include "pvr/TransmittanceMap.h"
+#include "pvr/DeepImage.h"
 #include "pvr/Types.h"
 
 #include "pvr/Raymarchers/Raymarcher.h"
@@ -112,9 +112,9 @@ public:
   // Results -------------------------------------------------------------------
 
   //! Returns a pointer to the transmittance map
-  TransmittanceMap::Ptr transmittanceMap() const;
+  DeepImage::Ptr transmittanceMap() const;
   //! Returns a pointer to the luminance map
-  TransmittanceMap::Ptr luminanceMap() const;
+  DeepImage::Ptr luminanceMap() const;
   //! Saves the rendered image to the given filename
   void saveImage(const std::string &filename) const;
 
@@ -154,9 +154,9 @@ private:
   //! Primary image output. 
   Image::Ptr m_primary;
   //! Pointer to deep transmittance map
-  TransmittanceMap::Ptr m_transmittanceMap;
+  DeepImage::Ptr m_deepTransmittance;
   //! Pointer to deep luminance map
-  TransmittanceMap::Ptr m_luminanceMap;
+  DeepImage::Ptr m_deepLuminance;
 };
 
 //----------------------------------------------------------------------------//

@@ -105,8 +105,8 @@ Renderer::Ptr Renderer::clone()
   Ptr renderer(new Renderer(*this));
   // Deep-copy the non-const data members
   renderer->m_primary = m_primary->clone();
-  renderer->m_transmittanceMap = m_transmittanceMap->clone();
-  renderer->m_luminanceMap = m_luminanceMap->clone();
+  renderer->m_deepTransmittance = m_deepTransmittance->clone();
+  renderer->m_deepLuminance = m_deepLuminance->clone();
   if (m_scene) {
     renderer->m_scene = m_scene->clone();
   }
@@ -130,10 +130,10 @@ void Renderer::setCamera(Camera::CPtr camera)
   V2i res = m_camera->resolution();
   m_primary = Image::create();
   m_primary->setSize(res.x, res.y);
-  m_transmittanceMap = TransmittanceMap::create();
-  m_transmittanceMap->setSize(res.x, res.y);
-  m_luminanceMap = TransmittanceMap::create();
-  m_luminanceMap->setSize(res.x, res.y);
+  m_deepTransmittance = DeepImage::create();
+  m_deepTransmittance->setSize(res.x, res.y);
+  m_deepLuminance = DeepImage::create();
+  m_deepLuminance->setSize(res.x, res.y);
 }
 
 //----------------------------------------------------------------------------//
@@ -259,10 +259,10 @@ void Renderer::execute()
     i.setPixel(result.luminance);
     i.setPixelAlpha((alpha.x + alpha.y + alpha.z) / 3.0f);
     if (result.transmittanceFunction) {
-      m_transmittanceMap->setPixel(i.x, i.y, result.transmittanceFunction);
+      m_deepTransmittance->setPixel(i.x, i.y, result.transmittanceFunction);
     }
     if (result.luminanceFunction) {
-      m_luminanceMap->setPixel(i.x, i.y, result.luminanceFunction);
+      m_deepLuminance->setPixel(i.x, i.y, result.luminanceFunction);
     }
   }
 
@@ -278,16 +278,16 @@ Raymarcher::CPtr Renderer::raymarcher() const
 
 //----------------------------------------------------------------------------//
 
-TransmittanceMap::Ptr Renderer::transmittanceMap() const
+DeepImage::Ptr Renderer::transmittanceMap() const
 {
-  return m_transmittanceMap;
+  return m_deepTransmittance;
 }
 
 //----------------------------------------------------------------------------//
 
-TransmittanceMap::Ptr Renderer::luminanceMap() const
+DeepImage::Ptr Renderer::luminanceMap() const
 {
-  return m_luminanceMap;
+  return m_deepLuminance;
 }
 
 //----------------------------------------------------------------------------//

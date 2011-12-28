@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------//
 
-/*! \file PyTransmittanceMap.cpp
+/*! \file PyDeepImage.cpp
   Contains the interface definition for the Occluders subclasses
  */
 
@@ -14,7 +14,7 @@
 
 // Library includes
 
-#include <pvr/TransmittanceMap.h>
+#include <pvr/DeepImage.h>
 
 //----------------------------------------------------------------------------//
 // Helper functions
@@ -26,23 +26,22 @@
 // Pvr python module
 //----------------------------------------------------------------------------//
 
-void exportTransmittanceMap()
+void exportDeepImage()
 {
   using namespace boost::python;
 
   using namespace pvr::Render;
 
-  // TransmittanceMap ---
+  // DeepImage ---
 
-  class_<TransmittanceMap, TransmittanceMap::Ptr>
-    ("TransmittanceMap", no_init)
-    .def("__init__",      make_constructor(TransmittanceMap::create))
-    .def("pixelFunction", &TransmittanceMap::pixelFunction)
-    .def("printStats",    &TransmittanceMap::printStats)
+  class_<DeepImage, DeepImage::Ptr>
+    ("DeepImage", no_init)
+    .def("__init__",      make_constructor(DeepImage::create))
+    .def("pixelFunction", &DeepImage::pixelFunction)
+    .def("printStats",    &DeepImage::printStats)
     ;
   
-  implicitly_convertible<TransmittanceMap::Ptr, 
-                         TransmittanceMap::CPtr>();
+  implicitly_convertible<DeepImage::Ptr, DeepImage::CPtr>();
 
 }
 

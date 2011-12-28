@@ -101,7 +101,7 @@ void TransmittanceMapOccluder::setCamera(Camera::CPtr camera)
 
 //----------------------------------------------------------------------------//
 
-void TransmittanceMapOccluder::setTransmittanceMap(TransmittanceMap::CPtr map)
+void TransmittanceMapOccluder::setTransmittanceMap(DeepImage::CPtr map)
 { 
   if (!map) {
     Util::Log::warning("TransmittanceMapOccluder::setTransmittanceMap "

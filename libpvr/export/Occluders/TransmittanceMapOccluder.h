@@ -20,7 +20,7 @@
 // Project headers
 
 #include "pvr/Camera.h"
-#include "pvr/TransmittanceMap.h"
+#include "pvr/DeepImage.h"
 #include "pvr/Occluders/Occluder.h"
 
 //----------------------------------------------------------------------------//
@@ -70,15 +70,15 @@ public:
   // Main methods --------------------------------------------------------------
 
   void setCamera(Camera::CPtr camera);
-  void setTransmittanceMap(TransmittanceMap::CPtr map);
+  void setTransmittanceMap(DeepImage::CPtr map);
 
 protected:
 
   // Data members --------------------------------------------------------------
 
-  TransmittanceMap::CPtr m_transmittanceMap;
-  Camera::CPtr           m_camera;
-  Imath::V2f             m_rasterBounds;
+  DeepImage::CPtr m_transmittanceMap;
+  Camera::CPtr    m_camera;
+  Imath::V2f      m_rasterBounds;
 };
 
 //----------------------------------------------------------------------------//
