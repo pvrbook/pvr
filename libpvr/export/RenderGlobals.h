@@ -18,12 +18,22 @@
 // Library includes
 
 #include "pvr/Exception.h"
+#include "pvr/Types.h"
 
 //----------------------------------------------------------------------------//
 // Namespaces 
 //----------------------------------------------------------------------------//
 
 namespace pvr {
+
+//----------------------------------------------------------------------------//
+// Forward declarations
+//----------------------------------------------------------------------------//
+
+  namespace Render {
+    class Scene;
+    class Camera;
+  }
 
 //----------------------------------------------------------------------------//
 // RenderGlobals
@@ -33,6 +43,11 @@ class RenderGlobals
 {
 public:
   
+  // Typedefs ------------------------------------------------------------------
+
+  typedef boost::shared_ptr<const pvr::Render::Scene> SceneCPtr;
+  typedef boost::shared_ptr<const pvr::Render::Camera> CameraCPtr;
+
   // Exceptions ----------------------------------------------------------------
 
   DECLARE_PVR_RT_EXC(BadFpsException, "Bad frames per second value:");
@@ -45,28 +60,38 @@ public:
   //! \param shutter Fraction of frame length that shutter is open. A value 
   //! of 0.5 corresponsonds to a 180 degree shutter angle.
   static void setupMotionBlur(const float fps, const float shutter);
+  //! Sets the current Scene instance
+  static void setScene(SceneCPtr scene);
+  //! Sets the current Camera
+  static void setCamera(CameraCPtr camera);
 
   // Accessors -----------------------------------------------------------------
 
   //! Returns the number of frames per second
   static float fps()
   { return ms_fps; }
-
   //! Returns the shutter length
   static float shutter() 
   { return ms_shutter; }
-
   //! Returns length (in seconds) of open shutter time.
   static float dt()
   { return ms_dt; }
+  //! Returns a pointer to the current scene
+  static SceneCPtr scene()
+  { return ms_scene; }
+  //! Returns a pointer to the current camera
+  static CameraCPtr camera()
+  { return ms_camera; }
 
 private:
 
   // Data members --------------------------------------------------------------
 
-  static float ms_fps;
-  static float ms_shutter;
-  static float ms_dt;
+  static float      ms_fps;
+  static float      ms_shutter;
+  static float      ms_dt;
+  static SceneCPtr  ms_scene;
+  static CameraCPtr ms_camera;
 
 };
 

@@ -74,8 +74,8 @@ TransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
   }
 
   // Transform to camera space for depth and raster space for pixel coordinate
-  Vector csP = m_camera->worldToCamera(state.wsP, state.renderState.time);
-  Vector rsP = m_camera->worldToRaster(state.wsP, state.renderState.time);
+  Vector csP = m_camera->worldToCamera(state.wsP, state.rayState.time);
+  Vector rsP = m_camera->worldToRaster(state.wsP, state.rayState.time);
   
   // Bounds checks
   if (csP.z > 0.0) {

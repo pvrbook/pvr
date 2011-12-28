@@ -26,6 +26,7 @@
 #include "pvr/Constants.h"
 
 #include "pvr/Lights/Light.h"
+#include "pvr/RenderGlobals.h"
 
 //----------------------------------------------------------------------------//
 // Local namespace
@@ -74,18 +75,18 @@ ScatteringSampler::Ptr ScatteringSampler::create()
 RaymarchSample
 ScatteringSampler::sample(const VolumeSampleState &state) const
 {
-  const Scene          &scene = *state.renderState.scene;
+  const Scene          &scene = *RenderGlobals::scene();
   Volume::CPtr         volume = scene.volume;
 
-  LightSampleState     lightState(state.renderState);
-  OcclusionSampleState occlusionState(state.renderState);
+  LightSampleState     lightState(state.rayState);
+  OcclusionSampleState occlusionState(state.rayState);
 
   Color                L = Colors::zero();
   Color                scattering = volume->sample(state, m_scatteringAttr);
   
   lightState.wsP = state.wsP;
 
-  if (state.renderState.rayType == RenderState::FullRaymarch) {
+  if (state.rayState.rayType == RayState::FullRaymarch) {
     BOOST_FOREACH (Light::CPtr light, scene.lights) {
       LightSample lightSample = light->sample(lightState);
       occlusionState.wsP = state.wsP;

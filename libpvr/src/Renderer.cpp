@@ -232,6 +232,9 @@ void Renderer::execute()
 
   // Initialization ---
 
+  RenderGlobals::setScene(m_scene);
+  RenderGlobals::setCamera(m_camera);
+
   m_rng.init(0);
   Timer timer;
   ProgressReporter progress(2.5f, "  ");
@@ -316,16 +319,14 @@ Ray Renderer::setupRay(const float x, const float y, const PTime time) const
 IntegrationResult Renderer::integrateRay(const float x, const float y,
                                          const PTime time) const
 {
-  // Create default RenderState. Rely on its constructor to set reasonable
+  // Create default RayState. Rely on its constructor to set reasonable
   // defaults
-  RenderState state;
+  RayState state;
   // Update the values that are non-default
   state.wsRay         = setupRay(x, y, time);
   state.time          = time;
   state.doOutputDeepT = m_params.doTransmittanceMap;
   state.doOutputDeepL = m_params.doLuminanceMap;
-  state.scene         = m_scene;  
-  state.camera        = m_camera;
   // Let the Raymarcher do the integration work
   return m_raymarcher->integrate(state);
 }

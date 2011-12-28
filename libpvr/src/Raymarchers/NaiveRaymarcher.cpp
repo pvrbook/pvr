@@ -25,6 +25,7 @@
 #include "pvr/Curve.h"
 #include "pvr/Log.h"
 #include "pvr/Math.h"
+#include "pvr/RenderGlobals.h"
 #include "pvr/Scene.h"
 #include "pvr/StlUtil.h"
 #include "pvr/Types.h"
@@ -107,11 +108,11 @@ void NaiveRaymarcher::setParams(const Util::ParamMap &params)
 //----------------------------------------------------------------------------//
 
 IntegrationResult
-NaiveRaymarcher::integrate(const RenderState &state) const
+NaiveRaymarcher::integrate(const RayState &state) const
 {
   // Integration intervals ---
 
-  IntervalVec rawIntervals = state.scene->volume->intersect(state);
+  IntervalVec rawIntervals = RenderGlobals::scene()->volume->intersect(state);
   IntervalVec intervals = splitIntervals(rawIntervals);
 
   if (intervals.size() == 0) {
@@ -200,7 +201,7 @@ NaiveRaymarcher::integrate(const RenderState &state) const
         // Z depth of camera is not equal to t (t is true distance)
         // Note that we always sample time at t=0.0 for the transmittance
         // function
-        Vector csP = state.camera->worldToCamera(sampleState.wsP, PTime(0.0));
+        Vector csP = RenderGlobals::camera()->worldToCamera(sampleState.wsP, PTime(0.0));
         float depth = -csP.z;
         if (tf) {
           tf->addSample(depth, T);

@@ -116,7 +116,7 @@ Color CompositeVolume::sample(const VolumeSampleState &state,
 
 //----------------------------------------------------------------------------//
 
-IntervalVec CompositeVolume::intersect(const RenderState &state) const
+IntervalVec CompositeVolume::intersect(const RayState &state) const
 {
   IntervalVec intervals;
   BOOST_FOREACH (Volume::CPtr child, m_volumes) {

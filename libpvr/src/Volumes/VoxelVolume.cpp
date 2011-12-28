@@ -251,7 +251,7 @@ Color VoxelVolume::sample(const VolumeSampleState &state,
 
 //----------------------------------------------------------------------------//
 
-IntervalVec VoxelVolume::intersect(const RenderState &state) const
+IntervalVec VoxelVolume::intersect(const RayState &state) const
 {
   assert (m_intersectionHandler && "Missing intersection handler");
   return m_intersectionHandler->intersect(state.wsRay, state.time);

@@ -168,7 +168,7 @@ public:
   virtual AttrNameVec attributeNames() const;
   virtual Color sample(const VolumeSampleState &state,
                        const VolumeAttr &attribute) const;
-  virtual IntervalVec intersect(const RenderState &state) const;
+  virtual IntervalVec intersect(const RayState &state) const;
   virtual StringVec info() const;
 
   // Main methods --------------------------------------------------------------

@@ -38,6 +38,9 @@ float RenderGlobals::ms_fps = 24.0f;
 float RenderGlobals::ms_dt = 0.0f;
 float RenderGlobals::ms_shutter = 0.0f;
 
+RenderGlobals::SceneCPtr RenderGlobals::ms_scene;
+RenderGlobals::CameraCPtr RenderGlobals::ms_camera;
+
 //----------------------------------------------------------------------------//
 // RenderGlobals implementations
 //----------------------------------------------------------------------------//
@@ -58,6 +61,20 @@ void RenderGlobals::setupMotionBlur(const float fps, const float shutter)
   ms_fps = fps;
   ms_shutter = shutter;
   ms_dt = 1.0 / fps * shutter;
+}
+
+//----------------------------------------------------------------------------//
+
+void RenderGlobals::setScene(SceneCPtr scene)
+{
+  ms_scene = scene;
+}
+
+//----------------------------------------------------------------------------//
+
+void RenderGlobals::setCamera(CameraCPtr camera)
+{
+  ms_camera = camera;
 }
 
 //----------------------------------------------------------------------------//

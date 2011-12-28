@@ -87,7 +87,7 @@ public:
 
   // To be implemented by subclasses -------------------------------------------
 
-  virtual IntegrationResult integrate(const RenderState &state) const = 0;
+  virtual IntegrationResult integrate(const RayState &state) const = 0;
 
 protected:
 

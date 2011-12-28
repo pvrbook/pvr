@@ -21,8 +21,10 @@
 
 // Project includes
 
+#include <pvr/Camera.h>
 #include <pvr/Globals.h>
 #include <pvr/RenderGlobals.h>
+#include <pvr/Scene.h>
 
 //----------------------------------------------------------------------------//
 // Helper functions
@@ -55,6 +57,8 @@ void exportGlobals()
     .def("dt",  &RenderGlobals::dt).staticmethod("dt")
     .def("shutter",  &RenderGlobals::shutter).staticmethod("shutter")
     .def("fps", &RenderGlobals::fps).staticmethod("fps")
+    .def("scene", &RenderGlobals::scene).staticmethod("scene")
+    .def("camera", &RenderGlobals::camera).staticmethod("camera")
     ;
 
 }

@@ -18,6 +18,7 @@
 
 // Project headers
 
+#include "pvr/RenderGlobals.h"
 #include "pvr/Scene.h"
 #include "pvr/Volumes/Volume.h"
 
@@ -54,7 +55,7 @@ DensitySampler::Ptr DensitySampler::create()
 RaymarchSample
 DensitySampler::sample(const VolumeSampleState &state) const
 {
-  Color density = state.renderState.scene->volume->sample(state, m_densityAttr);
+  Color density = RenderGlobals::scene()->volume->sample(state, m_densityAttr);
   return RaymarchSample(density, density);
 }
 

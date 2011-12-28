@@ -61,7 +61,7 @@ std::string RaymarchOccluder::typeName() const
 
 Color RaymarchOccluder::sample(const OcclusionSampleState &state) const
 {
-  RenderState raymarchState = state.makeSecondaryRayState();
+  RayState raymarchState = state.makeSecondaryRayState();
   return m_raymarcher->integrate(raymarchState).transmittance;
 }
 

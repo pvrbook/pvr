@@ -21,6 +21,7 @@
 
 #include "pvr/ParamBase.h"
 #include "pvr/VolumeAttr.h"
+#include "pvr/RenderState.h"
 
 //----------------------------------------------------------------------------//
 // Namespaces
@@ -56,7 +57,7 @@ public:
   //! Returns a vector of intersection intervals (start/end points) that
   //! intersect the ray.
   //! \note The ray is found in state.wsRay
-  virtual IntervalVec intersect(const RenderState &state) const = 0;
+  virtual IntervalVec intersect(const RayState &state) const = 0;
 
   // Optionally implemented by subclasses --------------------------------------
 

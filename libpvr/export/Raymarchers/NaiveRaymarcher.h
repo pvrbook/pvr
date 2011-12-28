@@ -60,7 +60,7 @@ public:
 
   virtual std::string typeName() const
   { return "Naive"; }
-  virtual IntegrationResult integrate(const RenderState &state) const;
+  virtual IntegrationResult integrate(const RayState &state) const;
 
 protected:
 

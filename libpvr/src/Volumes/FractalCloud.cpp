@@ -71,7 +71,7 @@ Color FractalCloud::sample(const VolumeSampleState &state,
 
 //----------------------------------------------------------------------------//
 
-IntervalVec FractalCloud::intersect(const RenderState &state) const
+IntervalVec FractalCloud::intersect(const RayState &state) const
 {
   Fractal::Range range = m_fractal->range();
   double maxDisplacement = (1.0 + range.second) * Vector(1.0).length();

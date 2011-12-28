@@ -30,29 +30,22 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// Forward declarations
+// RayState
 //----------------------------------------------------------------------------//
 
-class Scene;
-class Camera;
-
-//----------------------------------------------------------------------------//
-// RenderState
-//----------------------------------------------------------------------------//
-
-/*! \class RenderState
+/*! \class RayState
   \brief Stores information about the current state of the renderer.
  */
 
 //----------------------------------------------------------------------------//
 
-struct RenderState
+struct RayState
 {
   enum RayType {
     FullRaymarch,
     TransmittanceOnly, 
   };
-  RenderState()
+  RayState()
     : tMin(0.0), 
       tMax(std::numeric_limits<double>::max()),
       rayDepth(0), 
@@ -61,16 +54,14 @@ struct RenderState
       doOutputDeepL(false),
       doOutputDeepT(false)
   { }
-  Ray                             wsRay;
-  double                          tMin;
-  double                          tMax;
-  size_t                          rayDepth;
-  RayType                         rayType;
-  PTime                           time;
-  bool                            doOutputDeepL;
-  bool                            doOutputDeepT;
-  boost::shared_ptr<const Scene>  scene;
-  boost::shared_ptr<const Camera> camera;
+  Ray     wsRay;
+  double  tMin;
+  double  tMax;
+  size_t  rayDepth;
+  RayType rayType;
+  PTime   time;
+  bool    doOutputDeepL;
+  bool    doOutputDeepT;
 };
 
 //----------------------------------------------------------------------------//
@@ -85,10 +76,10 @@ struct RenderState
 
 struct LightSampleState
 {
-  LightSampleState(const RenderState &rState)
-    : renderState(rState)
+  LightSampleState(const RayState &rState)
+    : rayState(rState)
   { }
-  const RenderState &renderState;
+  const RayState &rayState;
   Vector wsP;
 };
 
@@ -104,10 +95,10 @@ struct LightSampleState
 
 struct VolumeSampleState
 {
-  VolumeSampleState(const RenderState &rState)
-    : renderState(rState)
+  VolumeSampleState(const RayState &rState)
+    : rayState(rState)
   { }
-  const RenderState &renderState;
+  const RayState &rayState;
   Vector wsP;
 };
 
@@ -124,22 +115,22 @@ struct VolumeSampleState
 
 struct OcclusionSampleState
 {
-  OcclusionSampleState(const RenderState &rState)
-    : renderState(rState)
+  OcclusionSampleState(const RayState &rState)
+    : rayState(rState)
   { }
-  //! Returns a RenderState that can be used to fire a secondary ray.
-  RenderState makeSecondaryRayState() const
+  //! Returns a RayState that can be used to fire a secondary ray.
+  RayState makeSecondaryRayState() const
   {
-    RenderState state(renderState);
+    RayState state(rayState);
     state.rayDepth++;
-    state.rayType = RenderState::TransmittanceOnly;
+    state.rayType = RayState::TransmittanceOnly;
     state.wsRay.pos = wsP;
     state.wsRay.dir = (wsLightP - wsP).normalized();
     state.tMin = 0.0;
     state.tMax = (wsLightP - wsP).length();
     return state;
   }
-  const RenderState &renderState;
+  const RayState &rayState;
   Vector wsP;
   Vector wsLightP;
 };

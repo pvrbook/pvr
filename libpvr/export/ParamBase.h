@@ -22,7 +22,6 @@
 // Project headers
 
 #include "pvr/ParamMap.h"
-#include "pvr/RenderState.h"
 #include "pvr/Types.h"
 
 //----------------------------------------------------------------------------//
