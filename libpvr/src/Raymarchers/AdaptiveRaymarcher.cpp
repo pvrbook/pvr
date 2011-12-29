@@ -221,7 +221,7 @@ AdaptiveRaymarcher::integrate(const RayState &state) const
 
       // Update transmittance and luminance functions
       if (tf || lf) {
-        updateDeepFunctions(sampleState.wsP, L, T, lf, tf);
+        updateDeepFunctions(state.wsRay(stepT1), L, T, lf, tf);
       }
 
       // Terminate if requested
