@@ -32,7 +32,7 @@
 #include "pvr/Primitives/Instantiation/Sphere.h"
 #include "pvr/Primitives/Instantiation/Surface.h"
 #include "pvr/Raymarchers/AdaptiveRaymarcher.h"
-#include "pvr/Raymarchers/NaiveRaymarcher.h"
+#include "pvr/Raymarchers/UniformRaymarcher.h"
 #include "pvr/RaymarchSamplers/DensitySampler.h"
 #include "pvr/RaymarchSamplers/ScatteringSampler.h"
 #include "pvr/Volumes/VoxelVolume.h"
@@ -116,7 +116,7 @@ void registerStandardTypes()
     ClassFactory<Raymarcher>::Ptr factory = 
       ClassFactory<Raymarcher>::singleton();
     
-    factory->registerClass(factoryFunc<Raymarcher, NaiveRaymarcher>);
+    factory->registerClass(factoryFunc<Raymarcher, UniformRaymarcher>);
     factory->registerClass(factoryFunc<Raymarcher, AdaptiveRaymarcher>);
   }
 

@@ -50,7 +50,7 @@ def __baseLight(renderer, parms, resMult, rmParams):
     light.setIntensity(parms["intensity"])
     # Transmittance map
     resolution = V2i(int(1024 * resMult), int(1024 * resMult))
-    raymarcherType = "Naive"
+    raymarcherType = "Uniform"
     samplerType = "ScatteringSampler"
     setupTransmittanceMap(renderer, light, resolution, quat, parms["fov"], 
                           raymarcherType, rmParams, samplerType)

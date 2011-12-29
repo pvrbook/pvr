@@ -14,7 +14,7 @@
 
 // Library includes
 
-#include <pvr/Raymarchers/NaiveRaymarcher.h>
+#include <pvr/Raymarchers/Raymarcher.h>
 
 #include "Common.h"
 

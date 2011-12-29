@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------//
 
-/*! \file NaiveRaymarcher.cpp
-  Contains implementations of NaiveRaymarcher class and related functions.
+/*! \file UniformRaymarcher.cpp
+  Contains implementations of UniformRaymarcher class and related functions.
  */
 
 //----------------------------------------------------------------------------//
@@ -10,7 +10,7 @@
 
 // Header include
 
-#include "pvr/Raymarchers/NaiveRaymarcher.h"
+#include "pvr/Raymarchers/UniformRaymarcher.h"
 
 // System includes
 
@@ -77,10 +77,10 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// NaiveRaymarcher::Params
+// UniformRaymarcher::Params
 //----------------------------------------------------------------------------//
 
-NaiveRaymarcher::Params::Params()
+UniformRaymarcher::Params::Params()
   : stepLength(1.0), useVolumeStepLength(true), volumeStepLengthMult(1.0),
     doEarlyTermination(true), earlyTerminationThreshold(0.001)
 { 
@@ -88,10 +88,10 @@ NaiveRaymarcher::Params::Params()
 }
 
 //----------------------------------------------------------------------------//
-// NaiveRaymarcher
+// UniformRaymarcher
 //----------------------------------------------------------------------------//
 
-void NaiveRaymarcher::setParams(const Util::ParamMap &params)
+void UniformRaymarcher::setParams(const Util::ParamMap &params)
 {
   getValue(params.floatMap, k_strStepLength, 
            m_params.stepLength);
@@ -108,7 +108,7 @@ void NaiveRaymarcher::setParams(const Util::ParamMap &params)
 //----------------------------------------------------------------------------//
 
 IntegrationResult
-NaiveRaymarcher::integrate(const RayState &state) const
+UniformRaymarcher::integrate(const RayState &state) const
 {
   // Integration intervals ---
 
@@ -119,7 +119,7 @@ NaiveRaymarcher::integrate(const RayState &state) const
     return IntegrationResult();
   }
 
-  // Output transmittance function and luminance function ---
+  // Set up transmittance function and luminance function ---
 
   ColorCurve::Ptr lf = setupDeepLCurve(state, intervals[0].t0);
   ColorCurve::Ptr tf = setupDeepTCurve(state, intervals[0].t0);
@@ -160,9 +160,10 @@ NaiveRaymarcher::integrate(const RayState &state) const
 
     while (stepT0 < tEnd) {
 
-      const double stepLength = stepT1 - stepT0;
       const double t = (stepT0 + stepT1) * 0.5;
       sampleState.wsP = state.wsRay(t);
+
+      const double stepLength = stepT1 - stepT0;
 
       RaymarchSample sample = m_raymarchSampler->sample(sampleState);
 

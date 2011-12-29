@@ -1,13 +1,13 @@
 //-*-c++-*--------------------------------------------------------------------//
 
-/*! \file NaiveRaymarcher.h
-  Contains the NaiveRaymarcher class and related functions.
+/*! \file UniformRaymarcher.h
+  Contains the UniformRaymarcher class and related functions.
  */
 
 //----------------------------------------------------------------------------//
 
-#ifndef __INCLUDED_PVR_NAIVERAYMARCHER_H__
-#define __INCLUDED_PVR_NAIVERAYMARCHER_H__
+#ifndef __INCLUDED_PVR_UNIFORMRAYMARCHER_H__
+#define __INCLUDED_PVR_UNIFORMRAYMARCHER_H__
 
 //----------------------------------------------------------------------------//
 // Includes
@@ -29,34 +29,34 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// NaiveRaymarcher
+// UniformRaymarcher
 //----------------------------------------------------------------------------//
 
-/*! \class NaiveRaymarcher
+/*! \class UniformRaymarcher
   \brief Implements the simplest raymarcher, with a fixed step length
  */
 
 //----------------------------------------------------------------------------//
 
-class NaiveRaymarcher : public Raymarcher
+class UniformRaymarcher : public Raymarcher
 {
 public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(NaiveRaymarcher);
+  DECLARE_SMART_PTRS(UniformRaymarcher);
 
   // Ctor, factory -------------------------------------------------------------
 
   //! Factory method
   static Ptr create()
-  { return Ptr(new NaiveRaymarcher); }
+  { return Ptr(new UniformRaymarcher); }
 
   // From ParamBase ------------------------------------------------------------
 
   virtual void setParams(const Util::ParamMap &params);
   virtual std::string typeName() const
-  { return "Naive"; }
+  { return "Uniform"; }
 
   // From Raymarcher -----------------------------------------------------------
 
@@ -84,6 +84,7 @@ protected:
 
   // Protected data members ----------------------------------------------------
   
+  //! Holds user parameters.
   Params m_params;
 
 };

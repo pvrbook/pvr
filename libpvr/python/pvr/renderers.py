@@ -22,7 +22,7 @@ def standard(params):
     # Set up Renderer
     renderer = Renderer()
     sampler = createRaymarchSampler("ScatteringSampler")
-    raymarcher = createRaymarcher("Naive")
+    raymarcher = createRaymarcher("Uniform")
     raymarcher.setRaymarchSampler(sampler)
     raymarcher.setParams(p)
     renderer.setRaymarcher(raymarcher)
