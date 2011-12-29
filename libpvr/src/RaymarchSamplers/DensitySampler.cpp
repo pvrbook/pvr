@@ -55,8 +55,9 @@ DensitySampler::Ptr DensitySampler::create()
 RaymarchSample
 DensitySampler::sample(const VolumeSampleState &state) const
 {
-  Color density = RenderGlobals::scene()->volume->sample(state, m_densityAttr);
-  return RaymarchSample(density, density);
+  VolumeSample sample = 
+    RenderGlobals::scene()->volume->sample(state, m_densityAttr);
+  return RaymarchSample(sample.value, sample.value);
 }
 
 //----------------------------------------------------------------------------//

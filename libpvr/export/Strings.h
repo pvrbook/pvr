@@ -37,6 +37,11 @@ struct Str {
 static const std::string pvr;
 static const std::string pvrLogStamp;
 
+static const std::string density;
+static const std::string scattering;
+static const std::string absorption;
+static const std::string emission;
+
 };
 
 //----------------------------------------------------------------------------//

@@ -50,8 +50,8 @@ Volume::AttrNameVec FractalCloud::attributeNames() const
 
 //----------------------------------------------------------------------------//
 
-Color FractalCloud::sample(const VolumeSampleState &state,
-                           const VolumeAttr &attribute) const
+VolumeSample FractalCloud::sample(const VolumeSampleState &state,
+                                  const VolumeAttr &attribute) const
 {
   if (attribute.index() == VolumeAttr::IndexNotSet) {
     if (attribute.name() == "scattering") {
@@ -61,12 +61,13 @@ Color FractalCloud::sample(const VolumeSampleState &state,
     }
   }
   if (attribute.index() == VolumeAttr::IndexInvalid) {
-    return Colors::zero();
+    return VolumeSample();
   }
   
   double distFunc = 1.0 - state.wsP.length();
 
-  return Color(distFunc + m_fractal->eval(state.wsP)) * m_density;
+  return VolumeSample(Color(distFunc + m_fractal->eval(state.wsP)) * m_density,
+                      Phase::k_isotropic);
 }
 
 //----------------------------------------------------------------------------//

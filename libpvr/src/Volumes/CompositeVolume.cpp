@@ -93,14 +93,14 @@ Volume::AttrNameVec CompositeVolume::attributeNames() const
 
 //----------------------------------------------------------------------------//
 
-Color CompositeVolume::sample(const VolumeSampleState &state,
-                              const VolumeAttr &attribute) const
+VolumeSample CompositeVolume::sample(const VolumeSampleState &state,
+                                     const VolumeAttr &attribute) const
 {
   if (attribute.index() == VolumeAttr::IndexNotSet) {
     setupAttribute(attribute);
   }
   if (attribute.index() == VolumeAttr::IndexInvalid) {
-    return Colors::zero();
+    return VolumeSample();
   }
 
   Color value = Colors::zero();
@@ -108,10 +108,11 @@ Color CompositeVolume::sample(const VolumeSampleState &state,
 
   for (size_t i = 0, size = m_volumes.size(); i < size; ++i) {
     const VolumeAttr &childAttr = m_childAttrs[attrIndex].attrs[i];
-    value += m_volumes[i]->sample(state, childAttr);
+    value += m_volumes[i]->sample(state, childAttr).value;
   }
   
-  return value;
+  return VolumeSample(value,
+                      Phase::k_isotropic);
 }
 
 //----------------------------------------------------------------------------//

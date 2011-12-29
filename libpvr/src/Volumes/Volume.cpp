@@ -29,6 +29,14 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
+void Volume::setPhaseFunction(Phase::PhaseFunction::CPtr phaseFunction)
+{
+  assert(phaseFunction != NULL && "Got null pointer for phase function");
+  m_phaseFunction = phaseFunction;
+}
+
+//----------------------------------------------------------------------------//
+
 Volume::StringVec Volume::info() const
 {
   return StringVec();

@@ -59,6 +59,7 @@ void exportNoiseClasses();
 void exportOccluders();
 void exportParticles();
 void exportPerspectiveCamera();
+void exportPhaseFunction();
 void exportPolygons();
 void exportPrimitive();
 void exportRaymarchers();
@@ -381,6 +382,7 @@ BOOST_PYTHON_MODULE(_pvr)
   exportOccluders();
   exportParticles();
   exportPerspectiveCamera();
+  exportPhaseFunction();
   exportPolygons();
   exportPrimitive();
   exportRaymarchSamplers();

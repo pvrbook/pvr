@@ -20,8 +20,9 @@
 // Project headers
 
 #include "pvr/ParamBase.h"
-#include "pvr/VolumeAttr.h"
+#include "pvr/PhaseFunction.h"
 #include "pvr/RenderState.h"
+#include "pvr/VolumeAttr.h"
 
 //----------------------------------------------------------------------------//
 // Namespaces
@@ -29,6 +30,29 @@
 
 namespace pvr {
 namespace Render {
+
+//----------------------------------------------------------------------------//
+// VolumeSample
+//----------------------------------------------------------------------------//
+
+struct VolumeSample
+{
+  
+  // Constructors ---
+
+  VolumeSample()
+    : value(0.0), probability(Phase::k_isotropic)
+  { }
+  VolumeSample(const Color &v, const float p)
+    : value(v), probability(p)
+  { }
+
+  // Public data members ---
+
+  Color value;
+  float probability;
+
+};
 
 //----------------------------------------------------------------------------//
 // Volume
@@ -46,14 +70,29 @@ public:
   typedef std::vector<std::string>  StringVec;
   typedef std::vector<Volume::CPtr> CVec;
 
+  // Constructors and destructor -----------------------------------------------
+
+  //! Default constructor. Initializes the scattering attribute
+  Volume()
+    : m_scatteringAttr("scattering")
+  { }
+  //! Virtual destructor
+  ~Volume()
+  { }
+  
+  // Main methods --------------------------------------------------------------
+
+  //! Sets the phase function to use
+  void setPhaseFunction(Phase::PhaseFunction::CPtr phaseFunction);
+
   // To be implemented by subclasses -------------------------------------------
 
   //! Returns the names of the attributes that the volume provides.
   virtual AttrNameVec attributeNames() const = 0;
   //! Returns the value of the volume node for a given point.
   //! \note The point position is found in state.wsP
-  virtual Color sample(const VolumeSampleState &state,
-                       const VolumeAttr &attribute) const = 0;
+  virtual VolumeSample sample(const VolumeSampleState &state,
+                              const VolumeAttr &attribute) const = 0;
   //! Returns a vector of intersection intervals (start/end points) that
   //! intersect the ray.
   //! \note The ray is found in state.wsRay
@@ -65,6 +104,21 @@ public:
   virtual StringVec info() const;
   //! Returns a vector of other volumes that the volume references
   virtual CVec inputs() const;
+
+protected:
+
+  // Utility methods -----------------------------------------------------------
+
+  float computeProbability(const Vector &in, const Vector &out,
+                           const VolumeAttr &attribute) const;
+
+  // Data members --------------------------------------------------------------
+  
+  //! Scattering attribute. Used to check if the currently computed attribute
+  //! is scattering. If not, there is no need to compute the phase function.
+  VolumeAttr m_scatteringAttr;
+  //! Pointer to phase function
+  Phase::PhaseFunction::CPtr m_phaseFunction;
 
 };
 

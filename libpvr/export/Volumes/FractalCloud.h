@@ -64,8 +64,8 @@ public:
   // From Volume ---------------------------------------------------------------
 
   virtual AttrNameVec attributeNames() const;
-  virtual Color sample(const VolumeSampleState &state,
-                       const VolumeAttr &attribute) const;
+  virtual VolumeSample sample(const VolumeSampleState &state,
+                              const VolumeAttr &attribute) const;
   virtual IntervalVec intersect(const RayState &state) const;
 
   // Main methods --------------------------------------------------------------

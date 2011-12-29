@@ -82,7 +82,8 @@ ScatteringSampler::sample(const VolumeSampleState &state) const
   OcclusionSampleState occlusionState(state.rayState);
 
   Color                L = Colors::zero();
-  Color                scattering = volume->sample(state, m_scatteringAttr);
+  VolumeSample         sample = volume->sample(state, m_scatteringAttr);
+  const Color &        sigma_s = sample.value;
   
   lightState.wsP = state.wsP;
 
@@ -91,14 +92,14 @@ ScatteringSampler::sample(const VolumeSampleState &state) const
       LightSample lightSample = light->sample(lightState);
       occlusionState.wsP = state.wsP;
       occlusionState.wsLightP = lightSample.wsP;
-      if (Math::max(scattering) > 0.0f) {
+      if (Math::max(sigma_s) > 0.0f) {
         Color transmittance = light->occluder()->sample(occlusionState);
-        L += scattering * lightSample.luminance * transmittance;
+        L += sigma_s * lightSample.luminance * transmittance;
       }
     }
   }
 
-  return RaymarchSample(L, scattering);
+  return RaymarchSample(L, sigma_s);
 }
 
 //----------------------------------------------------------------------------//

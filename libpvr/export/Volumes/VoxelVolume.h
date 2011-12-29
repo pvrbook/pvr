@@ -158,7 +158,7 @@ public:
   static Ptr create()
   { return Ptr(new VoxelVolume); }
 
-  // From Shader ---------------------------------------------------------------
+  // From ParamBase ------------------------------------------------------------
 
   virtual std::string typeName() const
   { return "VoxelVolume"; }
@@ -166,8 +166,8 @@ public:
   // From Volume ---------------------------------------------------------------
 
   virtual AttrNameVec attributeNames() const;
-  virtual Color sample(const VolumeSampleState &state,
-                       const VolumeAttr &attribute) const;
+  virtual VolumeSample sample(const VolumeSampleState &state,
+                              const VolumeAttr &attribute) const;
   virtual IntervalVec intersect(const RayState &state) const;
   virtual StringVec info() const;
 
