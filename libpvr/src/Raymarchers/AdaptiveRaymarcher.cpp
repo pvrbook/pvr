@@ -111,8 +111,6 @@ AdaptiveRaymarcher::integrate(const RayState &state) const
 {
   // Integration intervals ---
 
-  // Gather all intervals to be raymarched and make a vector of non-overlapping
-  // ones
   IntervalVec rawIntervals = RenderGlobals::scene()->volume->intersect(state);
   IntervalVec intervals = splitIntervals(rawIntervals);
 
@@ -122,21 +120,8 @@ AdaptiveRaymarcher::integrate(const RayState &state) const
 
   // Output transmittance function ---
 
-  ColorCurve::Ptr tf;
-
-  if (state.doOutputDeepT) {
-    tf = ColorCurve::create();
-    tf->addSample(intervals[0].t0, Colors::one());
-  }
-
-  // Output luminance function ---
-
-  ColorCurve::Ptr lf;
-
-  if (state.doOutputDeepL) {
-    lf = ColorCurve::create();
-    lf->addSample(intervals[0].t0, Colors::zero());
-  }
+  ColorCurve::Ptr lf = setupDeepLCurve(state, intervals[0].t0);
+  ColorCurve::Ptr tf = setupDeepTCurve(state, intervals[0].t0);
 
   // Ray integration variables ---
 
@@ -165,9 +150,6 @@ AdaptiveRaymarcher::integrate(const RayState &state) const
     double stepT1 = tStart + baseStepLength;
 
     // Prevent infinite loops.
-    // This condition occurs when tStart and tEnd are extremely close,
-    // causing (tStart + baseStepLength == tStart). If it happens
-    // we simply advance to the next Interval
     if (stepT0 == stepT1) {
       continue;
     }
@@ -239,19 +221,7 @@ AdaptiveRaymarcher::integrate(const RayState &state) const
 
       // Update transmittance and luminance functions
       if (tf || lf) {
-        // Z depth of camera is not equal to t (t is true distance)
-        // Note that we always sample time at t=0.0 for the transmittance
-        // function
-        Vector csP = RenderGlobals::camera()->worldToCamera(sampleState.wsP, PTime(0.0));
-        // double midpoint = (stepT0 + stepT1) * 0.5;
-        // Vector csP = state.camera->worldToCamera(state.wsRay(midpoint), PTime(0.0));
-        float depth = -csP.z;
-        if (tf) {
-          tf->addSample(depth, T);
-        }
-        if (lf) {
-          lf->addSample(depth, L);
-        }
+        updateDeepFunctions(sampleState.wsP, L, T, lf, tf);
       }
 
       // Terminate if requested

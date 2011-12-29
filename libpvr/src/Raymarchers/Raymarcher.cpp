@@ -22,6 +22,9 @@
 
 // Project headers
 
+#include "pvr/Camera.h"
+#include "pvr/RenderGlobals.h"
+
 //----------------------------------------------------------------------------//
 // Namespaces
 //----------------------------------------------------------------------------//
@@ -76,6 +79,56 @@ IntervalVec splitIntervals(const IntervalVec &intervals)
   }
   
   return outIntervals;
+}
+
+//----------------------------------------------------------------------------//
+
+Util::ColorCurve::Ptr setupDeepLCurve(const RayState &state, const float first)
+{
+  Util::ColorCurve::Ptr lf;
+  
+  if (state.doOutputDeepL) {
+    lf = Util::ColorCurve::create();
+    lf->addSample(first, Colors::zero());
+  }
+
+  return lf;
+}
+
+//----------------------------------------------------------------------------//
+
+Util::ColorCurve::Ptr setupDeepTCurve(const RayState &state, const float first)
+{
+  Util::ColorCurve::Ptr tf; 
+
+  if (state.doOutputDeepT) {
+    tf = Util::ColorCurve::create();
+    tf->addSample(first, Colors::one());
+  }
+
+  return tf;
+}
+
+//----------------------------------------------------------------------------//
+
+void updateDeepFunctions(const Vector &wsP, const Color &L, const Color &T, 
+                         Util::ColorCurve::Ptr lf, Util::ColorCurve::Ptr tf)
+{
+  // Z depth of camera is not equal to t (t is true distance)
+
+  //! \note We always sample time at t = 0.0 for the transmittance
+  //! function
+
+  Vector csP = RenderGlobals::camera()->worldToCamera(wsP, PTime(0.0));
+  float depth = -csP.z;
+
+  if (tf) {
+    tf->addSample(depth, T);
+  }
+
+  if (lf) {
+    lf->addSample(depth, L);
+  }
 }
 
 //----------------------------------------------------------------------------//

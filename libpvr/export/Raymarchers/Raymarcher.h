@@ -82,11 +82,14 @@ public:
 
   // Main methods --------------------------------------------------------------
 
+  //! Sets the raymarch sampler to use during integration.
   void setRaymarchSampler(RaymarchSampler::CPtr sampler)
   { m_raymarchSampler = sampler; }
 
   // To be implemented by subclasses -------------------------------------------
 
+  //! Integrates the volume along the given ray, and returns the resulting
+  //! luminance and transmittance in the IntegrationResult struct.
   virtual IntegrationResult integrate(const RayState &state) const = 0;
 
 protected:
@@ -101,7 +104,22 @@ protected:
 // Utility functions
 //----------------------------------------------------------------------------//
 
+//! Splits a set of possible overlapping Interval instances into a new set,
+//! which is guaranteed to have no overlap (but possible continuity).
 IntervalVec splitIntervals(const IntervalVec &intervals);
+
+//! Allocates and initializes the deep luminance function based on 
+//! whether the RayState has requested it.
+Util::ColorCurve::Ptr setupDeepLCurve(const RayState &state, const float first);
+
+//! Allocates and initializes the deep transmittance function based on 
+//! whether the RayState has requested it.
+Util::ColorCurve::Ptr setupDeepTCurve(const RayState &state, const float first);
+
+//! Updates the deep functions (luminance and transmittance) with the
+//! provided L and T values, at a depth computed from wsP.
+void updateDeepFunctions(const Vector &wsP, const Color &L, const Color &T, 
+                         Util::ColorCurve::Ptr lf, Util::ColorCurve::Ptr tf);
 
 //----------------------------------------------------------------------------//
 

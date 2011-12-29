@@ -55,14 +55,16 @@ public:
   // From ParamBase ------------------------------------------------------------
 
   virtual void setParams(const Util::ParamMap &params);
+  virtual std::string typeName() const
+  { return "Naive"; }
 
   // From Raymarcher -----------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "Naive"; }
   virtual IntegrationResult integrate(const RayState &state) const;
 
 protected:
+
+  // Structs -------------------------------------------------------------------
 
   struct Params
   {

@@ -121,17 +121,8 @@ NaiveRaymarcher::integrate(const RayState &state) const
 
   // Output transmittance function and luminance function ---
 
-  ColorCurve::Ptr lf, tf;
-
-  if (state.doOutputDeepT) {
-    tf = ColorCurve::create();
-    tf->addSample(intervals[0].t0, Colors::one());
-  }
-
-  if (state.doOutputDeepL) {
-    lf = ColorCurve::create();
-    lf->addSample(intervals[0].t0, Colors::zero());
-  }
+  ColorCurve::Ptr lf = setupDeepLCurve(state, intervals[0].t0);
+  ColorCurve::Ptr tf = setupDeepTCurve(state, intervals[0].t0);
 
   // Ray integration variables ---
 
@@ -139,30 +130,26 @@ NaiveRaymarcher::integrate(const RayState &state) const
   Color             L = Colors::zero();
   Color             T = Colors::one();
 
+  // Interval loop ---
+
   BOOST_FOREACH (const Interval &interval, intervals) {
 
-    // Interval integration variables ---
-
+    // Interval integration variables
     const double tStart = std::max(interval.t0, state.tMin);
     const double tEnd   = std::min(interval.t1, state.tMax);
 
-    // Pick step length ---
-
+    // Pick step length
     const double stepLengthToUse =
       m_params.useVolumeStepLength ? 
       interval.stepLength * m_params.volumeStepLengthMult : 
       m_params.stepLength;
-
     const double baseStepLength = std::min(stepLengthToUse, tEnd - tStart);
 
+    // Set up first raymarch step
     double stepT0 = tStart;
     double stepT1 = tStart + baseStepLength;
 
-    // Prevent infinite loops ---
-
-    // This condition occurs when tStart and tEnd are extremely close,
-    // causing (tStart + baseStepLength == tStart). If it happens
-    // we simply advance to the next Interval
+    // Prevent infinite loops
     if (stepT0 == stepT1) {
       continue;
     }
@@ -179,14 +166,12 @@ NaiveRaymarcher::integrate(const RayState &state) const
 
       RaymarchSample sample = m_raymarchSampler->sample(sampleState);
 
-      // Accept sample ---
-
-      // ... Update transmittance
+      // Update transmittance
       if (Math::max(sample.extinction) > 0.0f) {
         T *= exp(-sample.extinction * stepLength);
       }
 
-      // ... Add to luminance
+      // Update luminance
       L += sample.luminance * T * stepLength;
 
       // Early termination
@@ -198,17 +183,7 @@ NaiveRaymarcher::integrate(const RayState &state) const
 
       // Update transmittance and luminance functions
       if (tf || lf) {
-        // Z depth of camera is not equal to t (t is true distance)
-        // Note that we always sample time at t=0.0 for the transmittance
-        // function
-        Vector csP = RenderGlobals::camera()->worldToCamera(sampleState.wsP, PTime(0.0));
-        float depth = -csP.z;
-        if (tf) {
-          tf->addSample(depth, T);
-        }
-        if (lf) {
-          lf->addSample(depth, L);
-        }
+        updateDeepFunctions(sampleState.wsP, L, T, lf, tf);
       }
 
       // Set up next steps
@@ -220,7 +195,7 @@ NaiveRaymarcher::integrate(const RayState &state) const
         break;
       }
 
-    }
+    } // end raymarch of single interval
 
   } // end for each interval
 
