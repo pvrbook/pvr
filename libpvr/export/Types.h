@@ -73,22 +73,38 @@ namespace Util {
 }
 
 //----------------------------------------------------------------------------//
-// Common PVR types
+// Interval
 //----------------------------------------------------------------------------//
 
-//typedef std::pair<double, double> Interval;
-
+//! Represents a single integration interval. This communicates to a raymarcher
+//! what parts of a ray should be integrated, and is normally only created
+//! by the Volume::intersect() routines.
+//! The interval is assumed to be inclusive, i.e. [t0,t1].
 struct Interval
 {
-  double t0;
-  double t1;
-  double stepLength;
+  // Constructor ---------------------------------------------------------------
+
+  //! Default constructor
   Interval(double start, double end, double step)
     : t0(start), t1(end), stepLength(step) 
-  { /* Empty */ }
+  { }
+
+  // Public data members -------------------------------------------------------
+
+  //! The start of the interval (inclusive)
+  double t0;
+  //! The end of the interval (inclusive)
+  double t1;
+  //! The world space step length that is reasonable to use for the given 
+  //! interval.
+  double stepLength;
 };
 
 typedef std::vector<Interval> IntervalVec;
+
+//----------------------------------------------------------------------------//
+// Common PVR types
+//----------------------------------------------------------------------------//
 
 typedef Imath::Box3d   BBox;
 typedef Imath::Box3i   DiscreteBBox;

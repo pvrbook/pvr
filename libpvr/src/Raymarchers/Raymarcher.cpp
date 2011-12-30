@@ -114,11 +114,8 @@ Util::ColorCurve::Ptr setupDeepTCurve(const RayState &state, const float first)
 void updateDeepFunctions(const Vector &wsP, const Color &L, const Color &T, 
                          Util::ColorCurve::Ptr lf, Util::ColorCurve::Ptr tf)
 {
-  // Z depth of camera is not equal to t (t is true distance)
-
   //! \note We always sample time at t = 0.0 for the transmittance
   //! function
-
   Vector csP = RenderGlobals::camera()->worldToCamera(wsP, PTime(0.0));
   float depth = -csP.z;
 
