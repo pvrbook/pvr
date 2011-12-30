@@ -198,6 +198,10 @@ UniformRaymarcher::integrate(const RayState &state) const
 
     } // end raymarch of single interval
 
+    if (doTerminate) {
+      break;
+    }
+
   } // end for each interval
 
   if (tf) {
