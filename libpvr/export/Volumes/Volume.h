@@ -74,7 +74,8 @@ public:
 
   //! Default constructor. Initializes the scattering attribute
   Volume()
-    : m_scatteringAttr("scattering")
+    : m_scatteringAttr("scattering"),
+      m_phaseFunction(new Phase::Isotropic)
   { }
   //! Virtual destructor
   ~Volume()
@@ -84,6 +85,8 @@ public:
 
   //! Sets the phase function to use
   void setPhaseFunction(Phase::PhaseFunction::CPtr phaseFunction);
+  //! Returns the phase function
+  Phase::PhaseFunction::CPtr phaseFunction() const;
 
   // To be implemented by subclasses -------------------------------------------
 

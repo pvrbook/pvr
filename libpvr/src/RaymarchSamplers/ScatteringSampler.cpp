@@ -84,6 +84,7 @@ ScatteringSampler::sample(const VolumeSampleState &state) const
   Color                L = Colors::zero();
   VolumeSample         sample = volume->sample(state, m_scatteringAttr);
   const Color &        sigma_s = sample.value;
+  const float &        p = sample.probability;
   
   lightState.wsP = state.wsP;
 
@@ -94,7 +95,7 @@ ScatteringSampler::sample(const VolumeSampleState &state) const
       occlusionState.wsLightP = lightSample.wsP;
       if (Math::max(sigma_s) > 0.0f) {
         Color transmittance = light->occluder()->sample(occlusionState);
-        L += sigma_s * lightSample.luminance * transmittance;
+        L += sigma_s * p * lightSample.luminance * transmittance;
       }
     }
   }

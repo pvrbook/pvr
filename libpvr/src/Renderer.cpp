@@ -52,12 +52,14 @@ namespace {
     Log::print(indent + "(" + volume->typeName() + ")");
 
     BOOST_FOREACH (const std::string &attr, attrs) {
-      Log::print(indent + indentStr + "- " + attr);
+      Log::print(indent + indentStr + "a " + attr);
     }
 
     BOOST_FOREACH (const std::string &line, info) {
-      Log::print(indent + indentStr + indentStr + line);
+      Log::print(indent + indentStr + "i " + line);
     }
+
+    Log::print(indent + indentStr + "p " + volume->phaseFunction()->typeName());
 
     BOOST_FOREACH (Volume::CPtr volume, inputs) {
       printVolumeInfo(volume, indentLevel + 1);

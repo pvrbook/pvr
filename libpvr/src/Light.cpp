@@ -16,6 +16,8 @@
 
 // Project includes
 
+#include "pvr/PhaseFunction.h"
+
 //----------------------------------------------------------------------------//
 // Namespaces
 //----------------------------------------------------------------------------//
@@ -44,7 +46,7 @@ Light::~Light()
 
 void Light::setIntensity(const Color &intensity)
 { 
-  m_intensity = intensity; 
+  m_intensity = intensity / Phase::k_isotropic;
 }
 
 //----------------------------------------------------------------------------//

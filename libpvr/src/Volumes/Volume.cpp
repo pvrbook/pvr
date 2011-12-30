@@ -32,7 +32,16 @@ namespace Render {
 void Volume::setPhaseFunction(Phase::PhaseFunction::CPtr phaseFunction)
 {
   assert(phaseFunction != NULL && "Got null pointer for phase function");
-  m_phaseFunction = phaseFunction;
+  if (phaseFunction) {
+    m_phaseFunction = phaseFunction;
+  }
+}
+
+//----------------------------------------------------------------------------//
+
+Phase::PhaseFunction::CPtr Volume::phaseFunction() const
+{
+  return m_phaseFunction;
 }
 
 //----------------------------------------------------------------------------//
