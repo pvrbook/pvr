@@ -61,13 +61,13 @@ VolumeSample FractalCloud::sample(const VolumeSampleState &state,
     }
   }
   if (attribute.index() == VolumeAttr::IndexInvalid) {
-    return VolumeSample();
+    return VolumeSample(Colors::zero(), m_phaseFunction);
   }
   
   double distFunc = 1.0 - state.wsP.length();
 
   return VolumeSample(Color(distFunc + m_fractal->eval(state.wsP)) * m_density,
-                      Phase::k_isotropic);
+                      m_phaseFunction);
 }
 
 //----------------------------------------------------------------------------//

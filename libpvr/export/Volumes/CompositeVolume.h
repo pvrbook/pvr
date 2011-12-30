@@ -65,6 +65,13 @@ public:
 
   // Ctor, factory -------------------------------------------------------------
 
+  //! Default constructor
+  CompositeVolume()
+    : m_compositePhaseFunction(new Phase::Composite)
+  { 
+    m_phaseFunction = m_compositePhaseFunction;
+  }
+
   //! Specific factory method
   static Ptr create()
   { return Ptr(new CompositeVolume); }
@@ -83,6 +90,7 @@ public:
 
   // Main methods --------------------------------------------------------------
 
+  //! Adds a new volume to the composite.
   void add(Volume::CPtr child);
 
 protected:
@@ -93,8 +101,12 @@ protected:
 
   // Protected data members ----------------------------------------------------
 
+  //! Array of volumes
   std::vector<Volume::CPtr> m_volumes;
+  //! Array of child attributes. Used for sampling the child volumes.
   mutable ChildAttrsVec     m_childAttrs;
+  //! Pointer to composite phase function
+  Phase::Composite::Ptr     m_compositePhaseFunction;
 
 };
 

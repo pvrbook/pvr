@@ -72,6 +72,7 @@ ScatteringSampler::Ptr ScatteringSampler::create()
 
 //----------------------------------------------------------------------------//
 
+//! \todo This is messy. Tidy up.
 RaymarchSample
 ScatteringSampler::sample(const VolumeSampleState &state) const
 {
@@ -84,19 +85,27 @@ ScatteringSampler::sample(const VolumeSampleState &state) const
   Color                L = Colors::zero();
   VolumeSample         sample = volume->sample(state, m_scatteringAttr);
   const Color &        sigma_s = sample.value;
-  const float &        p = sample.probability;
+  const Vector         wo = -state.rayState.wsRay.dir;
   
   lightState.wsP = state.wsP;
 
-  if (state.rayState.rayType == RayState::FullRaymarch) {
+  // Only perform calculation if ray is primary and scattering coefficient is
+  // greater than zero.
+  if (Math::max(sigma_s) > 0.0f &&
+      state.rayState.rayType == RayState::FullRaymarch) {
+    // For each light source
     BOOST_FOREACH (Light::CPtr light, scene.lights) {
+      // Sample the light
       LightSample lightSample = light->sample(lightState);
       occlusionState.wsP = state.wsP;
       occlusionState.wsLightP = lightSample.wsP;
-      if (Math::max(sigma_s) > 0.0f) {
-        Color transmittance = light->occluder()->sample(occlusionState);
-        L += sigma_s * p * lightSample.luminance * transmittance;
-      }
+      // Sample the occluder
+      Color transmittance = light->occluder()->sample(occlusionState);
+      // Find the scattering probability
+      const Vector wi = (lightSample.wsP - state.wsP).normalized();
+      const float p = sample.phaseFunction->probability(wi, wo);
+      // Update luminance
+      L += sigma_s * p * lightSample.luminance * transmittance;
     }
   }
 

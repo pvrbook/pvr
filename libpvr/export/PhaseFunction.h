@@ -53,6 +53,51 @@ public:
 };
 
 //----------------------------------------------------------------------------//
+// Composite
+//----------------------------------------------------------------------------//
+
+class Composite : public PhaseFunction
+{
+public:
+
+  // Typedefs ------------------------------------------------------------------
+
+  DECLARE_SMART_PTRS(Composite);
+
+  // Factory -------------------------------------------------------------------
+
+  //! Factory creation function. Always use this when creating objects
+  //! that need lifespan management.
+  DECLARE_CREATE_FUNC(Composite);
+
+  // From ParamBase ------------------------------------------------------------
+
+  virtual std::string typeName() const
+  { return "Composite"; }
+
+  // From PhaseFunction --------------------------------------------------------
+
+  virtual float probability(const Vector &in, const Vector &out) const; 
+
+  // Main methods --------------------------------------------------------------
+
+  //! Adds a phase function to the composite
+  void add(PhaseFunction::CPtr phaseFunction);
+  //! Sets the weight of one phase function
+  void setWeight(const size_t idx, const float weight);
+
+private:
+
+  // Private data members ------------------------------------------------------
+
+  //! Array of phase functions to be composited
+  std::vector<PhaseFunction::CPtr> m_functions;
+  //! Array of phase function weights
+  std::vector<float>               m_weights;
+
+};
+
+//----------------------------------------------------------------------------//
 // Isotropic
 //----------------------------------------------------------------------------//
 

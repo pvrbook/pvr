@@ -196,6 +196,7 @@ VolumeSample VoxelVolume::sample(const VolumeSampleState &state,
   // Check (and set up) attribute index ---
 
   if (attribute.index() == VolumeAttr::IndexNotSet) {
+    // Then, set up the input attribute
     AttrNameVec::const_iterator i = 
       std::find(m_attrNames.begin(), m_attrNames.end(), attribute.name());
     if (i != m_attrNames.end()) {
@@ -205,7 +206,7 @@ VolumeSample VoxelVolume::sample(const VolumeSampleState &state,
     }
   }
   if (attribute.index() == VolumeAttr::IndexInvalid) {
-    return VolumeSample();
+    return VolumeSample(Colors::zero(), m_phaseFunction);
   }
 
   // Transform to voxel space for sampling ---
@@ -214,7 +215,7 @@ VolumeSample VoxelVolume::sample(const VolumeSampleState &state,
   m_buffer->mapping()->worldToVoxel(state.wsP, vsP);
 
   if (!isInBounds(vsP, m_buffer->dataWindow())) {
-    return VolumeSample();
+    return VolumeSample(Colors::zero(), m_phaseFunction);
   }
 
   // Interpolate voxel value ---
@@ -247,7 +248,7 @@ VolumeSample VoxelVolume::sample(const VolumeSampleState &state,
   }
 
   return VolumeSample(m_attrValues[attribute.index()] * value, 
-                      Phase::k_isotropic);
+                      m_phaseFunction);
 }
 
 //----------------------------------------------------------------------------//

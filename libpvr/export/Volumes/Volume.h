@@ -40,17 +40,14 @@ struct VolumeSample
   
   // Constructors ---
 
-  VolumeSample()
-    : value(0.0), probability(Phase::k_isotropic)
-  { }
-  VolumeSample(const Color &v, const float p)
-    : value(v), probability(p)
+  VolumeSample(const Color &v, Phase::PhaseFunction::CPtr p)
+    : value(v), phaseFunction(p)
   { }
 
   // Public data members ---
 
   Color value;
-  float probability;
+  Phase::PhaseFunction::CPtr phaseFunction;
 
 };
 
@@ -74,8 +71,7 @@ public:
 
   //! Default constructor. Initializes the scattering attribute
   Volume()
-    : m_scatteringAttr("scattering"),
-      m_phaseFunction(new Phase::Isotropic)
+    : m_phaseFunction(new Phase::Isotropic)
   { }
   //! Virtual destructor
   ~Volume()
@@ -117,9 +113,6 @@ protected:
 
   // Data members --------------------------------------------------------------
   
-  //! Scattering attribute. Used to check if the currently computed attribute
-  //! is scattering. If not, there is no need to compute the phase function.
-  VolumeAttr m_scatteringAttr;
   //! Pointer to phase function
   Phase::PhaseFunction::CPtr m_phaseFunction;
 

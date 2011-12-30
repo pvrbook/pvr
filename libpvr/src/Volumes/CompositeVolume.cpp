@@ -26,6 +26,7 @@
 
 #include "pvr/Constants.h"
 #include "pvr/Log.h"
+#include "pvr/Math.h"
 #include "pvr/VoxelBuffer.h"
 
 //----------------------------------------------------------------------------//
@@ -100,7 +101,7 @@ VolumeSample CompositeVolume::sample(const VolumeSampleState &state,
     setupAttribute(attribute);
   }
   if (attribute.index() == VolumeAttr::IndexInvalid) {
-    return VolumeSample();
+    return VolumeSample(Colors::zero(), m_phaseFunction);
   }
 
   Color value = Colors::zero();
@@ -108,11 +109,12 @@ VolumeSample CompositeVolume::sample(const VolumeSampleState &state,
 
   for (size_t i = 0, size = m_volumes.size(); i < size; ++i) {
     const VolumeAttr &childAttr = m_childAttrs[attrIndex].attrs[i];
-    value += m_volumes[i]->sample(state, childAttr).value;
+    const Color sampleValue = m_volumes[i]->sample(state, childAttr).value;
+    value += sampleValue;
+    m_compositePhaseFunction->setWeight(i, Math::max(value));
   }
   
-  return VolumeSample(value,
-                      Phase::k_isotropic);
+  return VolumeSample(value, m_phaseFunction);
 }
 
 //----------------------------------------------------------------------------//
@@ -133,6 +135,7 @@ IntervalVec CompositeVolume::intersect(const RayState &state) const
 void CompositeVolume::add(Volume::CPtr child)
 {
   m_volumes.push_back(child);
+  m_compositePhaseFunction->add(child->phaseFunction());
 }
 
 //----------------------------------------------------------------------------//
