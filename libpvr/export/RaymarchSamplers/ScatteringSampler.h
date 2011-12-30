@@ -44,14 +44,31 @@ namespace Render {
 class ScatteringSampler : public RaymarchSampler
 {
 public:
+  
+  // Typedefs ---
+
   DECLARE_SMART_PTRS(ScatteringSampler);
+
+  // Constructor, factory ---
+
   ScatteringSampler();
   static Ptr create();
+
+  // From ParamBase ---
+
   virtual std::string typeName() const
   { return "ScatteringSampler"; }
+  
+  // From RaymarchSampler ---
+
   virtual RaymarchSample sample(const VolumeSampleState &state) const;
+
 private:
+
+  // Private data members ---
+
   VolumeAttr m_scatteringAttr;
+
 };
 
 //----------------------------------------------------------------------------//
