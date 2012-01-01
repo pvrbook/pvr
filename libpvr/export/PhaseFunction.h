@@ -138,11 +138,16 @@ public:
 
   DECLARE_SMART_PTRS(HenyeyGreenstein);
 
-  // Factory -------------------------------------------------------------------
+  // Constructor, factory ------------------------------------------------------
+
+  //! Default constructor, requires the eccentricity parameter
+  HenyeyGreenstein(float g)
+    : m_g(Imath::clamp(g, -1.0f, 1.0f))
+  { }
 
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
-  DECLARE_CREATE_FUNC(HenyeyGreenstein);
+  DECLARE_CREATE_FUNC_1_ARG(HenyeyGreenstein, float);
 
   // From ParamBase ------------------------------------------------------------
 
@@ -153,92 +158,59 @@ public:
 
   virtual float probability(const Vector &in, const Vector &out) const;
 
+private:
+
+  // Private data members ------------------------------------------------------
+
+  //! Eccentricity parameter
+  const float m_g;
+
 };
 
 //----------------------------------------------------------------------------//
-// Schlick
+// DoubleHenyeyGreenstein
 //----------------------------------------------------------------------------//
 
-class Schlick : public PhaseFunction
+class DoubleHenyeyGreenstein : public PhaseFunction
 {
 public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Schlick);
+  DECLARE_SMART_PTRS(DoubleHenyeyGreenstein);
 
-  // Factory -------------------------------------------------------------------
+  // Constructor, factory ------------------------------------------------------
+
+  //! Default constructor, requires the eccentricity parameter
+  DoubleHenyeyGreenstein(float g1, float g2, float blend)
+    : m_g1(Imath::clamp(g1, -1.0f, 1.0f)),
+      m_g2(Imath::clamp(g2, -1.0f, 1.0f)),
+      m_blend(Imath::clamp(blend, 0.0f, 1.0f))
+  { }
 
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
-  DECLARE_CREATE_FUNC(Schlick);
+  DECLARE_CREATE_FUNC_3_ARG(DoubleHenyeyGreenstein, float, float, float);
 
   // From ParamBase ------------------------------------------------------------
 
   virtual std::string typeName() const
-  { return "Schlick"; }
+  { return "DoubleHenyeyGreenstein"; }
 
   // From PhaseFunction --------------------------------------------------------
 
   virtual float probability(const Vector &in, const Vector &out) const;
 
-};
+private:
 
-//----------------------------------------------------------------------------//
-// Rayleigh
-//----------------------------------------------------------------------------//
+  // Private data members ------------------------------------------------------
 
-class Rayleigh : public PhaseFunction
-{
-public:
-  
-  // Typedefs ------------------------------------------------------------------
-
-  DECLARE_SMART_PTRS(Rayleigh);
-
-  // Factory -------------------------------------------------------------------
-
-  //! Factory creation function. Always use this when creating objects
-  //! that need lifespan management.
-  DECLARE_CREATE_FUNC(Rayleigh);
-
-  // From ParamBase ------------------------------------------------------------
-
-  virtual std::string typeName() const
-  { return "Rayleigh"; }
-
-  // From PhaseFunction --------------------------------------------------------
-
-  virtual float probability(const Vector &in, const Vector &out) const;
-
-};
-
-//----------------------------------------------------------------------------//
-// Mie
-//----------------------------------------------------------------------------//
-
-class Mie : public PhaseFunction
-{
-public:
-  
-  // Typedefs ------------------------------------------------------------------
-
-  DECLARE_SMART_PTRS(Mie);
-
-  // Factory -------------------------------------------------------------------
-
-  //! Factory creation function. Always use this when creating objects
-  //! that need lifespan management.
-  DECLARE_CREATE_FUNC(Mie);
-
-  // From ParamBase ------------------------------------------------------------
-
-  virtual std::string typeName() const
-  { return "Mie"; }
-
-  // From PhaseFunction --------------------------------------------------------
-
-  virtual float probability(const Vector &in, const Vector &out) const;
+  //! Eccentricity parameter 1
+  const float m_g1;
+  //! Eccentricity parameter 2
+  const float m_g2;
+  //! Blend parameter
+  const float m_blend;
 
 };
 

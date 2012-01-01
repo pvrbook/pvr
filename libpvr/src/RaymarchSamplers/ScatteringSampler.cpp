@@ -102,7 +102,7 @@ ScatteringSampler::sample(const VolumeSampleState &state) const
       // Sample the occluder
       Color transmittance = light->occluder()->sample(occlusionState);
       // Find the scattering probability
-      const Vector wi = (lightSample.wsP - state.wsP).normalized();
+      const Vector wi = (state.wsP - lightSample.wsP).normalized();
       const float p = sample.phaseFunction->probability(wi, wo);
       // Update luminance
       L += sigma_s * p * lightSample.luminance * transmittance;

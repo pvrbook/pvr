@@ -111,9 +111,9 @@ VolumeSample CompositeVolume::sample(const VolumeSampleState &state,
     const VolumeAttr &childAttr = m_childAttrs[attrIndex].attrs[i];
     const Color sampleValue = m_volumes[i]->sample(state, childAttr).value;
     value += sampleValue;
-    m_compositePhaseFunction->setWeight(i, Math::max(value));
+    m_compositePhaseFunction->setWeight(i, Math::max(sampleValue));
   }
-  
+
   return VolumeSample(value, m_phaseFunction);
 }
 
@@ -128,6 +128,13 @@ IntervalVec CompositeVolume::intersect(const RayState &state) const
                      childIntervals.begin(), childIntervals.end());
   }
   return intervals;
+}
+
+//----------------------------------------------------------------------------//
+
+Volume::CVec CompositeVolume::inputs() const
+{
+  return m_volumes;
 }
 
 //----------------------------------------------------------------------------//

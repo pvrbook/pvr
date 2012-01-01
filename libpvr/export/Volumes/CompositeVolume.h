@@ -87,6 +87,7 @@ public:
   virtual VolumeSample sample(const VolumeSampleState &state,
                               const VolumeAttr &attribute) const;
   virtual IntervalVec intersect(const RayState &state) const;
+  virtual CVec inputs() const;
 
   // Main methods --------------------------------------------------------------
 

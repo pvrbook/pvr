@@ -29,6 +29,13 @@ __stdRimLight = {
     "intensity" : Color(0.125)
     }
 
+__stdBehindLight = {
+    "position" : V3f(0, 0, -20),
+    "rotation" : V3f(0, 180, 0.0),
+    "fov" : 20.0, 
+    "intensity" : Color(1.0)
+    }
+
 __stdRaymarcherParams = {
     "use_volume_step_length" : 1,
     "volume_step_length_multiplier" : 1.0, 
@@ -38,7 +45,7 @@ __stdRaymarcherParams = {
 
 # ------------------------------------------------------------------------------
 
-def __baseLight(renderer, parms, resMult, rmParams):
+def makeLight(renderer, parms, resMult, rmParams = __stdRaymarcherParams):
     light = PointLight()
     # Position
     light.setPosition(parms["position"])
@@ -59,17 +66,17 @@ def __baseLight(renderer, parms, resMult, rmParams):
 # ------------------------------------------------------------------------------
 
 def standardKey(renderer, resMult, rmParams = __stdRaymarcherParams):
-    return __baseLight(renderer, __stdKeyLight, resMult, rmParams)
+    return makeLight(renderer, __stdKeyLight, resMult, rmParams)
 
 # ------------------------------------------------------------------------------
 
 def standardFill(renderer, resMult, rmParams = __stdRaymarcherParams):
-    return __baseLight(renderer, __stdFillLight, resMult, rmParams)
+    return makeLight(renderer, __stdFillLight, resMult, rmParams)
 
 # ------------------------------------------------------------------------------
 
 def standardRim(renderer, resMult, rmParams = __stdRaymarcherParams):
-    return __baseLight(renderer, __stdRimLight, resMult, rmParams)
+    return makeLight(renderer, __stdRimLight, resMult, rmParams)
 
 # ------------------------------------------------------------------------------
 
@@ -77,5 +84,10 @@ def standardThreePoint(renderer, resMult, rmParams = __stdRaymarcherParams):
     return [standardKey(renderer, resMult, rmParams), 
             standardFill(renderer, resMult, rmParams), 
             standardRim(renderer, resMult, rmParams)]
+
+# ------------------------------------------------------------------------------
+
+def standardBehind(renderer, resMult, rmParams = __stdRaymarcherParams):
+    return makeLight(renderer, __stdBehindLight, resMult, rmParams)
 
 # ------------------------------------------------------------------------------

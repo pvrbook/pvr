@@ -2,7 +2,7 @@
 
 import os, sys
 from optparse import OptionParser
-\
+
 # Settings ------------
 
 # Exceptions ------------

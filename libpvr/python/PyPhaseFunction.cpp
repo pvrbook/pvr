@@ -35,12 +35,11 @@ void exportPhaseFunction()
 
   class_<PhaseFunction, PhaseFunction::Ptr, boost::noncopyable>
     ("PhaseFunction", no_init)
-    .def("typeName", &PhaseFunction::typeName)
+    .def("typeName",    &PhaseFunction::typeName)
+    .def("probability", &PhaseFunction::probability)
     ;
   
   implicitly_convertible<PhaseFunction::Ptr, PhaseFunction::CPtr>();
-
-#if 0
 
   // Isotropic ---
 
@@ -54,40 +53,23 @@ void exportPhaseFunction()
   // HenyeyGreenstein ---
 
   class_<HenyeyGreenstein, bases<PhaseFunction>, HenyeyGreenstein::Ptr>
-    ("HenyeyGreenstein")
+    ("HenyeyGreenstein", no_init)
     .def("__init__", make_constructor(HenyeyGreenstein::create))
     ;
 
   implicitly_convertible<HenyeyGreenstein::Ptr, HenyeyGreenstein::CPtr>();
 
-  // Schlick ---
+  // DoubleHenyeyGreenstein ---
 
-  class_<Schlick, bases<PhaseFunction>, Schlick::Ptr>
-    ("Schlick")
-    .def("__init__", make_constructor(Schlick::create))
+  class_<DoubleHenyeyGreenstein, bases<PhaseFunction>, 
+    DoubleHenyeyGreenstein::Ptr>
+    ("DoubleHenyeyGreenstein", no_init)
+    .def("__init__", make_constructor(DoubleHenyeyGreenstein::create))
     ;
 
-  implicitly_convertible<Schlick::Ptr, Schlick::CPtr>();
+  implicitly_convertible<DoubleHenyeyGreenstein::Ptr, 
+                         DoubleHenyeyGreenstein::CPtr>();
 
-  // Rayleigh ---
-
-  class_<Rayleigh, bases<PhaseFunction>, Rayleigh::Ptr>
-    ("Rayleigh")
-    .def("__init__", make_constructor(Rayleigh::create))
-    ;
-
-  implicitly_convertible<Rayleigh::Ptr, Rayleigh::CPtr>();
-
-  // Mie ---
-
-  class_<Mie, bases<PhaseFunction>, Mie::Ptr>
-    ("Mie")
-    .def("__init__", make_constructor(Mie::create))
-    ;
-
-  implicitly_convertible<Mie::Ptr, Mie::CPtr>();
-
-#endif
 
 }
 

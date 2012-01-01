@@ -57,6 +57,18 @@ namespace pvr {
 #define DECLARE_CREATE_FUNC(name)               \
   static Ptr create()                           \
   { return Ptr(new name); }                     \
+  
+#define DECLARE_CREATE_FUNC_1_ARG(name, argType)        \
+  static Ptr create(argType arg)                        \
+  { return Ptr(new name(arg)); }                        \
+
+#define DECLARE_CREATE_FUNC_2_ARG(name, argType1, argType2)      \
+  static Ptr create(argType1 arg1, argType2 arg2)                \
+  { return Ptr(new name(arg1, arg2)); }                          \
+
+#define DECLARE_CREATE_FUNC_3_ARG(name, argType1, argType2, argType3)   \
+  static Ptr create(argType1 arg1, argType2 arg2, argType3 arg3)        \
+  { return Ptr(new name(arg1, arg2, arg3)); }                           \
 
 //----------------------------------------------------------------------------//
 

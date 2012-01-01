@@ -39,7 +39,9 @@ void exportVolumes()
 
   class_<Volume, Volume::Ptr, boost::noncopyable>
     ("Volume", no_init)
-    .def("typeName", &Volume::typeName)
+    .def("typeName",         &Volume::typeName)
+    .def("setPhaseFunction", &Volume::setPhaseFunction)
+    .def("phaseFunction",    &Volume::phaseFunction)
     ;
 
   implicitly_convertible<Volume::Ptr, Volume::CPtr>();
