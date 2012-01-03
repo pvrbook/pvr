@@ -208,9 +208,9 @@ BBox Surface::wsBounds(Geo::Geometry::CPtr geometry) const
     updatePointAttrs(pointVisitor.begin(first), numPoints);
     // Compute world-space bounds
     size_t index = 0;
-    for (std::vector<PointAttrState>::const_iterator i = m_pointAttrs.begin();
-         i != m_pointAttrs.end(); ++i, ++index) {
-      Vector thickness   = Vector(i->thickness.value());
+    for (std::vector<PointAttrState>::const_iterator i = m_pointAttrs.begin(),
+           end = m_pointAttrs.end(); i != end; ++i, ++index) {
+      Vector thickness = Vector(i->thickness.value());
       float displacement = 0.0f;
       if (m_surfAttrs.doDispNoise) {
         Noise::Fractal::Range range = m_surfAttrs.dispFractal->range();

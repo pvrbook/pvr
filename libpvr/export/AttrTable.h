@@ -429,7 +429,7 @@ AttrArray<T>::AttrArray(const std::string &name, const size_t arraySize,
   elems.resize(size * arraySize);
                                                         
   // Write default value
-  for (size_t i = 0; i < size * arraySize; i++) {
+  for (size_t i = 0, end = size * arraySize; i < end; i++) {
     elems[i] = defaults[i % arraySize];
   }
 }

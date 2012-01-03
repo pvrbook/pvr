@@ -83,7 +83,7 @@ BBox SurfaceBase::wsBounds(Geo::Geometry::CPtr geometry) const
   // Need to figure out how to iterate over each 'surface' in the input
   // geometry.
 
-#if 0
+#if 0 //  WTF IS GOING ON HERE????
 
   for (AttrIter iPoly = polyVisitor.begin(), endPoly = polyVisitor.end(); 
        iPoly != endPoly; ++iPoly) {
@@ -95,8 +95,8 @@ BBox SurfaceBase::wsBounds(Geo::Geometry::CPtr geometry) const
     updatePointAttrs(pointVisitor.begin(first), numPoints);
     // Compute world-space bounds
     size_t index = 0;
-    for (std::vector<PointAttrState>::const_iterator i = m_basePointAttrs.begin();
-         i != m_basePointAttrs.end(); ++i, ++index) {
+    for (std::vector<PointAttrState>::const_iterator i = m_basePointAttrs.begin(),
+           end = m_basePointAttrs.end(); i != end; ++i, ++index) {
       Vector thickness    = Vector(i->thickness.value());
       float  displacement = displacementBounds(index);
       Vector wsV          = i->wsVelocity.value();
@@ -159,8 +159,8 @@ void SurfaceBase::execute(Geo::Geometry::CPtr geometry,
     BBox vsBounds;
     // Loop over each point
     size_t ptIndex = 0;
-    for (std::vector<PointAttrState>::const_iterator i = m_basePointAttrs.begin();
-         i != m_basePointAttrs.end(); ++i, ++ptIndex) {
+    for (std::vector<PointAttrState>::const_iterator i = m_basePointAttrs.begin(),
+           end = m_basePointAttrs.end(); i != end; ++i, ++ptIndex) {
       float displ = displacementBounds(ptIndex);
       vsBounds.extendBy(vsSphereBounds(buffer->mapping(), i->wsCenter.value(), 
                                        i->radius.value() * (1.0 + displ)));
@@ -185,7 +185,7 @@ void SurfaceBase::updateAccelStruct() const
   // Compute bounds and average radius
   BBox wsBounds;
   double sumRadius = 0.0;
-  for (size_t i = 0; i < m_basePointAttrs.size() - 1; ++i) {
+  for (size_t i = 0, size = m_basePointAttrs.size() - 1; i < size; ++i) {
     float radius = m_basePointAttrs[i].radius;
     wsBounds = extendBounds(wsBounds, m_basePointAttrs[i].wsCenter.value(),
                             radius);

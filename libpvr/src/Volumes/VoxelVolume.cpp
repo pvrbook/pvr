@@ -123,8 +123,8 @@ FrustumMappingIntersection::FrustumMappingIntersection
   PointVec lsCorners = Math::cornerPoints(lsBounds);
   // Get the world space positions of the eight corners of the frustum
   PointVec wsCorners(lsCorners.size());
-  for (PointVec::iterator lsP = lsCorners.begin(), wsP = wsCorners.begin();
-       lsP != lsCorners.end(); ++lsP, ++wsP) {
+  for (PointVec::iterator lsP = lsCorners.begin(), wsP = wsCorners.begin(),
+         end = lsCorners.end(); lsP != end; ++lsP, ++wsP) {
     mapping->localToWorld(*lsP, *wsP);
   }
   // Construct plane for each face of frustum
@@ -264,7 +264,7 @@ IntervalVec VoxelVolume::intersect(const RayState &state) const
 Volume::StringVec VoxelVolume::info() const
 {
   StringVec info;
-  for (size_t i = 0; i < m_attrNames.size(); ++i) {
+  for (size_t i = 0, size = m_attrNames.size(); i < size; ++i) {
     info.push_back(m_attrNames[i] + " : " + str(m_attrValues[i]));
   }
   return info;

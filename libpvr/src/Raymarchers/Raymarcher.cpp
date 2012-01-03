@@ -63,7 +63,7 @@ IntervalVec splitIntervals(const IntervalVec &intervals)
 
   // For each endpoint pair, find the incoming interval(s) that overlap it
   IntervalVec outIntervals;
-  for (size_t i = 0; i < points.size() - 1; ++i) {
+  for (size_t i = 0, size = points.size() - 1; i < size; ++i) {
     Interval newInterval(points[i], points[i + 1], 
                          std::numeric_limits<float>::max());
     bool foundInterval = false;

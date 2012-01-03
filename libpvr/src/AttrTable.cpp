@@ -42,7 +42,8 @@ namespace {
   {
     typedef typename AttrVec_T::value_type::value_type T;
     typedef typename AttrVec_T::iterator Iter;
-    for (Iter attr = attrArrays.begin(); attr != attrArrays.end(); ++attr) {
+    for (Iter attr = attrArrays.begin(), end = attrArrays.end(); 
+         attr != end; ++attr) {
       size_t arraySize = attr->arraySize();
       swapClear(attr->elems);
       try {
@@ -52,7 +53,7 @@ namespace {
         throw AttrTable::AttrResizeException("");
       }
       const std::vector<T> &defaults = attr->defaults();
-      for (size_t i = 0; i < size * arraySize; i++) {
+      for (size_t i = 0, iEnd = size * arraySize; i < iEnd; i++) {
         attr->elems[i] = defaults[i % arraySize];
       }
     }
@@ -65,7 +66,8 @@ namespace {
   {
     typedef typename AttrVec_T::value_type::value_type T;
     typedef typename AttrVec_T::iterator Iter;
-    for (Iter attr = attrMap.begin(); attr != attrMap.end(); ++attr) {
+    for (Iter attr = attrMap.begin(), end = attrMap.end(); 
+         attr != end; ++attr) {
       size_t arraySize = attr->arraySize();
       size_t oldSize = attr->elems.size();
       size_t newSize = oldSize + size * arraySize;
@@ -87,8 +89,8 @@ namespace {
   template <typename Attr_T>
   void checkForExistingAttr(const Attr_T &attrVec, const string &attrName)
   {
-    typename Attr_T::const_iterator i = attrVec.begin();
-    for (; i != attrVec.end(); ++i) {
+    typedef typename Attr_T::const_iterator Iter;
+    for (Iter i = attrVec.begin(), end = attrVec.end(); i != end; ++i) {
       if (i->name() == attrName) {
         throw AttrTable::AttrExistsException(attrName);
       }
@@ -109,7 +111,7 @@ namespace {
   template <typename Vec_T>
   size_t findAttrIdx(const Vec_T &vec, const string &attrName)
   {
-    for (size_t i = 0; i < vec.size(); ++i) {
+    for (size_t i = 0, size = vec.size(); i < size; ++i) {
       if (vec[i].name() == attrName) {
         return i;
       }
@@ -175,11 +177,11 @@ namespace {
   //--------------------------------------------------------------------------//
 
   template <typename T>
-  vector<string> attrNames(const T &attrArray)
+  vector<string> attrNames(const T &array)
   {
     vector<string> ret;
-    for (typename T::const_iterator i = attrArray.begin();
-         i != attrArray.end(); ++i) {
+    for (typename T::const_iterator i = array.begin(), end = array.end();
+         i != end; ++i) {
       ret.push_back(i->name());
     }
     return ret;

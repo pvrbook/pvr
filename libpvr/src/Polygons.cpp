@@ -189,7 +189,7 @@ const AttrTable& Polygons::polyAttrs() const
 void Polygons::print() const
 {
   using namespace pvr::Util;
-  for (size_t iPoly = 0; iPoly < m_polyInfo.size(); ++iPoly) {
+  for (size_t iPoly = 0, size = m_polyInfo.size(); iPoly < size; ++iPoly) {
     Log::print("Polygon " + str(iPoly));
     for (size_t iVert = 0; iVert < m_polyInfo[iPoly].numVertices; ++iVert) {
       Log::print("  Vertex " + str(iVert) + " -> " + 

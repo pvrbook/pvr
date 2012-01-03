@@ -124,9 +124,9 @@ void Image::write(const std::string &filename, Channels channels) const
       return;
     }
     
-    for (int j = 0; j <= buf.ymax(); ++j) {
+    for (int j = 0, ymax = buf.ymax(); j <= ymax; ++j) {
       int invertedJ = buf.ymax() - j;
-      for (int i = 0; i <= buf.xmax(); ++i) {
+      for (int i = 0, xmax = buf.xmax(); i <= xmax; ++i) {
         float pixel[4];
         m_buf.getpixel(i, j, pixel, 4);
         for (int c = 0; c < 3; c++) {
@@ -143,9 +143,9 @@ void Image::write(const std::string &filename, Channels channels) const
 
     ImageBuf buf("", m_buf.spec());
     
-    for (int j = 0; j <= buf.ymax(); ++j) {
-      int invertedJ = buf.ymax() - j;
-      for (int i = 0; i <= buf.xmax(); ++i) {
+    for (int j = 0, ymax = buf.ymax(); j <= ymax; ++j) {
+      int invertedJ = ymax - j;
+      for (int i = 0, xmax = buf.xmax(); i <= xmax; ++i) {
         float pixel[4];
         m_buf.getpixel(i, j, pixel, 4);
         buf.setpixel(i, invertedJ, pixel);

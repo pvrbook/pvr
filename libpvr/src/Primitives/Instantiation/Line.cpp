@@ -210,8 +210,8 @@ BBox Line::wsBounds(Geo::Geometry::CPtr geometry) const
     updatePointAttrs(pointVisitor.begin(first), numPoints);
     // Compute world-space bounds
     size_t index = 0;
-    for (std::vector<PointAttrState>::const_iterator i = m_pointAttrs.begin();
-         i != m_pointAttrs.end(); ++i, ++index) {
+    for (std::vector<PointAttrState>::const_iterator i = m_pointAttrs.begin(),
+           end = m_pointAttrs.end(); i != end; ++i, ++index) {
       Vector radius      = Vector(i->radius.value());
       float displacement = 0.0f;
       if (m_polyAttrs.doDispNoise) {

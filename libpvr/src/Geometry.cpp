@@ -266,13 +266,9 @@ Geometry::Ptr Geometry::read(const std::string &filename)
 
   // For each prim in file ---
 
-#ifdef GPD_VERSION_NS
-  for (int iPrim = 0; iPrim < detail.fileNprim; iPrim++) {
-    GPD_Primitive *prim = detail.prims[iPrim];
-#else
-  for (int iPrim = 0; iPrim < detail.numprim(); iPrim++) {
+  for (int iPrim = 0, size = detail.numprim(); iPrim < size; iPrim++) {
+
     GPD_Primitive *prim = detail.prim(iPrim);
-#endif
 
     const GPD_PrimParticle *particlePrim = 
       dynamic_cast<GPD_PrimParticle*>(prim);

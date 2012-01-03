@@ -88,8 +88,8 @@ BBox LineBase::wsBounds(Geo::Geometry::CPtr geometry) const
     updatePointAttrs(pointVisitor.begin(first), numPoints);
     // Compute world-space bounds
     size_t index = 0;
-    for (std::vector<PointAttrState>::const_iterator i = m_basePointAttrs.begin();
-         i != m_basePointAttrs.end(); ++i, ++index) {
+    for (std::vector<PointAttrState>::const_iterator i = m_basePointAttrs.begin(),
+           end = m_basePointAttrs.end(); i != end; ++i, ++index) {
       Vector radius      = Vector(i->radius.value());
       float displacement = displacementBounds(index);
       Vector wsV         = i->wsVelocity.value();
@@ -148,8 +148,8 @@ void LineBase::execute(Geo::Geometry::CPtr geometry,
     BBox vsBounds;
     // Loop over each point
     size_t ptIndex = 0;
-    for (std::vector<PointAttrState>::const_iterator i = m_basePointAttrs.begin();
-         i != m_basePointAttrs.end(); ++i, ++ptIndex) {
+    for (std::vector<PointAttrState>::const_iterator i = m_basePointAttrs.begin(),
+           end = m_basePointAttrs.end(); i != end; ++i, ++ptIndex) {
       float displ = displacementBounds(ptIndex);
       vsBounds.extendBy(vsSphereBounds(buffer->mapping(), i->wsCenter.value(), 
                                        i->radius.value() * (1.0 + displ)));
@@ -170,7 +170,7 @@ void LineBase::updateAccelStruct() const
   // Compute bounds and average radius
   BBox wsBounds;
   double sumRadius = 0.0;
-  for (size_t i = 0; i < m_basePointAttrs.size() - 1; ++i) {
+  for (size_t i = 0, size =  m_basePointAttrs.size() - 1; i < size; ++i) {
     float radius = m_basePointAttrs[i].radius;
     wsBounds = extendBounds(wsBounds, m_basePointAttrs[i].wsCenter.value(),
                             radius);
@@ -189,7 +189,7 @@ void LineBase::updateAccelStruct() const
   }
   m_gridAccel.clear(cellSize, res, origin);
   // Add line segments to hash
-  for (size_t i = 0; i < m_basePointAttrs.size() - 1; ++i) {
+  for (size_t i = 0, size = m_basePointAttrs.size() - 1; i < size; ++i) {
     Vector p0(m_basePointAttrs[i].wsCenter.value());
     Vector p1(m_basePointAttrs[i + 1].wsCenter.value());
     float displ = std::max(displacementBounds(i), displacementBounds(i + 1));
