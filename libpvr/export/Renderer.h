@@ -109,6 +109,12 @@ public:
   //! Executes the render
   void execute();
 
+  // Ray server ----------------------------------------------------------------
+
+  //! Traces a single arbitrary ray.
+  //! \note Does not change current camera.
+  IntegrationResult trace(const RayState &state) const;
+
   // Results -------------------------------------------------------------------
 
   //! Returns a pointer to the transmittance map

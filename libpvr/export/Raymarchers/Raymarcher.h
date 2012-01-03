@@ -118,7 +118,7 @@ Util::ColorCurve::Ptr setupDeepTCurve(const RayState &state, const float first);
 
 //! Updates the deep functions (luminance and transmittance) with the
 //! provided L and T values, at a depth computed from wsP.
-void updateDeepFunctions(const Vector &wsP, const Color &L, const Color &T, 
+void updateDeepFunctions(const float t, const Color &L, const Color &T, 
                          Util::ColorCurve::Ptr lf, Util::ColorCurve::Ptr tf);
 
 //----------------------------------------------------------------------------//

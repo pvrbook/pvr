@@ -86,10 +86,11 @@ TransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
     return Colors::one();
   }
   
-  //! \bug Transmittance map stores z distance, not camera space depth!!!
+  // Compute depth to sample at
+  float depth = (state.wsP - m_camera->position(state.rayState.time)).length();
 
   // Finally interpolate
-  return m_transmittanceMap->lerp(rsP.x, rsP.y, std::abs(csP.z));
+  return m_transmittanceMap->lerp(rsP.x, rsP.y, depth);
 }
 
 //----------------------------------------------------------------------------//

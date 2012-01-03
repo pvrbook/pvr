@@ -184,7 +184,7 @@ UniformRaymarcher::integrate(const RayState &state) const
 
       // Update transmittance and luminance functions
       if (tf || lf) {
-        updateDeepFunctions(state.wsRay(stepT1), L, T, lf, tf);
+        updateDeepFunctions(stepT1, L, T, lf, tf);
       }
 
       // Set up next steps

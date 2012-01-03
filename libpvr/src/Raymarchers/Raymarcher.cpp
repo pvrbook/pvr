@@ -112,20 +112,14 @@ Util::ColorCurve::Ptr setupDeepTCurve(const RayState &state, const float first)
 
 //----------------------------------------------------------------------------//
 
-void updateDeepFunctions(const Vector &wsP, const Color &L, const Color &T, 
+void updateDeepFunctions(const float t, const Color &L, const Color &T, 
                          Util::ColorCurve::Ptr lf, Util::ColorCurve::Ptr tf)
 {
-  //! \note We always sample time at t = 0.0 for the transmittance
-  //! function
-  Vector csP = RenderGlobals::camera()->worldToCamera(wsP, PTime(0.0));
-  float depth = -csP.z;
-
   if (tf) {
-    tf->addSample(depth, T);
+    tf->addSample(t, T);
   }
-
   if (lf) {
-    lf->addSample(depth, L);
+    lf->addSample(t, L);
   }
 }
 

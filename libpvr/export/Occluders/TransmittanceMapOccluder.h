@@ -69,7 +69,10 @@ public:
 
   // Main methods --------------------------------------------------------------
 
+  //! Sets the projection camera to use
   void setCamera(Camera::CPtr camera);
+  //! Sets the transmittance map to use.
+  //! \note It is assumed that sample depths are world space distances.
   void setTransmittanceMap(DeepImage::CPtr map);
 
 protected:

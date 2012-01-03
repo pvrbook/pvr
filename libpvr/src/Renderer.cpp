@@ -211,7 +211,7 @@ void Renderer::setDoRandomizePixelSamples(const bool enabled)
 
 //----------------------------------------------------------------------------//
 
-//! \todo Replace RNG with a proper Sampler
+//! \todo Replace RNG with a proper Sampler!!!
 void Renderer::execute()
 {
   Log::print("Rendering image size " + str(m_primary->size()));
@@ -249,7 +249,7 @@ void Renderer::execute()
     Sys::Interrupt::throwOnAbort();
     // Print progress
     progress.update(i.progress());
-    // Randomize pixel sample and time
+    // Set up pixel sample and time
     float xSample = i.rsX();
     float ySample = i.rsY();
     if (m_params.doRandomizePixelSamples) {
@@ -274,6 +274,13 @@ void Renderer::execute()
   Log::print("  Time elapsed: " + str(timer.elapsed()));
 }
   
+//----------------------------------------------------------------------------//
+
+IntegrationResult Renderer::trace(const RayState &state) const
+{
+  return m_raymarcher->integrate(state);
+}
+
 //----------------------------------------------------------------------------//
 
 Raymarcher::CPtr Renderer::raymarcher() const
