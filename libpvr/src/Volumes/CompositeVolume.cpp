@@ -88,6 +88,8 @@ Volume::AttrNameVec CompositeVolume::attributeNames() const
     attrs.insert(attrs.begin(), childAttrs.begin(), childAttrs.end());
   }
   // Unique attributes
+  AttrNameVec::iterator newEnd = std::unique(attrs.begin(), attrs.end());
+  attrs.resize(newEnd - attrs.begin());
   // Return unique'd vector
   return attrs;
 }
