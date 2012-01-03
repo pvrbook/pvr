@@ -72,40 +72,47 @@ ScatteringSampler::Ptr ScatteringSampler::create()
 
 //----------------------------------------------------------------------------//
 
-//! \todo This is messy. Tidy up.
-RaymarchSample
-ScatteringSampler::sample(const VolumeSampleState &state) const
+RaymarchSample ScatteringSampler::sample(const VolumeSampleState &state) const
 {
-  const Scene          &scene = *RenderGlobals::scene();
-  Volume::CPtr         volume = scene.volume;
+  const Scene          &scene          = *RenderGlobals::scene();
+  const Volume::CPtr    volume         = scene.volume;
 
-  LightSampleState     lightState(state.rayState);
-  OcclusionSampleState occlusionState(state.rayState);
+  LightSampleState      lightState     (state.rayState);
+  OcclusionSampleState  occlusionState (state.rayState);
 
-  Color                L = Colors::zero();
-  VolumeSample         sample = volume->sample(state, m_scatteringAttr);
-  const Color &        sigma_s = sample.value;
-  const Vector         wo = -state.rayState.wsRay.dir;
-  
-  lightState.wsP = state.wsP;
+  VolumeSample          sample         = volume->sample(state, m_scatteringAttr);
+
+  Color                 L              = Colors::zero();
+  const Color &         sigma_s        = sample.value;
+  const Vector          wo             = -state.rayState.wsRay.dir;
 
   // Only perform calculation if ray is primary and scattering coefficient is
   // greater than zero.
+
   if (Math::max(sigma_s) > 0.0f &&
       state.rayState.rayType == RayState::FullRaymarch) {
+
+    // Update light and occluder sample states
+    lightState.wsP = state.wsP;
+    occlusionState.wsP = state.wsP;
+
     // For each light source
     BOOST_FOREACH (Light::CPtr light, scene.lights) {
+
       // Sample the light
       LightSample lightSample = light->sample(lightState);
-      occlusionState.wsP = state.wsP;
-      occlusionState.wsLightP = lightSample.wsP;
+
       // Sample the occluder
+      occlusionState.wsLightP = lightSample.wsP;
       Color transmittance = light->occluder()->sample(occlusionState);
+
       // Find the scattering probability
       const Vector wi = (state.wsP - lightSample.wsP).normalized();
       const float p = sample.phaseFunction->probability(wi, wo);
+
       // Update luminance
       L += sigma_s * p * lightSample.luminance * transmittance;
+
     }
   }
 
