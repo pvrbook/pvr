@@ -104,8 +104,8 @@ protected:
         lacunarity ("lacunarity",     1.92f), 
         amplitude  ("amplitude",      1.0f), 
         gamma      ("gamma",          1.0f), 
-        displace2D ("displace_2d",    1), 
         pyroclastic("pyroclastic",    1), 
+        pyro2D     ("pyroclastic_2d", 1), 
         absNoise   ("absolute_noise", 1),
         antialiased("antialiased", 1)
     { }
@@ -129,8 +129,8 @@ protected:
     Geo::Attr<float>      lacunarity;
     Geo::Attr<float>      amplitude;
     Geo::Attr<float>      gamma;
-    Geo::Attr<int>        displace2D;
     Geo::Attr<int>        pyroclastic;
+    Geo::Attr<int>        pyro2D;
     Geo::Attr<int>        absNoise;
     Geo::Attr<int>        antialiased;
     Matrix                rotation;

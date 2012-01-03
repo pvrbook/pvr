@@ -38,7 +38,7 @@ primParams = {
     "lacunarity"     : 1.92,
     "amplitude"      : 1.0,
     "gamma"          : 1.0,
-    "displace_2d"    : 1,
+    "pyroclastic_2d" : 1,
     "pyroclastic"    : 1,
     "absolute_noise" : 1
 }

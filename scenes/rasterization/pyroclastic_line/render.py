@@ -42,7 +42,7 @@ primParams = {
     "octaves"        : 8.0, 
     "octave_gain"    : 0.5,
     "lacunarity"     : 1.92,
-    "displace_2d"    : 1,
+    "pyroclastic_2d" : 1,
     "absolute_noise" : 1,
     "pyroclastic"    : 1
 }

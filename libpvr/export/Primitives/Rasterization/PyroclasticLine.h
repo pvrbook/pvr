@@ -114,9 +114,9 @@ protected:
         octaves     ("octaves",        8.0f), 
         octaveGain  ("octave_gain",    0.5f), 
         lacunarity  ("lacunarity",     1.92f), 
-        displace2D  ("displace_2d",    1), 
         absNoise    ("absolute_noise", 1),
-        pyroclastic ("pyroclastic",    1)
+        pyroclastic ("pyroclastic",    1),
+        pyro2D      ("pyroclastic_2d", 1)
     { }
     
     void update(const Geo::AttrVisitor::const_iterator &i);
@@ -125,9 +125,9 @@ protected:
     Geo::Attr<float>      octaves;
     Geo::Attr<float>      octaveGain;
     Geo::Attr<float>      lacunarity;
-    Geo::Attr<int>        displace2D;
     Geo::Attr<int>        absNoise;
     Geo::Attr<int>        pyroclastic;
+    Geo::Attr<int>        pyro2D;
 
     Noise::Fractal::CPtr  fractal;
   };

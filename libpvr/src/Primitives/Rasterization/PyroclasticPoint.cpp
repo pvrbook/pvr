@@ -131,7 +131,10 @@ void PyroclasticPoint::getSample(const RasterizationState &state,
   float radius = m_attrs.radius;
   Vector lsP, lsPUnrot = (state.wsP - m_attrs.wsCenter.as<Vector>()) / radius;
   m_attrs.rotation.multVecMatrix(lsPUnrot, lsP);
-  Vector nsP = m_attrs.displace2D ? lsP.normalized() : lsP;
+  Vector nsP = lsP;
+  if (m_attrs.pyroclastic && m_attrs.pyro2D) {
+    nsP.normalize();
+  }
   // Offset by seed
   Rand32 rng(m_attrs.seed.value());
   Vector offset;
@@ -211,7 +214,7 @@ AttrState::update(const Geo::AttrVisitor::const_iterator &i)
   i.update(lacunarity);
   i.update(amplitude);
   i.update(gamma);
-  i.update(displace2D);
+  i.update(pyro2D);
   i.update(absNoise);
   i.update(antialiased);
   i.update(pyroclastic);

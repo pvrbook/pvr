@@ -99,7 +99,7 @@ void PyroclasticLine::getSample(const RasterizationState &state,
                             wsCenter, u, info.radius);
     // Normalize the length of the vector in the XY plane
     // if user wants "2D" style displacement.
-    if (m_polyAttrs.displace2D) {
+    if (m_polyAttrs.pyroclastic && m_polyAttrs.pyro2D) {
       lsP = Math::normalizeXY(lsP);
     }
     // Transform to noise space
@@ -194,7 +194,7 @@ void PyroclasticLine::PolyAttrState::update
   i.update(octaves);
   i.update(octaveGain);
   i.update(lacunarity);
-  i.update(displace2D);
+  i.update(pyro2D);
   i.update(absNoise);
   i.update(pyroclastic);
 }
