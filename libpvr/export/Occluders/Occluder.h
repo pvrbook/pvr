@@ -60,9 +60,6 @@ public:
 
   virtual Color sample(const OcclusionSampleState &state) const = 0;
 
-  // May be implemented by subclasses ------------------------------------------
-
-  virtual void setup(Renderer::CPtr renderer
 };
 
 //----------------------------------------------------------------------------//
