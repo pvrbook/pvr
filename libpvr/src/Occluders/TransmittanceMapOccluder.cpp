@@ -48,9 +48,17 @@ namespace Render {
 // TransmittanceMapOccluder
 //----------------------------------------------------------------------------//
 
-TransmittanceMapOccluder::Ptr TransmittanceMapOccluder::create()
+TransmittanceMapOccluder::TransmittanceMapOccluder(Renderer::CPtr baseRenderer, 
+                                                   Camera::CPtr camera)
+  : m_camera(camera)
 { 
-  return Ptr(new TransmittanceMapOccluder); 
+  Renderer::Ptr renderer = baseRenderer->clone();
+  renderer->setCamera(camera);
+  renderer->setPrimaryEnabled(false);
+  renderer->setTransmittanceMapEnabled(true);
+  renderer->execute();
+  m_transmittanceMap = renderer->transmittanceMap();
+  m_rasterBounds = static_cast<Imath::V2f>(m_transmittanceMap->size());
 }
 
 //----------------------------------------------------------------------------//
@@ -62,8 +70,7 @@ std::string TransmittanceMapOccluder::typeName() const
 
 //----------------------------------------------------------------------------//
 
-Color
-TransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
+Color TransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
 {
   // Error checking
   if (!m_camera) {
@@ -91,25 +98,6 @@ TransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
 
   // Finally interpolate
   return m_transmittanceMap->lerp(rsP.x, rsP.y, depth);
-}
-
-//----------------------------------------------------------------------------//
-
-void TransmittanceMapOccluder::setCamera(Camera::CPtr camera)
-{ 
-  m_camera = camera; 
-}
-
-//----------------------------------------------------------------------------//
-
-void TransmittanceMapOccluder::setTransmittanceMap(DeepImage::CPtr map)
-{ 
-  if (!map) {
-    Util::Log::warning("TransmittanceMapOccluder::setTransmittanceMap "
-                       "got null pointer");
-  }
-  m_transmittanceMap = map; 
-  m_rasterBounds = static_cast<Imath::V2f>(map->size());
 }
 
 //----------------------------------------------------------------------------//

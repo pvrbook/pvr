@@ -21,6 +21,7 @@
 
 #include "pvr/Camera.h"
 #include "pvr/DeepImage.h"
+#include "pvr/Renderer.h"
 #include "pvr/Occluders/Occluder.h"
 
 //----------------------------------------------------------------------------//
@@ -55,9 +56,14 @@ public:
   DECLARE_PVR_RT_EXC(MissingTransmittanceMapException, 
                      "TransmittanceMapOccluder has no transmittance map.");
 
-  // Factory method ------------------------------------------------------------
+  // Constructor, factory method -----------------------------------------------
 
-  static Ptr create();
+  //! Constructor requires a Renderer and Camera to use for precomputation.
+  TransmittanceMapOccluder(Renderer::CPtr renderer, 
+                           Camera::CPtr camera);
+
+  DECLARE_CREATE_FUNC_2_ARG(TransmittanceMapOccluder, 
+                            Renderer::CPtr, Camera::CPtr);
 
   // From ParamBase ------------------------------------------------------------
 
@@ -66,14 +72,6 @@ public:
   // From Occluder -------------------------------------------------------------
 
   virtual Color sample(const OcclusionSampleState &state) const;
-
-  // Main methods --------------------------------------------------------------
-
-  //! Sets the projection camera to use
-  void setCamera(Camera::CPtr camera);
-  //! Sets the transmittance map to use.
-  //! \note It is assumed that sample depths are world space distances.
-  void setTransmittanceMap(DeepImage::CPtr map);
 
 protected:
 

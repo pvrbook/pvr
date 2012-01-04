@@ -85,7 +85,8 @@ void exportPerspectiveCamera()
 {
   using namespace boost::python;
 
-  class_<Camera, Camera::Ptr, boost::noncopyable>("Camera", no_init)
+  class_<Camera, Camera::Ptr, boost::noncopyable>
+    ("Camera", no_init)
     .def("setPosition",    &PerspectiveCamera::setPosition)
     .def("setOrientation", &PerspectiveCamera::setOrientation)
     .def("setResolution",  &PerspectiveCamera::setResolution)
@@ -108,6 +109,7 @@ void exportPerspectiveCamera()
     ;
 
   implicitly_convertible<PerspectiveCamera::Ptr, PerspectiveCamera::CPtr>();
+
 }
 
 //----------------------------------------------------------------------------//

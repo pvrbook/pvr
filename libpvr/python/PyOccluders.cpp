@@ -58,8 +58,6 @@ void exportOccluders()
          TransmittanceMapOccluder::Ptr>
     ("TransmittanceMapOccluder", no_init)
     .def("__init__", make_constructor(TransmittanceMapOccluder::create))
-    .def("setTransmittanceMap", &TransmittanceMapOccluder::setTransmittanceMap)
-    .def("setCamera",           &TransmittanceMapOccluder::setCamera)
     ;
   
   implicitly_convertible<TransmittanceMapOccluder::Ptr, 

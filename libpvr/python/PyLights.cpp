@@ -16,6 +16,7 @@
 
 #include <pvr/Lights/Light.h>
 #include <pvr/Lights/PointLight.h>
+#include <pvr/Lights/SpotLight.h>
 
 //----------------------------------------------------------------------------//
 // Helper functions
@@ -52,6 +53,16 @@ void exportLights()
     ;
   
   implicitly_convertible<PointLight::Ptr, PointLight::CPtr>();
+
+  // SpotLight ---
+
+  class_<SpotLight, bases<Light>, SpotLight::Ptr>("SpotLight", no_init)
+    .def("__init__",    make_constructor(SpotLight::create))
+    .def("setCamera",   &SpotLight::setCamera)
+    .def("camera",      &SpotLight::camera)
+    ;
+  
+  implicitly_convertible<SpotLight::Ptr, SpotLight::CPtr>();
 
 }
 

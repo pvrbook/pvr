@@ -101,6 +101,7 @@ void registerStandardTypes()
     factory->registerClass(factoryFunc<Light, PointLight>);
   }
 
+#if 0
   // Occluder classes
   {
     ClassFactory<Occluder>::Ptr factory = 
@@ -136,6 +137,7 @@ void registerStandardTypes()
     
     factory->registerClass(factoryFunc<Volume, VoxelVolume>);
   }
+#endif
 }
 
 //----------------------------------------------------------------------------//

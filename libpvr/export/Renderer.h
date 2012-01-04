@@ -75,7 +75,7 @@ public:
   static Ptr create();
   //! Clones the Renderer. Will clear all the non-const data members but keeps
   //! pointers to const data members (volumes, lights, etc)
-  Ptr clone();
+  Ptr clone() const;
 
   // Setup ---------------------------------------------------------------------
 
@@ -95,7 +95,7 @@ public:
   // Options -------------------------------------------------------------------
 
   //! Whether to enable primary output. This is true for beauty renders
-  //! and false when rendering a seconary pass, such as the transmittance map.
+  //! and false when rendering a secondary pass, such as the transmittance map.
   void setPrimaryEnabled(const bool enabled);
   //! Sets whether to enable computation of the deep transmittance map.
   void setTransmittanceMapEnabled(const bool enabled);

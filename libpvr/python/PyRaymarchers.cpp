@@ -15,6 +15,7 @@
 // Library includes
 
 #include <pvr/Raymarchers/Raymarcher.h>
+#include <pvr/Raymarchers/UniformRaymarcher.h>
 
 #include "Common.h"
 
@@ -39,7 +40,7 @@ void exportRaymarchers()
   using namespace std;
   using namespace pvr;
   
-  using pvr::Render::Raymarcher;
+  using namespace pvr::Render;
 
   // ParamBase ---
 
@@ -58,6 +59,15 @@ void exportRaymarchers()
     ;
   
   implicitly_convertible<Raymarcher::Ptr, Raymarcher::CPtr>();
+
+  // UniformRaymarcher ---
+
+  class_<UniformRaymarcher, bases<Raymarcher>, UniformRaymarcher::Ptr>
+    ("UniformRaymarcher", no_init)
+    .def("__init__", make_constructor(UniformRaymarcher::create))
+    ;
+  
+  implicitly_convertible<UniformRaymarcher::Ptr, UniformRaymarcher::CPtr>();
 
 }
 

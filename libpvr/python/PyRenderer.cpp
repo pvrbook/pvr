@@ -60,6 +60,8 @@ void exportRenderer()
     .def("saveImage",                  &Renderer::saveImage)
     ;
 
+  implicitly_convertible<Renderer::Ptr, Renderer::CPtr>();
+
 }
 
 //----------------------------------------------------------------------------//

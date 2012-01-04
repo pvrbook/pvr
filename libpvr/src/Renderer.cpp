@@ -101,7 +101,7 @@ Renderer::Params::Params()
 // Renderer
 //----------------------------------------------------------------------------//
 
-Renderer::Ptr Renderer::clone()
+Renderer::Ptr Renderer::clone() const
 {
   // First copy everything from this
   Ptr renderer(new Renderer(*this));
@@ -214,7 +214,11 @@ void Renderer::setDoRandomizePixelSamples(const bool enabled)
 //! \todo Replace RNG with a proper Sampler!!!
 void Renderer::execute()
 {
-  Log::print("Rendering image size " + str(m_primary->size()));
+  if (m_params.doPrimary) {
+    Log::print("Rendering image " + str(m_primary->size()));
+  } else {
+    Log::print("Rendering transmittance map " + str(m_primary->size()));
+  }
 
   if (!m_camera) {
     throw MissingCameraException();

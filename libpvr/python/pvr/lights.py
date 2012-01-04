@@ -36,58 +36,55 @@ __stdBehindLight = {
     "intensity" : Color(1.0)
     }
 
-__stdRaymarcherParams = {
-    "use_volume_step_length" : 1,
-    "volume_step_length_multiplier" : 1.0, 
-    "do_early_termination" : 1,
-    "early_termination_threshold" : 0.01
-    }
-
 # ------------------------------------------------------------------------------
 
-def makeLight(renderer, parms, resMult, rmParams = __stdRaymarcherParams):
-    light = PointLight()
+def makeLight(renderer, parms, resMult):
+    light = SpotLight()
+    cam = PerspectiveCamera()
     # Position
-    light.setPosition(parms["position"])
+    cam.setPosition(parms["position"])
     # Orientation
     angles = parms["rotation"]
     euler = Euler(radians(angles.x), radians(angles.y), radians(angles.z))
-    quat = euler.toQuat()
+    cam.setOrientation(euler.toQuat())
+    # FOV
+    cam.setVerticalFOV(parms["fov"])
+    # Resolution
+    resolution = V2i(int(1024 * resMult), int(1024 * resMult))
+    cam.setResolution(resolution)
     # Intensity
     light.setIntensity(parms["intensity"])
-    # Transmittance map
-    resolution = V2i(int(1024 * resMult), int(1024 * resMult))
-    raymarcherType = "Uniform"
-    samplerType = "ScatteringSampler"
-    setupTransmittanceMap(renderer, light, resolution, quat, parms["fov"], 
-                          raymarcherType, rmParams, samplerType)
+    # Camera
+    light.setCamera(cam)
+    tmap = TransmittanceMapOccluder(renderer, cam)
+    light.setOccluder(tmap)
     return light
     
 # ------------------------------------------------------------------------------
 
-def standardKey(renderer, resMult, rmParams = __stdRaymarcherParams):
-    return makeLight(renderer, __stdKeyLight, resMult, rmParams)
+def standardKey(renderer, resMult):
+    return makeLight(renderer, __stdKeyLight, resMult)
 
 # ------------------------------------------------------------------------------
 
-def standardFill(renderer, resMult, rmParams = __stdRaymarcherParams):
-    return makeLight(renderer, __stdFillLight, resMult, rmParams)
+def standardFill(renderer, resMult):
+    return makeLight(renderer, __stdFillLight, resMult)
 
 # ------------------------------------------------------------------------------
 
-def standardRim(renderer, resMult, rmParams = __stdRaymarcherParams):
-    return makeLight(renderer, __stdRimLight, resMult, rmParams)
+def standardRim(renderer, resMult):
+    return makeLight(renderer, __stdRimLight, resMult)
 
 # ------------------------------------------------------------------------------
 
-def standardThreePoint(renderer, resMult, rmParams = __stdRaymarcherParams):
-    return [standardKey(renderer, resMult, rmParams), 
-            standardFill(renderer, resMult, rmParams), 
-            standardRim(renderer, resMult, rmParams)]
+def standardThreePoint(renderer, resMult):
+    return [standardKey(renderer, resMult), 
+            standardFill(renderer, resMult), 
+            standardRim(renderer, resMult)]
 
 # ------------------------------------------------------------------------------
 
-def standardBehind(renderer, resMult, rmParams = __stdRaymarcherParams):
-    return makeLight(renderer, __stdBehindLight, resMult, rmParams)
+def standardBehind(renderer, resMult):
+    return makeLight(renderer, __stdBehindLight, resMult)
 
 # ------------------------------------------------------------------------------

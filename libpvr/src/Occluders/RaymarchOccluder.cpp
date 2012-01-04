@@ -72,7 +72,6 @@ void RaymarchOccluder::setRaymarcher(Raymarcher::CPtr raymarcher)
   m_raymarcher = raymarcher; 
 }
 
-
 //----------------------------------------------------------------------------//
 
 } // namespace Render

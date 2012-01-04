@@ -15,6 +15,7 @@
 // Library includes
 
 #include <pvr/RaymarchSamplers/RaymarchSampler.h>
+#include <pvr/RaymarchSamplers/ScatteringSampler.h>
 
 #include "Common.h"
 
@@ -36,7 +37,7 @@ void exportRaymarchSamplers()
   using namespace std;
   using namespace pvr;
 
-  using pvr::Render::RaymarchSampler;
+  using namespace pvr::Render;
 
   // RaymarchSampler ---
 
@@ -46,6 +47,15 @@ void exportRaymarchSamplers()
     ;
   
   implicitly_convertible<RaymarchSampler::Ptr, RaymarchSampler::CPtr>();
+
+  // ScatteringSampler ---
+
+  class_<ScatteringSampler, bases<RaymarchSampler>, ScatteringSampler::Ptr>
+    ("ScatteringSampler", no_init)
+    .def("__init__", make_constructor(ScatteringSampler::create))
+    ;
+  
+  implicitly_convertible<ScatteringSampler::Ptr, ScatteringSampler::CPtr>();
 
 }
 
