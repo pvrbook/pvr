@@ -111,7 +111,6 @@ phaseFunction = Isotropic()
 volume.setPhaseFunction(phaseFunction)
 
 renderer.addVolume(volume)
-renderer.printSceneInfo()
 
 # Lights
 
@@ -120,6 +119,7 @@ for light in lights:
     renderer.addLight(light)
 
 # Execute render
+renderer.printSceneInfo()
 renderer.execute()
 
 # Save result

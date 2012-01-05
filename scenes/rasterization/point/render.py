@@ -90,7 +90,6 @@ volume = VoxelVolume()
 volume.setBuffer(modeler.buffer())
 volume.addAttribute("scattering", V3f(1.0))
 renderer.addVolume(volume)
-renderer.printSceneInfo()
 
 # Lights
 
@@ -99,6 +98,7 @@ for light in lights:
     renderer.addLight(light)
 
 # Execute render
+renderer.printSceneInfo()
 renderer.execute()
 
 # Save result

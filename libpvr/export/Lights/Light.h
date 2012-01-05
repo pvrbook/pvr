@@ -86,6 +86,8 @@ public:
 
   //! Sets the intesity of the light source.
   void setIntensity(const Color &intensity);
+  //! Returns the intensity
+  const Color& intensity() const;
   //! Sets the Occluder to use for the light. By default, each light has the
   //! NullOccluder assigned.
   void setOccluder(Occluder::CPtr occluder);

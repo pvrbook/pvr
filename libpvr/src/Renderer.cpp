@@ -22,6 +22,7 @@
 #include "pvr/RenderGlobals.h"
 #include "pvr/Interrupt.h"
 #include "pvr/Log.h"
+#include "pvr/PhaseFunction.h"
 #include "pvr/Scene.h"
 #include "pvr/Strings.h"
 
@@ -63,6 +64,30 @@ namespace {
 
     BOOST_FOREACH (Volume::CPtr volume, inputs) {
       printVolumeInfo(volume, indentLevel + 1);
+    }
+
+  }
+
+  //--------------------------------------------------------------------------//
+
+  void printLightInfo(const pvr::Render::Scene::LightVec &lights, 
+                      const int &indentLevel = 0)
+  {
+    using namespace pvr;
+    using namespace pvr::Render;
+    using namespace pvr::Util;
+
+    std::string indentStr = "  ";
+    std::string indent;
+    for (int i = 0; i < indentLevel; i++) {
+      indent += indentStr;
+    }
+
+    BOOST_FOREACH (Scene::LightPtr light, lights) {
+      Log::print(indent + "(" + light->typeName() + ")");
+      Color intensity = light->intensity() * Phase::k_isotropic;
+      Log::print(indent + indentStr + "i " + str(intensity));
+      Log::print(indent + indentStr + "o " + light->occluder()->typeName());
     }
 
   }
@@ -179,6 +204,7 @@ void Renderer::printSceneInfo() const
 
   Log::print("Scene info:");
   printVolumeInfo(m_scene->volume, 1);
+  printLightInfo(m_scene->lights, 1);
 }
 
 //----------------------------------------------------------------------------//
@@ -315,20 +341,6 @@ void Renderer::saveImage(const std::string &filename) const
 
 //----------------------------------------------------------------------------//
 
-Ray Renderer::setupRay(const float x, const float y, const PTime time) const
-{
-  // Find camera position at current time. This will serve as the Ray's origin
-  const Vector wsEye = m_camera->position(time);
-  // Compute direction by transforming pixel position in raster space to
-  // world space
-  const Vector rsP(x, y, 0.0);
-  Vector wsP = m_camera->rasterToWorld(rsP, time);
-
-  return Ray(wsEye, wsP);
-}
-
-//----------------------------------------------------------------------------//
-
 IntegrationResult Renderer::integrateRay(const float x, const float y,
                                          const PTime time) const
 {
@@ -336,12 +348,29 @@ IntegrationResult Renderer::integrateRay(const float x, const float y,
   // defaults
   RayState state;
   // Update the values that are non-default
-  state.wsRay         = setupRay(x, y, time);
+  state.wsRay         = setupRay(m_camera, x, y, time);
   state.time          = time;
   state.doOutputDeepT = m_params.doTransmittanceMap;
   state.doOutputDeepL = m_params.doLuminanceMap;
   // Let the Raymarcher do the integration work
   return m_raymarcher->integrate(state);
+}
+
+//----------------------------------------------------------------------------//
+// Utility functions
+//----------------------------------------------------------------------------//
+
+Ray setupRay(Camera::CPtr camera, const float x, const float y, 
+             const PTime time) 
+{
+  // Find camera position at current time. This will serve as the Ray's origin
+  const Vector wsEye = camera->position(time);
+  // Compute direction by transforming pixel position in raster space to
+  // world space
+  const Vector rsP(x, y, 0.0);
+  Vector wsP = camera->rasterToWorld(rsP, time);
+
+  return Ray(wsEye, wsP);  
 }
 
 //----------------------------------------------------------------------------//

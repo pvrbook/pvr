@@ -128,9 +128,6 @@ private:
 
   // Private methods -----------------------------------------------------------
 
-  //! Creates a Ray for a given pixel and time.
-  //! \param time Between shutter open and shutter close. Always in [0,1]
-  Ray setupRay(const float x, const float y, const PTime time) const;
   //! Integrates a single ray and returns the result
   IntegrationResult integrateRay(const float x, const float y, 
                                  const PTime time) const;
@@ -164,6 +161,15 @@ private:
   //! Pointer to deep luminance map
   DeepImage::Ptr m_deepLuminance;
 };
+
+//----------------------------------------------------------------------------//
+// Utility functions
+//----------------------------------------------------------------------------//
+
+//! Creates a Ray for a given pixel and time.
+//! \param time Between shutter open and shutter close. Always in [0,1]
+Ray setupRay(Camera::CPtr camera, const float x, const float y, 
+             const PTime time);
 
 //----------------------------------------------------------------------------//
 

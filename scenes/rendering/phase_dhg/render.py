@@ -111,7 +111,6 @@ phaseFunction = DoubleHenyeyGreenstein(0.8, 0.0, 0.5)
 volume.setPhaseFunction(phaseFunction)
 
 renderer.addVolume(volume)
-renderer.printSceneInfo()
 
 # Lights
 
@@ -120,6 +119,7 @@ for light in lights:
     renderer.addLight(light)
 
 # Execute render
+renderer.printSceneInfo()
 renderer.execute()
 
 # Save result

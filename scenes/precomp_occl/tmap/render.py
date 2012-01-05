@@ -28,7 +28,6 @@ primParams = {
     # Base controls
     "v"              : V3f(0.0), 
     "radius"         : 1.0,
-    "orientation"    : V3f(0, radians(5), radians(5)), 
     "density"        : V3f(5.0),
     "antialiased"    : 1,
     # Noise controls
@@ -110,7 +109,8 @@ renderer.addVolume(volume)
 
 # Lights
 
-lights = pvr.lights.standardThreePoint(renderer, 1.0 / reduceRes)
+lights = pvr.lights.standardThreePoint(renderer, 1.0 / reduceRes,
+                                       TransmittanceMapOccluder)
 for light in lights:
     renderer.addLight(light)
 

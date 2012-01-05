@@ -36,9 +36,11 @@ __stdBehindLight = {
     "intensity" : Color(1.0)
     }
 
+__defaultOccluder = OtfTransmittanceMapOccluder
+
 # ------------------------------------------------------------------------------
 
-def makeLight(renderer, parms, resMult):
+def makeLight(renderer, parms, resMult, occlType):
     light = SpotLight()
     cam = PerspectiveCamera()
     # Position
@@ -56,35 +58,40 @@ def makeLight(renderer, parms, resMult):
     light.setIntensity(parms["intensity"])
     # Camera
     light.setCamera(cam)
-    tmap = TransmittanceMapOccluder(renderer, cam)
-    light.setOccluder(tmap)
+    # Occluder
+    occluder = None
+    if occlType == TransmittanceMapOccluder:
+        occluder = TransmittanceMapOccluder(renderer, cam)
+    elif occlType == OtfTransmittanceMapOccluder:
+        occluder = OtfTransmittanceMapOccluder(renderer, cam)
+    light.setOccluder(occluder)
     return light
-    
-# ------------------------------------------------------------------------------
-
-def standardKey(renderer, resMult):
-    return makeLight(renderer, __stdKeyLight, resMult)
 
 # ------------------------------------------------------------------------------
 
-def standardFill(renderer, resMult):
-    return makeLight(renderer, __stdFillLight, resMult)
+def standardKey(renderer, resMult, occlType = __defaultOccluder):
+    return makeLight(renderer, __stdKeyLight, resMult, occlType)
 
 # ------------------------------------------------------------------------------
 
-def standardRim(renderer, resMult):
-    return makeLight(renderer, __stdRimLight, resMult)
+def standardFill(renderer, resMult, occlType = __defaultOccluder):
+    return makeLight(renderer, __stdFillLight, resMult, occlType)
 
 # ------------------------------------------------------------------------------
 
-def standardThreePoint(renderer, resMult):
-    return [standardKey(renderer, resMult), 
-            standardFill(renderer, resMult), 
-            standardRim(renderer, resMult)]
+def standardRim(renderer, resMult, occlType = __defaultOccluder):
+    return makeLight(renderer, __stdRimLight, resMult, occlType)
 
 # ------------------------------------------------------------------------------
 
-def standardBehind(renderer, resMult):
-    return makeLight(renderer, __stdBehindLight, resMult)
+def standardThreePoint(renderer, resMult, occlType = __defaultOccluder):
+    return [standardKey(renderer, resMult, occlType), 
+            standardFill(renderer, resMult, occlType), 
+            standardRim(renderer, resMult, occlType)]
+
+# ------------------------------------------------------------------------------
+
+def standardBehind(renderer, resMult, occlType = __defaultOccluder):
+    return makeLight(renderer, __stdBehindLight, resMult, occlType)
 
 # ------------------------------------------------------------------------------

@@ -14,6 +14,8 @@
 
 // System includes
 
+#include <stdlib.h>
+
 // Library includes
 
 // Project headers
@@ -56,6 +58,7 @@ void Composite::add(PhaseFunction::CPtr phaseFunction)
 
 void Composite::setWeight(const size_t idx, const float weight)
 {
+  assert(idx < m_weights.size());
   m_weights[idx] = weight;
 }
 

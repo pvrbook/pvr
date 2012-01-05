@@ -26,7 +26,9 @@ def getIdiff():
         return "idiff"
 
 def compareResults(dir):
+    print ""
     print "[ regression_tests ] Comparing", dir
+    print ""
     idiff = getIdiff()
     cmd = idiff + " " + os.path.join(dir, "reference.png") + " " + \
         os.path.join(dir, "out", "image.png")
@@ -35,7 +37,9 @@ def compareResults(dir):
         raise ResultFail(dir, "Image difference")
 
 def runTest(dir):
+    print ""
     print "[ regression_tests ] Running test in", dir
+    print ""
     scriptPath = os.path.join(dir, "render.py")
     if os.path.exists(scriptPath):
         cmd = "cd " + dir + ";"

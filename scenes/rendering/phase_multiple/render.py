@@ -132,19 +132,22 @@ composite = CompositeVolume()
 composite.add(volume1)
 composite.add(volume2)
 
-#composite.setPhaseFunction(Isotropic())
+# composite.setPhaseFunction(Isotropic())
 
 renderer.addVolume(composite)
-renderer.printSceneInfo()
 
 # Lights
 
-lights = pvr.lights.standardThreePoint(renderer, 1.0 / reduceRes)
+occluderType = OtfTransmittanceMapOccluder
+lights = pvr.lights.standardThreePoint(renderer, 1.0 / reduceRes,
+                                       occluderType)
 for light in lights:
     renderer.addLight(light)
-renderer.addLight(pvr.lights.standardBehind(renderer, 1.0 / reduceRes))
+renderer.addLight(pvr.lights.standardBehind(renderer, 1.0 / reduceRes,
+                                            occluderType))
 
 # Execute render
+renderer.printSceneInfo()
 renderer.execute()
 
 # Save result

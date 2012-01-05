@@ -51,6 +51,13 @@ void Light::setIntensity(const Color &intensity)
 
 //----------------------------------------------------------------------------//
 
+const Color& Light::intensity() const
+{ 
+  return m_intensity;
+}
+
+//----------------------------------------------------------------------------//
+
 void Light::setOccluder(Occluder::CPtr occluder)
 { 
   assert(occluder != NULL && "Light::setOccluder got null pointer");

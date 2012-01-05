@@ -17,6 +17,7 @@
 #include <pvr/Occluders/Occluder.h>
 #include <pvr/Occluders/RaymarchOccluder.h>
 #include <pvr/Occluders/TransmittanceMapOccluder.h>
+#include <pvr/Occluders/OtfTransmittanceMapOccluder.h>
 
 //----------------------------------------------------------------------------//
 // Helper functions
@@ -62,6 +63,17 @@ void exportOccluders()
   
   implicitly_convertible<TransmittanceMapOccluder::Ptr, 
                          TransmittanceMapOccluder::CPtr>();
+
+  // OtfTransmittanceMapOccluder ---
+
+  class_<OtfTransmittanceMapOccluder, bases<Occluder>, 
+         OtfTransmittanceMapOccluder::Ptr>
+    ("OtfTransmittanceMapOccluder", no_init)
+    .def("__init__", make_constructor(OtfTransmittanceMapOccluder::create))
+    ;
+  
+  implicitly_convertible<OtfTransmittanceMapOccluder::Ptr, 
+                         OtfTransmittanceMapOccluder::CPtr>();
 
 }
 
