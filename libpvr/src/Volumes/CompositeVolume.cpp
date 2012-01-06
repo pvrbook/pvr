@@ -123,6 +123,17 @@ VolumeSample CompositeVolume::sample(const VolumeSampleState &state,
 
 //----------------------------------------------------------------------------//
 
+BBox CompositeVolume::wsBounds() const
+{
+  BBox bounds;
+  for (size_t i = 0, size = m_volumes.size(); i < size; ++i) {
+    bounds.extendBy(m_volumes[i]->wsBounds());
+  }
+  return bounds;
+}
+
+//----------------------------------------------------------------------------//
+
 IntervalVec CompositeVolume::intersect(const RayState &state) const
 {
   IntervalVec intervals;

@@ -86,6 +86,7 @@ public:
   virtual AttrNameVec attributeNames() const;
   virtual VolumeSample sample(const VolumeSampleState &state,
                               const VolumeAttr &attribute) const;
+  virtual BBox wsBounds() const;
   virtual IntervalVec intersect(const RayState &state) const;
   virtual CVec inputs() const;
 

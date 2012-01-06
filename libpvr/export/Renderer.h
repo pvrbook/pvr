@@ -91,6 +91,8 @@ public:
   void addLight(Light::CPtr light);
   //! Prints the scene contents
   void printSceneInfo() const;
+  //! Returns a pointer to the Scene instance
+  Scene::Ptr scene() const;
 
   // Options -------------------------------------------------------------------
 

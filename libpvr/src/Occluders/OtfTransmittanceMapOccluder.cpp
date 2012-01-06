@@ -111,13 +111,11 @@ Color OtfTransmittanceMapOccluder::sample(const OcclusionSampleState &state) con
 void 
 OtfTransmittanceMapOccluder::updatePixel(const size_t x, const size_t y) const
 {
-  // std::cout << "updatePixel " << x << " " << y 
-  //           << std::endl;
-
   RayState state;
   state.wsRay         = setupRay(m_camera, Field3D::discToCont(x), 
                                  Field3D::discToCont(y), PTime(0.0));
   state.rayType       = RayState::TransmittanceOnly;
+  state.rayDepth      = 1;
   state.doOutputDeepT = true;
   state.doOutputDeepL = false;
 
@@ -125,9 +123,6 @@ OtfTransmittanceMapOccluder::updatePixel(const size_t x, const size_t y) const
   m_transmittanceMap.setPixel(x, y, result.transmittanceFunction);
 
   m_computed[offset(x, y)] = 1;
-
-  // std::cout << *(--result.transmittanceFunction->sampleValues().end()) 
-  //           << std::endl;
 }
 
 //----------------------------------------------------------------------------//

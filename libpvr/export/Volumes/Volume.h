@@ -92,6 +92,8 @@ public:
   //! \note The point position is found in state.wsP
   virtual VolumeSample sample(const VolumeSampleState &state,
                               const VolumeAttr &attribute) const = 0;
+  //! Returns an axis-aligned world space bounding box.
+  virtual BBox wsBounds() const = 0;
   //! Returns a vector of intersection intervals (start/end points) that
   //! intersect the ray.
   //! \note The ray is found in state.wsRay

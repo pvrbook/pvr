@@ -168,6 +168,7 @@ public:
   virtual AttrNameVec attributeNames() const;
   virtual VolumeSample sample(const VolumeSampleState &state,
                               const VolumeAttr &attribute) const;
+  virtual BBox wsBounds() const;
   virtual IntervalVec intersect(const RayState &state) const;
   virtual StringVec info() const;
 
@@ -193,6 +194,8 @@ protected:
 
   //! Voxel buffer
   VoxelBuffer::Ptr m_buffer;
+  //! World space bounds
+  BBox m_wsBounds;
   //! Attribute names
   AttrNameVec m_attrNames;
   //! Attribute scaling values

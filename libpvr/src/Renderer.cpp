@@ -176,6 +176,7 @@ void Renderer::addVolume(Volume::CPtr volume)
 {
   if (!m_scene) {
     m_scene = Scene::Ptr(new Scene);
+    RenderGlobals::setScene(m_scene);
   }
   m_scene->volume = volume;
 }
@@ -186,6 +187,7 @@ void Renderer::addLight(Light::CPtr light)
 {
   if (!m_scene) {
     m_scene = Scene::Ptr(new Scene);
+    RenderGlobals::setScene(m_scene);
   }
   m_scene->lights.push_back(light);
 }
@@ -205,6 +207,13 @@ void Renderer::printSceneInfo() const
   Log::print("Scene info:");
   printVolumeInfo(m_scene->volume, 1);
   printLightInfo(m_scene->lights, 1);
+}
+
+//----------------------------------------------------------------------------//
+
+Scene::Ptr Renderer::scene() const
+{
+  return m_scene;
 }
 
 //----------------------------------------------------------------------------//
@@ -264,7 +273,6 @@ void Renderer::execute()
 
   // Initialization ---
 
-  RenderGlobals::setScene(m_scene);
   RenderGlobals::setCamera(m_camera);
 
   m_rng.init(0);

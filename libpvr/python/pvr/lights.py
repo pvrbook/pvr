@@ -64,6 +64,14 @@ def makeLight(renderer, parms, resMult, occlType):
         occluder = TransmittanceMapOccluder(renderer, cam)
     elif occlType == OtfTransmittanceMapOccluder:
         occluder = OtfTransmittanceMapOccluder(renderer, cam)
+    elif occlType == VoxelOccluder:
+        occluder = VoxelOccluder(renderer, parms["position"], 
+                                 int(256 * resMult))
+    elif occlType == OtfVoxelOccluder:
+        occluder = OtfVoxelOccluder(renderer, parms["position"], 
+                                    int(256 * resMult))
+    else:
+        occluder = NullOccluder()
     light.setOccluder(occluder)
     return light
 

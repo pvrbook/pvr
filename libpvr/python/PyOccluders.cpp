@@ -18,6 +18,8 @@
 #include <pvr/Occluders/RaymarchOccluder.h>
 #include <pvr/Occluders/TransmittanceMapOccluder.h>
 #include <pvr/Occluders/OtfTransmittanceMapOccluder.h>
+#include <pvr/Occluders/VoxelOccluder.h>
+#include <pvr/Occluders/OtfVoxelOccluder.h>
 
 //----------------------------------------------------------------------------//
 // Helper functions
@@ -42,6 +44,15 @@ void exportOccluders()
     ;
   
   implicitly_convertible<Occluder::Ptr, Occluder::CPtr>();
+
+  // NullOccluder ---
+
+  class_<NullOccluder, bases<Occluder>, NullOccluder::Ptr>
+    ("NullOccluder", no_init)
+    .def("__init__", make_constructor(NullOccluder::create))
+    ;
+  
+  implicitly_convertible<NullOccluder::Ptr, NullOccluder::CPtr>();
 
   // RaymarchOccluder ---
 
@@ -74,6 +85,28 @@ void exportOccluders()
   
   implicitly_convertible<OtfTransmittanceMapOccluder::Ptr, 
                          OtfTransmittanceMapOccluder::CPtr>();
+
+  // VoxelOccluder ---
+
+  class_<VoxelOccluder, bases<Occluder>, 
+         VoxelOccluder::Ptr>
+    ("VoxelOccluder", no_init)
+    .def("__init__", make_constructor(VoxelOccluder::create))
+    ;
+  
+  implicitly_convertible<VoxelOccluder::Ptr, 
+                         VoxelOccluder::CPtr>();
+
+  // OtfVoxelOccluder ---
+
+  class_<OtfVoxelOccluder, bases<Occluder>, 
+         OtfVoxelOccluder::Ptr>
+    ("OtfVoxelOccluder", no_init)
+    .def("__init__", make_constructor(OtfVoxelOccluder::create))
+    ;
+  
+  implicitly_convertible<OtfVoxelOccluder::Ptr, 
+                         OtfVoxelOccluder::CPtr>();
 
 }
 

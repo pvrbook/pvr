@@ -35,22 +35,6 @@ namespace {
 
   //--------------------------------------------------------------------------//
 
-  using namespace pvr;
-
-  //--------------------------------------------------------------------------//
-
-  //! Checks continuous coordinate against discrete coordinate bounds
-  bool isInBounds(const Vector &vsP, const Imath::Box3i &dataWindow) 
-  {
-    for (int dim = 0; dim < 3; ++dim) {
-      if (vsP[dim] < static_cast<double>(dataWindow.min[dim]) ||
-          vsP[dim] > static_cast<double>(dataWindow.max[dim])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   //--------------------------------------------------------------------------//
 
 } // local namespace
@@ -214,7 +198,7 @@ VolumeSample VoxelVolume::sample(const VolumeSampleState &state,
   Vector vsP;
   m_buffer->mapping()->worldToVoxel(state.wsP, vsP);
 
-  if (!isInBounds(vsP, m_buffer->dataWindow())) {
+  if (!Math::isInBounds(vsP, m_buffer->dataWindow())) {
     return VolumeSample(Colors::zero(), m_phaseFunction);
   }
 
@@ -249,6 +233,13 @@ VolumeSample VoxelVolume::sample(const VolumeSampleState &state,
 
   return VolumeSample(m_attrValues[attribute.index()] * value, 
                       m_phaseFunction);
+}
+
+//----------------------------------------------------------------------------//
+
+BBox VoxelVolume::wsBounds() const
+{
+  return m_wsBounds;
 }
 
 //----------------------------------------------------------------------------//
@@ -327,12 +318,14 @@ void VoxelVolume::setInterpolation(const InterpType interpType)
 
 void VoxelVolume::updateIntersectionHandler()
 {
+  // Error checks
   if (!m_buffer) {
     throw MissingBufferException();
   }
   if (!m_buffer->mapping()) {
     throw MissingMappingException();
   }
+  // Update intersection handler
   MatrixFieldMapping::Ptr matrixMapping = 
     field_dynamic_cast<MatrixFieldMapping>(m_buffer->mapping());
   FrustumFieldMapping::Ptr frustumMapping = 
@@ -343,6 +336,16 @@ void VoxelVolume::updateIntersectionHandler()
     m_intersectionHandler.reset(new FrustumMappingIntersection(frustumMapping));
   } else {
     throw UnsupportedMappingException();
+  }
+  // Update bounds
+  m_wsBounds.makeEmpty();
+  BBox lsBounds = Bounds::zeroOne();
+  std::vector<Vector> lsCorners = Math::cornerPoints(lsBounds);
+  Vector wsP;
+  for (std::vector<Vector>::iterator lsP = lsCorners.begin(), end = lsCorners.end(); 
+       lsP != end; ++lsP) {
+    m_buffer->mapping()->localToWorld(*lsP, wsP);
+    m_wsBounds.extendBy(wsP);
   }
 }
 

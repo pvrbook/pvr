@@ -166,6 +166,18 @@ Imath::Matrix44<T> coordinateSystem(const Imath::Vec3<T> &e1,
                                     const Imath::Vec3<T> &origin);
 
 //----------------------------------------------------------------------------//
+
+//! Coordinate system from bounding box
+template <typename T>
+Imath::Matrix44<T> coordinateSystem(const Imath::Box<Imath::Vec3<T> > &box);
+
+//----------------------------------------------------------------------------//
+
+//! Checks continuous coordinate against discrete coordinate bounds
+template <typename T>
+bool isInBounds(const Imath::Vec3<T> &vsP, const Imath::Box3i &dataWindow);
+
+//----------------------------------------------------------------------------//
 // Template implementations
 //----------------------------------------------------------------------------//
 
@@ -377,6 +389,32 @@ Imath::Matrix44<T> coordinateSystem(const Imath::Vec3<T> &e1,
   m[3][1] = origin.y;
   m[3][2] = origin.z;
   return m;
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+Imath::Matrix44<T> coordinateSystem(const Imath::Box<Imath::Vec3<T> > &box)
+{
+  Imath::Vec3<T> e1(box.max.x - box.min.x, 0, 0);
+  Imath::Vec3<T> e2(0, box.max.y - box.min.y, 0);
+  Imath::Vec3<T> e3(0, 0, box.max.z - box.min.z);
+  Imath::Vec3<T> origin(box.min);
+  return coordinateSystem(e1, e2, e3, origin);
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+bool isInBounds(const Imath::Vec3<T> &vsP, const Imath::Box3i &dataWindow) 
+{
+  for (int dim = 0; dim < 3; ++dim) {
+    if (vsP[dim] < static_cast<double>(dataWindow.min[dim]) ||
+        vsP[dim] > static_cast<double>(dataWindow.max[dim])) {
+      return false;
+    }
+  }
+  return true;
 }
 
 //----------------------------------------------------------------------------//
