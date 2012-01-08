@@ -80,7 +80,8 @@ private:
 
   // Data members --------------------------------------------------------------
 
-  Matrix m_worldToLocal, m_worldToVoxel;
+  // Matrix m_worldToLocal, m_worldToVoxel;
+  Field3D::MatrixFieldMapping::Ptr m_mapping;
 };
 
 //----------------------------------------------------------------------------//
@@ -112,6 +113,47 @@ private:
   //! The six planes that make up the frustum
   //! \note Order of planes: Left, Right, Bottom, Top, Near, Far
   Plane m_planes[6];
+};
+
+//----------------------------------------------------------------------------//
+// EmptySpaceOptimizer
+//----------------------------------------------------------------------------//
+
+class EmptySpaceOptimizer
+{
+public:
+  DECLARE_SMART_PTRS(EmptySpaceOptimizer);
+  virtual IntervalVec optimize(const Ray &wsRay, const PTime time,
+                               const IntervalVec &intervals) const = 0;
+};
+
+//----------------------------------------------------------------------------//
+// SparseOptimizer
+//----------------------------------------------------------------------------//
+
+class SparseOptimizer : public EmptySpaceOptimizer
+{
+public:
+  // Ctor, factory
+  DECLARE_SMART_PTRS(SparseOptimizer);
+  DECLARE_CREATE_FUNC_2_ARG(SparseOptimizer, SparseBuffer::Ptr,
+                            Field3D::MatrixFieldMapping::Ptr);
+  SparseOptimizer(SparseBuffer::Ptr sparse, 
+                  Field3D::MatrixFieldMapping::Ptr mapping)
+    : m_sparse(sparse), m_mapping(mapping)
+  { }
+  // From EmptySpaceOptimizer
+  virtual IntervalVec optimize(const Ray &wsRay, const PTime time,
+                               const IntervalVec &intervals) const;
+private:
+  // Utility methods
+  Interval intervalForRun(const Ray &wsRay, const PTime time,
+                          const Imath::V3i &start, const Imath::V3i &end) const;
+  void intersect(const Ray &wsRay, const PTime time, const Imath::V3i block,
+                 double &t0, double &t1) const;
+  // Private data members
+  SparseBuffer::Ptr m_sparse;
+  Field3D::MatrixFieldMapping::Ptr m_mapping;
 };
 
 //----------------------------------------------------------------------------//
@@ -183,6 +225,8 @@ public:
   void addAttribute(const std::string &attrName, const Imath::V3f &value);
   //! Sets the interpolator type to use for lookups.
   void setInterpolation(const InterpType interpType);
+  //! Sets whether to use empty space optimization.
+  void setUseEmptySpaceOptimization(const bool enabled);
 
 protected:
 
@@ -214,8 +258,17 @@ protected:
   Field3D::GaussianFieldInterp<Imath::V3f> m_gaussInterp;
   //! Mitchell-Netravali interpolator
   Field3D::MitchellFieldInterp<Imath::V3f> m_mitchellInterp;
+  //! Empty space optimizer. May be null.
+  EmptySpaceOptimizer::CPtr m_eso;
+  //! Whether to use empty space optimization
+  bool m_useEmptySpaceOptimization;
 
 };
+
+//----------------------------------------------------------------------------//
+
+Interval makeInterval(const Ray &wsRay, const double t0, const double t1,
+                      Field3D::FieldMapping::Ptr mapping);
 
 //----------------------------------------------------------------------------//
 

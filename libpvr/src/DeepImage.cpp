@@ -81,11 +81,22 @@ Imath::V2i DeepImage::size() const
 //----------------------------------------------------------------------------//
 
 void DeepImage::setPixel(const size_t x, const size_t y, 
-                                const Util::ColorCurve::CPtr func)
+                         const Util::ColorCurve::CPtr func)
 {
   assert(x < m_width && "Pixel x coordinate out of bounds");
   assert(y < m_height && "Pixel y coordinate out of bounds");
+  assert(func != NULL && "Got null pointer for pixel function");
   pixel(x, y) = *func;
+}
+  
+//----------------------------------------------------------------------------//
+
+void DeepImage::setPixel(const size_t x, const size_t y, 
+                         const Color& value)
+{
+  assert(x < m_width && "Pixel x coordinate out of bounds");
+  assert(y < m_height && "Pixel y coordinate out of bounds");
+  pixel(x, y) = Util::ColorCurve(value);
 }
   
 //----------------------------------------------------------------------------//

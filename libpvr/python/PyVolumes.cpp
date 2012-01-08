@@ -64,6 +64,7 @@ void exportVolumes()
     .def("setBuffer",        &VoxelVolume::setBuffer)
     .def("addAttribute",     &VoxelVolume::addAttribute)
     .def("setInterpolation", &VoxelVolume::setInterpolation)
+    .def("setUseEmptySpaceOptimization", &VoxelVolume::setUseEmptySpaceOptimization)
     ;
 
   implicitly_convertible<VoxelVolume::Ptr, VoxelVolume::CPtr>();

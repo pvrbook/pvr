@@ -73,6 +73,9 @@ public:
   //! Sets the transmittance function of a pixel
   void setPixel(const size_t x, const size_t y, 
                 const Util::ColorCurve::CPtr func);
+  //! Sets the transmittance function of a pixel to a single value
+  void setPixel(const size_t x, const size_t y, 
+                const Color &value);
 
   Util::ColorCurve::Ptr 
   pixelFunction(const size_t x, const size_t y) const;
@@ -92,12 +95,10 @@ private:
   // Utility methods -----------------------------------------------------------
 
   //! Returns a const reference to the given pixel's color curve
-  const Util::ColorCurve& pixel(const size_t x, 
-                                           const size_t y) const;
+  const Util::ColorCurve& pixel(const size_t x, const size_t y) const;
 
   //! Returns a reference to the given pixel's color curve.
-  Util::ColorCurve& pixel(const size_t x, 
-                                     const size_t y);
+  Util::ColorCurve& pixel(const size_t x, const size_t y);
 
   // Private data members ------------------------------------------------------
 

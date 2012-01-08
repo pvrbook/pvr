@@ -120,7 +120,12 @@ OtfTransmittanceMapOccluder::updatePixel(const size_t x, const size_t y) const
   state.doOutputDeepL = false;
 
   IntegrationResult result = m_renderer->trace(state);
-  m_transmittanceMap.setPixel(x, y, result.transmittanceFunction);
+
+  if (result.transmittanceFunction) {
+    m_transmittanceMap.setPixel(x, y, result.transmittanceFunction);
+  } else {
+    m_transmittanceMap.setPixel(x, y, Colors::one());
+  }
 
   m_computed[offset(x, y)] = 1;
 }
