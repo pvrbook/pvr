@@ -358,6 +358,10 @@ IntegrationResult Renderer::integrateRay(const float x, const float y,
   // Update the values that are non-default
   state.wsRay         = setupRay(m_camera, x, y, time);
   state.time          = time;
+  if (!m_params.doPrimary) {
+    state.rayType = RayState::TransmittanceOnly;
+    state.rayDepth = 1;
+  }
   state.doOutputDeepT = m_params.doTransmittanceMap;
   state.doOutputDeepL = m_params.doLuminanceMap;
   // Let the Raymarcher do the integration work
