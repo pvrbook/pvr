@@ -78,8 +78,7 @@ UniformMappingIntersection::UniformMappingIntersection
 (Field3D::MatrixFieldMapping::Ptr mapping)
   : m_mapping(mapping)
 {
-  // m_worldToLocal = mapping->localToWorld().inverse();
-  // m_worldToVoxel = mapping->worldToVoxel();
+  
 }
   
 //----------------------------------------------------------------------------//
