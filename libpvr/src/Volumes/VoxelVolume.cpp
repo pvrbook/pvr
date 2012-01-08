@@ -47,6 +47,12 @@ namespace {
       v.y = std::numeric_limits<double>::max();
     if (std::isnan(v.z)) 
       v.z = std::numeric_limits<double>::max();
+    if (std::isinf(v.x)) 
+      v.x = std::numeric_limits<double>::max();
+    if (std::isinf(v.y)) 
+      v.y = std::numeric_limits<double>::max();
+    if (std::isinf(v.z)) 
+      v.z = std::numeric_limits<double>::max();
   }
 
   //--------------------------------------------------------------------------//
@@ -168,11 +174,22 @@ IntervalVec FrustumMappingIntersection::intersect(const Ray &wsRay,
 }
 
 //----------------------------------------------------------------------------//
-// SparseOptimizer
+// SparseUniformOptimizer
 //----------------------------------------------------------------------------//
 
-IntervalVec SparseOptimizer::optimize(const RayState &state, 
-                                      const IntervalVec &intervals) const
+SparseUniformOptimizer::SparseUniformOptimizer
+(SparseBuffer::Ptr sparse, 
+ Field3D::MatrixFieldMapping::Ptr mapping)
+  : m_sparse(sparse), m_mapping(mapping)
+{ 
+
+}
+
+//----------------------------------------------------------------------------//
+
+IntervalVec 
+SparseUniformOptimizer::optimize(const RayState &state, 
+                                 const IntervalVec &intervals) const
 {
   if (intervals.size() != 1) {
     return intervals;
@@ -248,14 +265,21 @@ IntervalVec SparseOptimizer::optimize(const RayState &state,
     result.push_back(intervalForRun(wsRay, time, startRun, last));
   }
 
+#if 0
+  BOOST_FOREACH (const Interval &i, result) {
+    cout << "  " << i.t0 << " " << i.t1 << " " << i.stepLength << endl;
+  }
+#endif
+
   return result;
 }
 
 //----------------------------------------------------------------------------//
 
-Interval SparseOptimizer::intervalForRun(const Ray &wsRay, const PTime time,
-                                         const Imath::V3i &start, 
-                                         const Imath::V3i &end) const
+Interval 
+SparseUniformOptimizer::intervalForRun(const Ray &wsRay, const PTime time,
+                                       const Imath::V3i &start, 
+                                       const Imath::V3i &end) const
 {
   double t0, t1, intT0, intT1;
   intersect(wsRay, time, start, t0, t1);
@@ -267,9 +291,10 @@ Interval SparseOptimizer::intervalForRun(const Ray &wsRay, const PTime time,
 
 //----------------------------------------------------------------------------//
 
-void SparseOptimizer::intersect(const Ray &wsRay, const PTime time, 
-                                const Imath::V3i block,
-                                double &t0, double &t1) const
+void 
+SparseUniformOptimizer::intersect(const Ray &wsRay, const PTime time, 
+                                  const Imath::V3i block,
+                                  double &t0, double &t1) const
 {
   // Transform to local space
   Ray lsRay;
@@ -288,6 +313,16 @@ void SparseOptimizer::intersect(const Ray &wsRay, const PTime time,
 
 //----------------------------------------------------------------------------//
 // SparseFrustumOptimizer
+//----------------------------------------------------------------------------//
+
+SparseFrustumOptimizer::SparseFrustumOptimizer
+(SparseBuffer::Ptr sparse, 
+ Field3D::FrustumFieldMapping::Ptr mapping)
+  : m_sparse(sparse), m_mapping(mapping)
+{ 
+
+}
+
 //----------------------------------------------------------------------------//
 
 IntervalVec 
@@ -523,7 +558,7 @@ void VoxelVolume::setBuffer(VoxelBuffer::Ptr buffer)
     FrustumFieldMapping::Ptr fMapping = 
       field_dynamic_cast<FrustumFieldMapping>(sparse->mapping());
     if (mMapping) {
-      m_eso = SparseOptimizer::create(sparse, mMapping);
+      m_eso = SparseUniformOptimizer::create(sparse, mMapping);
     } else if (fMapping) {
       m_eso = SparseFrustumOptimizer::create(sparse, fMapping);
     }

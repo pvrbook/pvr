@@ -19,7 +19,7 @@ import pvr.renderers
 
 reduceRes  =    4
 instanceMult =  0.1
-bufferRes =     V3i(1024 / reduceRes, 1024 / reduceRes, 1024 / reduceRes)
+bufferRes =     1024 / reduceRes
 camResMult =    1 / float(reduceRes)
 lightResMult =  1 / float(reduceRes)
 
@@ -88,7 +88,7 @@ modeler.addInput(input)
 
 # Prep for modeling
 modeler.updateBounds()
-modeler.setResolution(bufferRes.x, bufferRes.y, bufferRes.z)
+modeler.setResolution(bufferRes)
 
 # Execute modeler
 modeler.execute()

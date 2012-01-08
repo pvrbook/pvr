@@ -122,39 +122,58 @@ private:
 class EmptySpaceOptimizer : public Util::ParamBase
 {
 public:
+
+  // Typedefs ------------------------------------------------------------------
+
   DECLARE_SMART_PTRS(EmptySpaceOptimizer);
+
+  // To be implemented by subclasses -------------------------------------------
+
   virtual IntervalVec optimize(const RayState &state, 
                                const IntervalVec &intervals) const = 0;
 };
 
 //----------------------------------------------------------------------------//
-// SparseOptimizer
+// SparseUniformOptimizer
 //----------------------------------------------------------------------------//
 
-class SparseOptimizer : public EmptySpaceOptimizer
+class SparseUniformOptimizer : public EmptySpaceOptimizer
 {
 public:
-  // Ctor, factory
-  DECLARE_SMART_PTRS(SparseOptimizer);
-  DECLARE_CREATE_FUNC_2_ARG(SparseOptimizer, SparseBuffer::Ptr,
+
+  // Typedefs ------------------------------------------------------------------
+
+  DECLARE_SMART_PTRS(SparseUniformOptimizer);
+
+  // Ctor, factory -------------------------------------------------------------
+
+  DECLARE_CREATE_FUNC_2_ARG(SparseUniformOptimizer, SparseBuffer::Ptr,
                             Field3D::MatrixFieldMapping::Ptr);
-  SparseOptimizer(SparseBuffer::Ptr sparse, 
-                  Field3D::MatrixFieldMapping::Ptr mapping)
-    : m_sparse(sparse), m_mapping(mapping)
-  { }
-  // From ParamBase
+  SparseUniformOptimizer(SparseBuffer::Ptr sparse, 
+                         Field3D::MatrixFieldMapping::Ptr mapping);
+
+  // From ParamBase ------------------------------------------------------------
+
   virtual std::string typeName() const
-  { return "SparseOptimizer"; }
-  // From EmptySpaceOptimizer
+  { return "SparseUniformOptimizer"; }
+
+  // From EmptySpaceOptimizer --------------------------------------------------
+
   virtual IntervalVec optimize(const RayState &state, 
                                const IntervalVec &intervals) const;
 private:
-  // Utility methods
+
+  // Utility methods -----------------------------------------------------------
+
+  //! Constructs an Interval given the start and end blocks along the ray
   Interval intervalForRun(const Ray &wsRay, const PTime time,
                           const Imath::V3i &start, const Imath::V3i &end) const;
+  //! Intersects the ray with the given sparse block
   void intersect(const Ray &wsRay, const PTime time, const Imath::V3i block,
                  double &t0, double &t1) const;
-  // Private data members
+
+  // Private data members ------------------------------------------------------
+
   SparseBuffer::Ptr m_sparse;
   Field3D::MatrixFieldMapping::Ptr m_mapping;
 };
@@ -166,26 +185,37 @@ private:
 class SparseFrustumOptimizer : public EmptySpaceOptimizer
 {
 public:
-  // Ctor, factory
+
+  // Typedefs ------------------------------------------------------------------
+
   DECLARE_SMART_PTRS(SparseFrustumOptimizer);
+
+  // Ctor, factory -------------------------------------------------------------
+
   DECLARE_CREATE_FUNC_2_ARG(SparseFrustumOptimizer, SparseBuffer::Ptr,
                             Field3D::FrustumFieldMapping::Ptr);
   SparseFrustumOptimizer(SparseBuffer::Ptr sparse, 
-                         Field3D::FrustumFieldMapping::Ptr mapping)
-    : m_sparse(sparse), m_mapping(mapping)
-  { }
-  // From ParamBase
+                         Field3D::FrustumFieldMapping::Ptr mapping);
+
+  // From ParamBase ------------------------------------------------------------
+
   virtual std::string typeName() const
   { return "SparseFrustumOptimizer"; }
-  // From EmptySpaceOptimizer
+
+  // From EmptySpaceOptimizer --------------------------------------------------
+
   virtual IntervalVec optimize(const RayState &state, 
                                const IntervalVec &intervals) const;
 private:
-  // Utility methods
+
+  // Utility methods -----------------------------------------------------------
+
   Interval intervalForRun(const Ray &wsRay, const PTime time, 
                           const Vector &vsFirst, 
                           const int start, const int end) const;
-  // Private data members
+
+  // Private data members ------------------------------------------------------
+
   SparseBuffer::Ptr m_sparse;
   Field3D::FrustumFieldMapping::Ptr m_mapping;
 };
