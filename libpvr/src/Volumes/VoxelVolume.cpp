@@ -160,7 +160,7 @@ IntervalVec FrustumMappingIntersection::intersect(const Ray &wsRay,
 // SparseOptimizer
 //----------------------------------------------------------------------------//
 
-IntervalVec SparseOptimizer::optimize(const Ray &wsRay, const PTime time,
+IntervalVec SparseOptimizer::optimize(const RayState &state, 
                                       const IntervalVec &intervals) const
 {
   if (intervals.size() != 1) {
@@ -168,6 +168,8 @@ IntervalVec SparseOptimizer::optimize(const Ray &wsRay, const PTime time,
   }
 
   IntervalVec result;
+  const Ray &wsRay = state.wsRay;
+  const PTime &time = state.time;
 
   // Find start and end voxel
   Vector wsStart = wsRay(intervals[0].t0);
@@ -246,6 +248,7 @@ IntervalVec SparseOptimizer::optimize(const Ray &wsRay, const PTime time,
 
   return result;
 }
+
 //----------------------------------------------------------------------------//
 
 Interval SparseOptimizer::intervalForRun(const Ray &wsRay, const PTime time,
@@ -276,11 +279,93 @@ void SparseOptimizer::intersect(const Ray &wsRay, const PTime time,
   BBox vsBox(box.min, box.max + V3i(1)), lsBox;
   m_mapping->voxelToLocal(vsBox.min, lsBox.min);
   m_mapping->voxelToLocal(vsBox.max, lsBox.max);
-  if(Math::intersect(lsRay, lsBox, t0, t1)){
+  Math::intersect(lsRay, lsBox, t0, t1);
+}
 
-  } else {
-    cout << "  Shit, missed" << endl;
+//----------------------------------------------------------------------------//
+// SparseFrustumOptimizer
+//----------------------------------------------------------------------------//
+
+IntervalVec 
+SparseFrustumOptimizer::optimize(const RayState &state, 
+                                 const IntervalVec &intervals) const
+{
+  if (intervals.size() != 1) {
+    return intervals;
   }
+
+  if (state.rayType != RayState::FullRaymarch ||
+      state.rayDepth != 0) {
+    return intervals;
+  }
+
+  IntervalVec result;
+  const Ray &wsRay = state.wsRay;
+  const PTime &time = state.time;
+
+  // Find start voxel
+  Vector wsStart = wsRay(intervals[0].t0);
+  Vector wsEnd = wsRay(intervals[0].t1);
+  Vector vsStart, vsEnd;
+  m_sparse->mapping()->worldToVoxel(wsStart, vsStart);
+  m_sparse->mapping()->worldToVoxel(wsEnd, vsEnd);
+  V3i in(vsStart), out(vsEnd);
+  Box3i extents = m_sparse->extents();
+  in.x = clamp(in.x, extents.min.x, extents.max.x);
+  in.y = clamp(in.y, extents.min.y, extents.max.y);
+  in.z = clamp(in.z, extents.min.z, extents.max.z);
+  out.x = clamp(out.x, extents.min.x, extents.max.x);
+  out.y = clamp(out.y, extents.min.y, extents.max.y);
+  out.z = clamp(out.z, extents.min.z, extents.max.z);
+
+  // Find start and end block
+  V3i bStart, bEnd;
+  m_sparse->getBlockCoord(in.x, in.y, in.z, bStart.x, bStart.y, bStart.z);
+  m_sparse->getBlockCoord(out.x, out.y, out.z, bEnd.x, bEnd.y, bEnd.z);
+  int x = bStart.x, y = bStart.y, z = bStart.z;
+
+  bool run = m_sparse->blockIsAllocated(x, y, z);
+  int startRun = z, last;
+
+  for (; z <= bEnd.z; z++) {
+    if (m_sparse->blockIsAllocated(x, y, z)) {
+      if (!run) {
+        startRun = z;
+        run = true;
+      }
+    } else {
+      if (run) {
+        result.push_back(intervalForRun(wsRay, time, vsStart, startRun, last));
+        run = false;
+      }
+    }
+    last = z;
+  }
+
+  if (run) {
+    result.push_back(intervalForRun(wsRay, time, vsStart, startRun, last));
+  }
+
+  return result;
+}
+
+//----------------------------------------------------------------------------//
+
+Interval 
+SparseFrustumOptimizer::intervalForRun(const Ray &wsRay, const PTime time,
+                                       const Vector &vsFirst, 
+                                       const int start, const int end) const
+{
+  double vsStartZ = start * m_sparse->blockSize();
+  double vsEndZ = (end + 1) * m_sparse->blockSize();
+  Vector vsStart(vsFirst.x, vsFirst.y, vsStartZ);
+  Vector vsEnd(vsFirst.x, vsFirst.y, vsEndZ);
+  Vector wsStart, wsEnd;
+  m_mapping->voxelToWorld(vsStart, wsStart);
+  m_mapping->voxelToWorld(vsEnd, wsEnd);
+  double t0 = (wsStart - wsRay.pos).length();
+  double t1 = (wsEnd - wsRay.pos).length();
+  return makeInterval(wsRay, t0, t1, m_mapping);
 }
 
 //----------------------------------------------------------------------------//
@@ -377,7 +462,7 @@ IntervalVec VoxelVolume::intersect(const RayState &state) const
   assert (m_intersectionHandler && "Missing intersection handler");
   if (m_eso && m_useEmptySpaceOptimization) {
     IntervalVec i = m_intersectionHandler->intersect(state.wsRay, state.time);
-    return m_eso->optimize(state.wsRay, state.time, i);                   
+    return m_eso->optimize(state, i);                   
   } else {
     return m_intersectionHandler->intersect(state.wsRay, state.time);
   }
@@ -391,8 +476,11 @@ Volume::StringVec VoxelVolume::info() const
   for (size_t i = 0, size = m_attrNames.size(); i < size; ++i) {
     info.push_back(m_attrNames[i] + " : " + str(m_attrValues[i]));
   }
-  info.push_back("Empty space optimization: " + 
-                 str(m_useEmptySpaceOptimization));
+  if (m_useEmptySpaceOptimization) {
+    info.push_back("Empty space optimization: " + m_eso->typeName());
+  } else {
+    info.push_back("Empty space optimization disabled");
+  }
   return info;
 }
 
@@ -433,10 +521,14 @@ void VoxelVolume::setBuffer(VoxelBuffer::Ptr buffer)
   updateIntersectionHandler();
   SparseBuffer::Ptr sparse = field_dynamic_cast<SparseBuffer>(buffer);
   if (sparse) {
-    MatrixFieldMapping::Ptr mapping = 
+    MatrixFieldMapping::Ptr mMapping = 
       field_dynamic_cast<MatrixFieldMapping>(sparse->mapping());
-    if (mapping) {
-      m_eso = SparseOptimizer::create(sparse, mapping);
+    FrustumFieldMapping::Ptr fMapping = 
+      field_dynamic_cast<FrustumFieldMapping>(sparse->mapping());
+    if (mMapping) {
+      m_eso = SparseOptimizer::create(sparse, mMapping);
+    } else if (fMapping) {
+      m_eso = SparseFrustumOptimizer::create(sparse, fMapping);
     }
   }
 }

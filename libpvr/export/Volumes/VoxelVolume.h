@@ -119,11 +119,11 @@ private:
 // EmptySpaceOptimizer
 //----------------------------------------------------------------------------//
 
-class EmptySpaceOptimizer
+class EmptySpaceOptimizer : public Util::ParamBase
 {
 public:
   DECLARE_SMART_PTRS(EmptySpaceOptimizer);
-  virtual IntervalVec optimize(const Ray &wsRay, const PTime time,
+  virtual IntervalVec optimize(const RayState &state, 
                                const IntervalVec &intervals) const = 0;
 };
 
@@ -142,8 +142,11 @@ public:
                   Field3D::MatrixFieldMapping::Ptr mapping)
     : m_sparse(sparse), m_mapping(mapping)
   { }
+  // From ParamBase
+  virtual std::string typeName() const
+  { return "SparseOptimizer"; }
   // From EmptySpaceOptimizer
-  virtual IntervalVec optimize(const Ray &wsRay, const PTime time,
+  virtual IntervalVec optimize(const RayState &state, 
                                const IntervalVec &intervals) const;
 private:
   // Utility methods
@@ -154,6 +157,37 @@ private:
   // Private data members
   SparseBuffer::Ptr m_sparse;
   Field3D::MatrixFieldMapping::Ptr m_mapping;
+};
+
+//----------------------------------------------------------------------------//
+// SparseFrustumOptimizer
+//----------------------------------------------------------------------------//
+
+class SparseFrustumOptimizer : public EmptySpaceOptimizer
+{
+public:
+  // Ctor, factory
+  DECLARE_SMART_PTRS(SparseFrustumOptimizer);
+  DECLARE_CREATE_FUNC_2_ARG(SparseFrustumOptimizer, SparseBuffer::Ptr,
+                            Field3D::FrustumFieldMapping::Ptr);
+  SparseFrustumOptimizer(SparseBuffer::Ptr sparse, 
+                         Field3D::FrustumFieldMapping::Ptr mapping)
+    : m_sparse(sparse), m_mapping(mapping)
+  { }
+  // From ParamBase
+  virtual std::string typeName() const
+  { return "SparseFrustumOptimizer"; }
+  // From EmptySpaceOptimizer
+  virtual IntervalVec optimize(const RayState &state, 
+                               const IntervalVec &intervals) const;
+private:
+  // Utility methods
+  Interval intervalForRun(const Ray &wsRay, const PTime time, 
+                          const Vector &vsFirst, 
+                          const int start, const int end) const;
+  // Private data members
+  SparseBuffer::Ptr m_sparse;
+  Field3D::FrustumFieldMapping::Ptr m_mapping;
 };
 
 //----------------------------------------------------------------------------//
