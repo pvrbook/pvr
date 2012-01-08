@@ -141,10 +141,7 @@ public:
   // Constructor, factory ------------------------------------------------------
 
   //! Default constructor, requires the eccentricity parameter
-  HenyeyGreenstein(float g)
-    : m_g(Imath::clamp(g, -1.0f, 1.0f))
-  { }
-
+  HenyeyGreenstein(float g);
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
   DECLARE_CREATE_FUNC_1_ARG(HenyeyGreenstein, float);
@@ -181,13 +178,8 @@ public:
 
   // Constructor, factory ------------------------------------------------------
 
-  //! Default constructor, requires the eccentricity parameter
-  DoubleHenyeyGreenstein(float g1, float g2, float blend)
-    : m_g1(Imath::clamp(g1, -1.0f, 1.0f)),
-      m_g2(Imath::clamp(g2, -1.0f, 1.0f)),
-      m_blend(Imath::clamp(blend, 0.0f, 1.0f))
-  { }
-
+  //! Default constructor, requires the eccentricity parameters and blend
+  DoubleHenyeyGreenstein(float g1, float g2, float blend);
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
   DECLARE_CREATE_FUNC_3_ARG(DoubleHenyeyGreenstein, float, float, float);

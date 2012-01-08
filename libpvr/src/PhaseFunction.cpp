@@ -75,6 +75,14 @@ float Isotropic::probability(const Vector &in, const Vector &out) const
 // HenyeyGreenstein
 //----------------------------------------------------------------------------//
 
+HenyeyGreenstein::HenyeyGreenstein(float g)
+  : m_g(Imath::clamp(g, -1.0f, 1.0f))
+{ 
+
+}
+
+//----------------------------------------------------------------------------//
+
 float HenyeyGreenstein::probability(const Vector &in, const Vector &out) const
 {
   const float cosTheta = in.dot(out);
@@ -84,6 +92,16 @@ float HenyeyGreenstein::probability(const Vector &in, const Vector &out) const
 
 //----------------------------------------------------------------------------//
 // DoubleHenyeyGreenstein
+//----------------------------------------------------------------------------//
+
+DoubleHenyeyGreenstein::DoubleHenyeyGreenstein(float g1, float g2, float blend)
+  : m_g1(Imath::clamp(g1, -1.0f, 1.0f)),
+    m_g2(Imath::clamp(g2, -1.0f, 1.0f)),
+    m_blend(Imath::clamp(blend, 0.0f, 1.0f))
+{ 
+
+}
+
 //----------------------------------------------------------------------------//
 
 float DoubleHenyeyGreenstein::probability(const Vector &in, 
