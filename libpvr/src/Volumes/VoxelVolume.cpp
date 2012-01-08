@@ -51,6 +51,17 @@ namespace {
 
   //--------------------------------------------------------------------------//
 
+  void worldToBlock(Field3D::MatrixFieldMapping::Ptr mapping, 
+                    const int blockSize, const pvr::Ray &wsRay, pvr::Ray &bsRay)
+  {
+    mapping->worldToVoxel(wsRay.pos, bsRay.pos);
+    mapping->worldToVoxelDir(wsRay.dir, bsRay.dir);
+    bsRay.pos /= static_cast<double>(blockSize);
+    bsRay.dir /= static_cast<double>(blockSize);
+  }
+
+  //--------------------------------------------------------------------------//
+
 } // local namespace
 
 //----------------------------------------------------------------------------//
@@ -168,18 +179,14 @@ IntervalVec SparseOptimizer::optimize(const RayState &state,
   }
 
   IntervalVec result;
+
   const Ray &wsRay = state.wsRay;
   const PTime &time = state.time;
 
-  // Find start and end voxel
-  Vector wsStart = wsRay(intervals[0].t0);
-  Vector vsStart;
+  // Find start voxel
+  Vector wsStart = wsRay(intervals[0].t0), vsStart;
   m_sparse->mapping()->worldToVoxel(wsStart, vsStart);
-  V3i in(vsStart);
-  Box3i extents = m_sparse->extents();
-  in.x = clamp(in.x, extents.min.x, extents.max.x);
-  in.y = clamp(in.y, extents.min.y, extents.max.y);
-  in.z = clamp(in.z, extents.min.z, extents.max.z);
+  V3i in = Imath::clip(V3i(vsStart), m_sparse->extents());
 
   // Find start block
   V3i bStart;
@@ -187,13 +194,8 @@ IntervalVec SparseOptimizer::optimize(const RayState &state,
 
   // Find runs along ray ---
 
-  V3i last(bStart), startRun(bStart);
-
   Ray bsRay;
-  m_mapping->worldToVoxel(wsRay.pos, bsRay.pos);
-  m_mapping->worldToVoxelDir(wsRay.dir, bsRay.dir);
-  bsRay.pos /= m_sparse->blockSize();
-  bsRay.dir /= m_sparse->blockSize();
+  worldToBlock(m_mapping, m_sparse->blockSize(), wsRay, bsRay);
   
   // Implementation is based on:
   // "A Fast Voxel Traversal Algorithm for Ray Tracing"
@@ -202,16 +204,16 @@ IntervalVec SparseOptimizer::optimize(const RayState &state,
 
   int x = bStart.x, y = bStart.y, z = bStart.z;
   int sX = sign(bsRay.dir.x), sY = sign(bsRay.dir.y), sZ = sign(bsRay.dir.z);
-  V3i cell(x + (sX > 0 ? 1 : 0), y + (sY > 0 ? 1 : 0), z + (sZ > 0 ? 1 : 0));
 
-  Vector tMax((cell.x - bsRay.pos.x) / bsRay.dir.x,
-              (cell.y - bsRay.pos.y) / bsRay.dir.y,
-              (cell.z - bsRay.pos.z) / bsRay.dir.z);
+  Vector cell(x + (sX > 0 ? 1 : 0), y + (sY > 0 ? 1 : 0), z + (sZ > 0 ? 1 : 0));
+  Vector tMax((cell - bsRay.pos) / bsRay.dir);
   Vector tDelta(sX / bsRay.dir.x, sY / bsRay.dir.y, sZ / bsRay.dir.z);
+
   handleNaN(tMax);
   handleNaN(tDelta);
 
   bool run = m_sparse->blockIsAllocated(x, y, z);
+  V3i last(bStart), startRun(bStart);
 
   while (m_sparse->blockIndexIsValid(x, y, z)) {
 
@@ -269,9 +271,11 @@ void SparseOptimizer::intersect(const Ray &wsRay, const PTime time,
                                 const Imath::V3i block,
                                 double &t0, double &t1) const
 {
+  // Transform to local space
   Ray lsRay;
   m_mapping->worldToLocal(wsRay.pos, lsRay.pos);
   m_mapping->worldToLocalDir(wsRay.dir, lsRay.dir);
+  // Intersect in local space
   Imath::Box3i box;
   int blockSz = m_sparse->blockSize();
   box.min = V3i(block.x * blockSz, block.y * blockSz, block.z * blockSz);
@@ -303,25 +307,18 @@ SparseFrustumOptimizer::optimize(const RayState &state,
   const Ray &wsRay = state.wsRay;
   const PTime &time = state.time;
 
-  // Find start voxel
-  Vector wsStart = wsRay(intervals[0].t0);
-  Vector wsEnd = wsRay(intervals[0].t1);
+  // Find start and end voxel
   Vector vsStart, vsEnd;
-  m_sparse->mapping()->worldToVoxel(wsStart, vsStart);
-  m_sparse->mapping()->worldToVoxel(wsEnd, vsEnd);
-  V3i in(vsStart), out(vsEnd);
-  Box3i extents = m_sparse->extents();
-  in.x = clamp(in.x, extents.min.x, extents.max.x);
-  in.y = clamp(in.y, extents.min.y, extents.max.y);
-  in.z = clamp(in.z, extents.min.z, extents.max.z);
-  out.x = clamp(out.x, extents.min.x, extents.max.x);
-  out.y = clamp(out.y, extents.min.y, extents.max.y);
-  out.z = clamp(out.z, extents.min.z, extents.max.z);
+  m_sparse->mapping()->worldToVoxel(wsRay(intervals[0].t0), vsStart);
+  m_sparse->mapping()->worldToVoxel(wsRay(intervals[0].t1), vsEnd);
+  V3i in = Imath::clip(V3i(vsStart), m_sparse->extents());
+  V3i out = Imath::clip(V3i(vsEnd), m_sparse->extents());
 
   // Find start and end block
   V3i bStart, bEnd;
   m_sparse->getBlockCoord(in.x, in.y, in.z, bStart.x, bStart.y, bStart.z);
   m_sparse->getBlockCoord(out.x, out.y, out.z, bEnd.x, bEnd.y, bEnd.z);
+
   int x = bStart.x, y = bStart.y, z = bStart.z;
 
   bool run = m_sparse->blockIsAllocated(x, y, z);
