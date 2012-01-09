@@ -33,40 +33,58 @@
 
 namespace {
 
-  //--------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 
-  int sign(int x) { return (x > 0) - (x < 0); }
+int sign(int x) { return (x > 0) - (x < 0); }
 
-  //--------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 
-  void handleNaN(pvr::Vector &v) 
-  {
-    if (std::isnan(v.x)) 
-      v.x = std::numeric_limits<double>::max();
-    if (std::isnan(v.y)) 
-      v.y = std::numeric_limits<double>::max();
-    if (std::isnan(v.z)) 
-      v.z = std::numeric_limits<double>::max();
-    if (std::isinf(v.x)) 
-      v.x = std::numeric_limits<double>::max();
-    if (std::isinf(v.y)) 
-      v.y = std::numeric_limits<double>::max();
-    if (std::isinf(v.z)) 
-      v.z = std::numeric_limits<double>::max();
+void handleNaN(pvr::Vector &v) 
+{
+  if (std::isnan(v.x)) 
+    v.x = std::numeric_limits<double>::max();
+  if (std::isnan(v.y)) 
+    v.y = std::numeric_limits<double>::max();
+  if (std::isnan(v.z)) 
+    v.z = std::numeric_limits<double>::max();
+  if (std::isinf(v.x)) 
+    v.x = std::numeric_limits<double>::max();
+  if (std::isinf(v.y)) 
+    v.y = std::numeric_limits<double>::max();
+  if (std::isinf(v.z)) 
+    v.z = std::numeric_limits<double>::max();
+}
+
+//----------------------------------------------------------------------------//
+
+void worldToBlock(Field3D::MatrixFieldMapping::Ptr mapping, 
+                  const int blockSize, const pvr::Ray &wsRay, 
+                  pvr::Ray &bsRay)
+{
+  mapping->worldToVoxel(wsRay.pos, bsRay.pos);
+  mapping->worldToVoxelDir(wsRay.dir, bsRay.dir);
+  bsRay.pos /= static_cast<double>(blockSize);
+  bsRay.dir /= static_cast<double>(blockSize);
+}
+
+//----------------------------------------------------------------------------//
+
+void stepToNextBlock(const pvr::Vector &tDelta, const Imath::V3i &sgn, 
+                     pvr::Vector &tMax, int &x, int &y, int &z)
+{
+  if (tMax.x < tMax.y && tMax.x < tMax.z) {
+    x += sgn.x;
+    tMax.x += tDelta.x;
+  } else if (tMax.y < tMax.z) {
+    y += sgn.y;
+    tMax.y += tDelta.y;
+  } else {
+    z += sgn.z;
+    tMax.z += tDelta.z;
   }
+}
 
-  //--------------------------------------------------------------------------//
-
-  void worldToBlock(Field3D::MatrixFieldMapping::Ptr mapping, 
-                    const int blockSize, const pvr::Ray &wsRay, pvr::Ray &bsRay)
-  {
-    mapping->worldToVoxel(wsRay.pos, bsRay.pos);
-    mapping->worldToVoxelDir(wsRay.dir, bsRay.dir);
-    bsRay.pos /= static_cast<double>(blockSize);
-    bsRay.dir /= static_cast<double>(blockSize);
-  }
-
-  //--------------------------------------------------------------------------//
+//----------------------------------------------------------------------------//
 
 } // local namespace
 
@@ -187,7 +205,7 @@ SparseUniformOptimizer::SparseUniformOptimizer
 
 //----------------------------------------------------------------------------//
 
-IntervalVec 
+IntervalVec
 SparseUniformOptimizer::optimize(const RayState &state, 
                                  const IntervalVec &intervals) const
 {
@@ -209,31 +227,39 @@ SparseUniformOptimizer::optimize(const RayState &state,
   V3i bStart;
   m_sparse->getBlockCoord(in.x, in.y, in.z, bStart.x, bStart.y, bStart.z);
 
-  // Find runs along ray ---
-
+  // Transform ray to block space
   Ray bsRay;
   worldToBlock(m_mapping, m_sparse->blockSize(), wsRay, bsRay);
   
+  // Find runs along ray ---
+
   // Implementation is based on:
   // "A Fast Voxel Traversal Algorithm for Ray Tracing"
   // John Amanatides, Andrew Woo
   // http://www.cse.yorku.ca/~amana/research/grid.pdf
 
+  // Current block
   int x = bStart.x, y = bStart.y, z = bStart.z;
-  int sX = sign(bsRay.dir.x), sY = sign(bsRay.dir.y), sZ = sign(bsRay.dir.z);
-
-  Vector cell(x + (sX > 0 ? 1 : 0), y + (sY > 0 ? 1 : 0), z + (sZ > 0 ? 1 : 0));
+  // Direction to step
+  V3i sgn(sign(bsRay.dir.x), sign(bsRay.dir.y), sign(bsRay.dir.z));
+  // Whether to look at positive or negative side of block
+  Vector cell(x + (sgn.x > 0 ? 1 : 0), 
+              y + (sgn.y > 0 ? 1 : 0), 
+              z + (sgn.z > 0 ? 1 : 0));
+  // Distance we could step in each direction, at most
   Vector tMax((cell - bsRay.pos) / bsRay.dir);
-  Vector tDelta(sX / bsRay.dir.x, sY / bsRay.dir.y, sZ / bsRay.dir.z);
-
+  // Size of one step in each dimension
+  Vector tDelta(sgn.x / bsRay.dir.x, sgn.y / bsRay.dir.y, sgn.z / bsRay.dir.z);
+  // Ensure there are no inf's or nan's
   handleNaN(tMax);
   handleNaN(tDelta);
-
+  // Check if first block starts a run
   bool run = m_sparse->blockIsAllocated(x, y, z);
+  // Keep track of start-of-run and last visited block
   V3i last(bStart), startRun(bStart);
 
+  // Traverse blocks
   while (m_sparse->blockIndexIsValid(x, y, z)) {
-
     if (m_sparse->blockIsAllocated(x, y, z)) {
       if (!run) {
         startRun = V3i(x, y, z);
@@ -245,38 +271,20 @@ SparseUniformOptimizer::optimize(const RayState &state,
         run = false;
       }
     }
-
-    last = V3i(x, y, z);
- 
-    if (tMax.x < tMax.y && tMax.x < tMax.z) {
-      x += sX;
-      tMax.x += tDelta.x;
-    } else if (tMax.y < tMax.z) {
-      y += sY;
-      tMax.y += tDelta.y;
-    } else {
-      z += sZ;
-      tMax.z += tDelta.z;
-    }
-
+    last = V3i(x, y, z);    
+    stepToNextBlock(tDelta, sgn, tMax, x, y, z);
   }
 
   if (run) {
     result.push_back(intervalForRun(wsRay, time, startRun, last));
   }
 
-#if 0
-  BOOST_FOREACH (const Interval &i, result) {
-    cout << "  " << i.t0 << " " << i.t1 << " " << i.stepLength << endl;
-  }
-#endif
-
   return result;
 }
 
 //----------------------------------------------------------------------------//
 
-Interval 
+Interval
 SparseUniformOptimizer::intervalForRun(const Ray &wsRay, const PTime time,
                                        const Imath::V3i &start, 
                                        const Imath::V3i &end) const
@@ -291,7 +299,7 @@ SparseUniformOptimizer::intervalForRun(const Ray &wsRay, const PTime time,
 
 //----------------------------------------------------------------------------//
 
-void 
+void
 SparseUniformOptimizer::intersect(const Ray &wsRay, const PTime time, 
                                   const Imath::V3i block,
                                   double &t0, double &t1) const
@@ -325,7 +333,7 @@ SparseFrustumOptimizer::SparseFrustumOptimizer
 
 //----------------------------------------------------------------------------//
 
-IntervalVec 
+IntervalVec
 SparseFrustumOptimizer::optimize(const RayState &state, 
                                  const IntervalVec &intervals) const
 {
@@ -354,11 +362,14 @@ SparseFrustumOptimizer::optimize(const RayState &state,
   m_sparse->getBlockCoord(in.x, in.y, in.z, bStart.x, bStart.y, bStart.z);
   m_sparse->getBlockCoord(out.x, out.y, out.z, bEnd.x, bEnd.y, bEnd.z);
 
+  // Current block
   int x = bStart.x, y = bStart.y, z = bStart.z;
-
+  // Check if first block starts a run
   bool run = m_sparse->blockIsAllocated(x, y, z);
-  int startRun = z, last;
+  // Keep track of start-of-run and last visited block
+  int startRun = z, last = z;
 
+  // Traverse row of blocks
   for (; z <= bEnd.z; z++) {
     if (m_sparse->blockIsAllocated(x, y, z)) {
       if (!run) {
