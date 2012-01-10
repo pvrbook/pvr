@@ -362,6 +362,11 @@ SparseFrustumOptimizer::optimize(const RayState &state,
   m_sparse->getBlockCoord(in.x, in.y, in.z, bStart.x, bStart.y, bStart.z);
   m_sparse->getBlockCoord(out.x, out.y, out.z, bEnd.x, bEnd.y, bEnd.z);
 
+  // Ensure ray travels down z axis
+  if (bStart.x != bEnd.x || bStart.y != bEnd.y) {
+    return intervals;
+  }
+
   // Current block
   int x = bStart.x, y = bStart.y, z = bStart.z;
   // Check if first block starts a run
