@@ -110,6 +110,11 @@ Volume::StringVec ConstantVolume::info() const
 void ConstantVolume::addAttribute(const std::string &attrName, 
                                const Imath::V3f &value)
 {
+  // No need to add an attribute whose value is zero.
+  if (Math::max(value) == 0.0) {
+    return;
+  }
+
   m_attrNames.push_back(attrName);
   m_attrValues.push_back(value);
   m_maxAttrValue = std::max(m_maxAttrValue, Math::max(value));
