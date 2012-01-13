@@ -19,9 +19,13 @@
 
 // Library includes
 
+#include <OpenEXR/ImathMatrix.h>
+
 #include <pvr/Exception.h>
 #include <pvr/Log.h>
 #include <pvr/Types.h>
+
+#include "Common.h"
 
 //----------------------------------------------------------------------------//
 // Namespaces
@@ -231,6 +235,26 @@ void exportTypes()
     .def_readwrite("b", &Color::z)
     ;
 
+  // Matrix ---
+
+  const Imath::M44d& (Imath::M44d::*setEulerHelper)(const Imath::V3f&) = 
+    &Imath::M44d::setEulerAngles;
+  const Imath::M44d& (Imath::M44d::*setAxisHelper)(const Imath::V3f&, float) = 
+    &Imath::M44d::setAxisAngle;
+  const Imath::M44d& (Imath::M44d::*scaleHelper)(const Imath::V3f&) = 
+    &Imath::M44d::scale;
+  const Imath::M44d& (Imath::M44d::*translateHelper)(const Imath::V3f&) = 
+    &Imath::M44d::translate;
+  class_<Imath::Matrix44<double> >("Matrix")
+    .def(self * self)
+    .def("invert",         &Imath::M44d::invert, bpRetNone())
+    .def("setEulerAngles", setEulerHelper,       bpRetNone())
+    .def("setAxisAngle",   setAxisHelper,        bpRetNone())
+    .def("makeIdentity",   &Imath::M44d::makeIdentity)
+    .def("scale",          scaleHelper,          bpRetNone()) 
+    .def("translate",      translateHelper,      bpRetNone())
+    ;
+
   // Euler ---
 
   class_<Euler>("Euler")
@@ -254,6 +278,7 @@ void exportTypes()
     .def(init<Vector>())
     .def(init<Vector, Vector>())
     .def("__str__",       &BBox_str)
+    .def("size",          &BBox::size)
     .def_readwrite("min", &BBox::min)
     .def_readwrite("max", &BBox::max)
     ;

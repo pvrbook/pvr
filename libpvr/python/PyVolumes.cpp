@@ -16,6 +16,7 @@
 
 #include <pvr/Volumes/FractalCloud.h>
 #include <pvr/Volumes/CompositeVolume.h>
+#include <pvr/Volumes/ConstantVolume.h>
 #include <pvr/Volumes/VoxelVolume.h>
 
 #include "Common.h"
@@ -78,6 +79,16 @@ void exportVolumes()
     ;
 
   implicitly_convertible<CompositeVolume::Ptr, CompositeVolume::CPtr>();
+
+  // ConstantVolume ---
+
+  class_<ConstantVolume, bases<Volume>, ConstantVolume::Ptr>
+    ("ConstantVolume", no_init)
+    .def("__init__", make_constructor(ConstantVolume::create))
+    .def("addAttribute", &ConstantVolume::addAttribute)
+    ;
+
+  implicitly_convertible<ConstantVolume::Ptr, ConstantVolume::CPtr>();
 
   // FractalCloud ---
 

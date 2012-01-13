@@ -441,14 +441,7 @@ VolumeSample VoxelVolume::sample(const VolumeSampleState &state,
   // Check (and set up) attribute index ---
 
   if (attribute.index() == VolumeAttr::IndexNotSet) {
-    // Then, set up the input attribute
-    AttrNameVec::const_iterator i = 
-      std::find(m_attrNames.begin(), m_attrNames.end(), attribute.name());
-    if (i != m_attrNames.end()) {
-      attribute.setIndex(std::distance(i, m_attrNames.begin()));
-    } else {
-      attribute.setIndexInvalid();
-    }
+    setIndexForName(attribute, m_attrNames);
   }
   if (attribute.index() == VolumeAttr::IndexInvalid) {
     return VolumeSample(Colors::zero(), m_phaseFunction);

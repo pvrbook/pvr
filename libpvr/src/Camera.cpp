@@ -69,6 +69,13 @@ void Camera::setPosition(const Util::VectorCurve &curve)
 
 //----------------------------------------------------------------------------//
 
+Vector Camera::position(const PTime time) const
+{
+  return m_position.interpolate(time);
+}
+
+//----------------------------------------------------------------------------//
+
 void Camera::setOrientation(const Util::QuatCurve &curve)
 {
   m_orientation = curve;
@@ -77,17 +84,17 @@ void Camera::setOrientation(const Util::QuatCurve &curve)
 
 //----------------------------------------------------------------------------//
 
-void Camera::setResolution(const Imath::V2i &resolution)
+Quat Camera::orientation(const PTime time) const
 {
-  m_resolution = resolution;
-  recomputeTransforms();    
+  return m_orientation.interpolate(time);
 }
 
 //----------------------------------------------------------------------------//
 
-Vector Camera::position(const PTime time) const
+void Camera::setResolution(const Imath::V2i &resolution)
 {
-  return m_position.interpolate(time);
+  m_resolution = resolution;
+  recomputeTransforms();    
 }
 
 //----------------------------------------------------------------------------//

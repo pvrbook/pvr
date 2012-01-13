@@ -59,6 +59,21 @@ Volume::CVec Volume::inputs() const
 }
 
 //----------------------------------------------------------------------------//
+// Utility functions
+//----------------------------------------------------------------------------//
+
+void setIndexForName(const VolumeAttr &attr, const Volume::StringVec &v)
+{
+  Volume::AttrNameVec::const_iterator i = 
+    std::find(v.begin(), v.end(), attr.name());
+  if (i != v.end()) {
+    attr.setIndex(std::distance(i, v.begin()));
+  } else {
+    attr.setIndexInvalid();
+  }
+}
+
+//----------------------------------------------------------------------------//
 
 } // namespace Render
 } // namespace pvr

@@ -98,25 +98,33 @@ public:
   //! Virtual desctructor
   virtual ~Camera();
 
-  // Main methods --------------------------------------------------------------
+  // Placement -----------------------------------------------------------------
 
   //! Sets the (potentially time-varying) position
   void setPosition(const Util::VectorCurve &curve);
+  //! Returns the position at the given time
+  Vector position(const PTime time) const;
   //! Sets the (potentially time-varying) orientation
   void setOrientation(const Util::QuatCurve &curve);
+  //! Returns the position at the given time
+  Quat orientation(const PTime time) const;
+
+  // Resolution ----------------------------------------------------------------
+
   //! Sets the resolution of the camera. This also defines the aspect ratio of 
   //! the frame.
   void setResolution(const Imath::V2i &resolution);
-
-  //! Returns the position at the given time
-  Vector position(const PTime time) const;
   //! Returns the resolution of the camera
   const Imath::V2i& resolution() const;
+
+  // Motion blur settings ------------------------------------------------------
 
   //! Sets the number of time samples
   void setNumTimeSamples(const uint numSamples);
   //! Returns the number of time samples
   uint numTimeSamples() const ;
+
+  // Transforms ----------------------------------------------------------------
 
   //! Returns the camera-space coordinate given a world-space coordinate.
   Vector worldToCamera(const Vector &wsP, const PTime time) const;
@@ -127,6 +135,8 @@ public:
   const MatrixVec& worldToCameraMatrices() const;
   //! Returns the camera to world transform matrices
   const MatrixVec& cameraToWorldMatrices() const;
+
+  // To be implemented by subclasses -------------------------------------------
 
   //! Returns the screen-space coordinate given a world-space coordinate.
   virtual Vector worldToScreen(const Vector &wsP, const PTime time) const = 0;
@@ -153,12 +163,10 @@ protected:
   //! Should be called whenever a data member is altered that will affect the
   //! transformation matrices of the camera.
   virtual void recomputeTransforms();
-
   //! Transforms the given point by interpolating between the two closest
   //! matrix transformations, given a [0,1] parametric time sample
   Vector transformPoint(const Vector &p, const MatrixVec &matrices,
                         const PTime time) const;
-
   //! Computes the camera to world transform at the given time
   //! \param time Time in [0,1] range
   Matrix computeCameraToWorld(const PTime time) const;
@@ -210,6 +218,7 @@ public:
 
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
+  //! \todo Replace with #define
   static Ptr create();
 
   // Main methods --------------------------------------------------------------
