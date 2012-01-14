@@ -88,7 +88,8 @@ IntervalVec ConstantVolume::intersect(const RayState &state) const
   // Intersect against unity bounds
   double t0, t1;
   if (Math::intersect(lsRay, Bounds::zeroOne(), t0, t1)) {
-    return IntervalVec(1, Interval(t0, t1, (t1 - t0) / m_maxAttrValue * 0.1));
+    return IntervalVec(1, Interval(t0, t1, (t1 - t0) / 
+                                   (std::sqrt(m_maxAttrValue) * 20.0)));
   } else {
     return IntervalVec();
   }

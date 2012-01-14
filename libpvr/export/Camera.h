@@ -290,6 +290,110 @@ private:
 };
 
 //----------------------------------------------------------------------------//
+// SphericalCoords
+//----------------------------------------------------------------------------//
+
+//! Represents spherical coordinates
+//! The spherical coordinate system is aligned such that zero longitude, zero
+//! latitude corresponds to a cartesian vector along the positive z axis.
+struct SphericalCoords
+{
+  //! Radial coordinate
+  float radius;
+  //! Azimuthal angle, longitude
+  //! PVR follows a convention of [-pi,pi] range for longitude, with the 
+  //! positive direction going to the right, looking down the cartesian z axis.
+  float longitude; 
+  //! Zenith angle, latitude
+  //! PVR follows a convention of [-pi/2,pi/2] range for latitude, with the
+  //! positive direction going up, looking down the cartesian z axis.
+  float latitude;
+  //! Default constructor
+  SphericalCoords()
+    : radius(0.0f), longitude(0.0f), latitude(0.0f)
+  { }
+};
+
+//----------------------------------------------------------------------------//
+// SphericalCamera
+//----------------------------------------------------------------------------//
+
+/*! \brief A simple spherical projection camera
+  
+  The SphericalCamera is mainly used to produce transmittance maps for point
+  lights. It projects a spherical coordinate space which is mapped to 
+  raster space using rectangular (phi, theta) coordinates. Spherical coordinate
+  (0,0) maps to the center pixel.
+
+  Raster space depth is translated to world space distance directly, so the
+  camera has no near and far plane.
+
+ */
+
+//----------------------------------------------------------------------------//
+
+class SphericalCamera : public Camera
+{
+public:
+  
+  // Typedefs ------------------------------------------------------------------
+
+  DECLARE_SMART_PTRS(SphericalCamera);
+
+  // Constructor, destructor, factory ------------------------------------------
+
+  DECLARE_CREATE_FUNC(SphericalCamera);
+  
+  // Main methods --------------------------------------------------------------
+
+  
+
+  // From Camera ---------------------------------------------------------------
+  
+  PVR_DEFINE_STATIC_CLONE_FUNC(SphericalCamera);
+
+  virtual Vector worldToScreen(const Vector &wsP, const PTime time) const;
+  virtual Vector screenToWorld(const Vector &ssP, const PTime time) const;
+  virtual Vector worldToRaster(const Vector &wsP, const PTime time) const;
+  virtual Vector rasterToWorld(const Vector &rsP, const PTime time) const;
+
+  // Cloning -------------------------------------------------------------------
+
+  SphericalCamera::Ptr clone() const
+  { return SphericalCamera::Ptr(rawClone()); }
+
+protected:
+
+  // From Camera ---------------------------------------------------------------
+
+  virtual void recomputeTransforms();
+
+  // Utility methods -----------------------------------------------------------
+
+  //! Transforms cartesian coordinates to spherical coordinates
+  SphericalCoords cartToSphere(const Vector &cs) const;
+  //! Transforms spherical coordinates to cartesian coordinates
+  Vector sphereToCart(const SphericalCoords &ss) const;
+
+  // Protected data members ----------------------------------------------------
+  
+  //! Pre-computed screen to raster transform. This is never time-depedent.
+  Matrix m_screenToRaster;
+  //! Pre-computed raster to screen transform. This is never time-depedent.
+  Matrix m_rasterToScreen;
+
+private:
+
+  // From Camera ---------------------------------------------------------------
+  
+  virtual SphericalCamera* rawClone() const
+  { return new SphericalCamera(*this); }
+
+};
+
+//----------------------------------------------------------------------------//
+// Utility functions
+//----------------------------------------------------------------------------//
 
 //! Calculates vertical field of view.
 //! \param focalLength The camera's focal length

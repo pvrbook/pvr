@@ -52,10 +52,12 @@ OtfTransmittanceMapOccluder::OtfTransmittanceMapOccluder(Renderer::CPtr renderer
                                                          Camera::CPtr camera)
   : m_camera(camera)
 { 
-  m_rasterBounds = static_cast<Imath::V2f>(m_camera->resolution());
+  m_resolution = m_camera->resolution();
+  m_floatRasterBounds = static_cast<Imath::V2f>(m_resolution);
+  m_intRasterBounds = m_resolution - Imath::V2i(1);
   m_renderer = renderer;
-  m_transmittanceMap.setSize(m_rasterBounds.x, m_rasterBounds.y);
-  m_computed.resize(m_rasterBounds.x * m_rasterBounds.y);
+  m_transmittanceMap.setSize(m_resolution.x, m_resolution.y);
+  m_computed.resize(m_resolution.x * m_resolution.y);
   std::fill(m_computed.begin(), m_computed.end(), 0);
 }
 
@@ -83,8 +85,8 @@ Color OtfTransmittanceMapOccluder::sample(const OcclusionSampleState &state) con
   if (csP.z > 0.0) {
     return Colors::one();
   }
-  if (rsP.x < 0.0 || rsP.x > m_rasterBounds.x ||
-      rsP.y < 0.0 || rsP.y > m_rasterBounds.y) {
+  if (rsP.x < 0.0 || rsP.x >= m_floatRasterBounds.x ||
+      rsP.y < 0.0 || rsP.y >= m_floatRasterBounds.y) {
     return Colors::one();
   }
   
@@ -94,10 +96,12 @@ Color OtfTransmittanceMapOccluder::sample(const OcclusionSampleState &state) con
   // Ensure all samples are available
   size_t x = static_cast<size_t>(std::floor(rsP.x));
   size_t y = static_cast<size_t>(std::floor(rsP.y));
-  for (size_t j = y; j < y + 2; j++) {
-    for (size_t i = x; i < x + 2; i++) {
-      if (!m_computed[offset(i, j)]) {
-        updatePixel(i, j);
+  for (uint j = y; j < y + 2; j++) {
+    for (uint i = x; i < x + 2; i++) {
+      uint iC = Imath::clamp(i, 0u, static_cast<uint>(m_intRasterBounds.x));
+      uint jC = Imath::clamp(j, 0u, static_cast<uint>(m_intRasterBounds.y));
+      if (!m_computed[offset(iC, jC)]) {
+        updatePixel(iC, jC);
       }
     }
   }

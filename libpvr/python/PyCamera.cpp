@@ -28,12 +28,10 @@
 //----------------------------------------------------------------------------//
 
 using namespace std;
+
 using namespace pvr;
 using namespace pvr::Util;
-
-using pvr::Render::Camera;
-using pvr::Render::PerspectiveCamera;
-using pvr::Render::calculateVerticalFOV;
+using namespace pvr::Render;
 
 //----------------------------------------------------------------------------//
 // Helper functions
@@ -109,6 +107,13 @@ void exportPerspectiveCamera()
     ;
 
   implicitly_convertible<PerspectiveCamera::Ptr, PerspectiveCamera::CPtr>();
+
+  class_<SphericalCamera, bases<Camera>, SphericalCamera::Ptr>
+    ("SphericalCamera", no_init)
+    .def("__init__",       make_constructor(SphericalCamera::create))
+    ;
+
+  implicitly_convertible<SphericalCamera::Ptr, SphericalCamera::CPtr>();
 
 }
 

@@ -185,6 +185,10 @@ void Renderer::addVolume(Volume::CPtr volume)
 
 void Renderer::addLight(Light::CPtr light)
 {
+  if (!light) {
+    Log::warning("Tried to add null pointer with Renderer::addLight()");
+    return;
+  }
   if (!m_scene) {
     m_scene = Scene::Ptr(new Scene);
     RenderGlobals::setScene(m_scene);
@@ -379,7 +383,7 @@ Ray setupRay(Camera::CPtr camera, const float x, const float y,
   const Vector wsEye = camera->position(time);
   // Compute direction by transforming pixel position in raster space to
   // world space
-  const Vector rsP(x, y, 0.0);
+  const Vector rsP(x, y, 1.0);
   Vector wsP = camera->rasterToWorld(rsP, time);
 
   return Ray(wsEye, wsP);  

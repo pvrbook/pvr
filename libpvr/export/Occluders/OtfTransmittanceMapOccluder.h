@@ -76,14 +76,16 @@ protected:
   // Utility methods -----------------------------------------------------------
 
   size_t offset(const size_t x, const size_t y) const
-  { return x + m_rasterBounds.x * y; }
+  { return x + m_resolution.x * y; }
   void updatePixel(const size_t x, const size_t y) const;
 
   // Data members --------------------------------------------------------------
 
   Renderer::CPtr            m_renderer;
   Camera::CPtr              m_camera;
-  Imath::V2f                m_rasterBounds;
+  Imath::V2f                m_floatRasterBounds;
+  Imath::V2i                m_intRasterBounds;
+  Imath::V2i                m_resolution;
   mutable DeepImage         m_transmittanceMap;
   mutable std::vector<char> m_computed;
 };

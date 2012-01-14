@@ -49,7 +49,7 @@ namespace Render {
 Camera::Camera()
   : m_resolution(640, 480), m_numSamples(2)
 {
-  
+  Camera::recomputeTransforms();
 }
 
 //----------------------------------------------------------------------------//
@@ -183,8 +183,8 @@ Vector Camera::transformPoint(const Vector &p,
   second = std::min(second, m_numSamples - 1);
   double lerpFactor = slicePos - static_cast<double>(first);
   // Transform point twice
-  Vector t0 = p * matrices[first];
-  Vector t1 = p * matrices[second];
+  Vector t0 = p * matrices[Imath::clamp(first, 0u, m_numSamples - 1)];
+  Vector t1 = p * matrices[Imath::clamp(second, 0u, m_numSamples - 1)];
   // Interpolate transformed positions
   return lerp(t0, t1, lerpFactor);
 }
@@ -326,6 +326,7 @@ void PerspectiveCamera::getTransforms(const PTime time,
   Matrix ndcTranslate, ndcScale;
   ndcTranslate.setTranslation(Vector(1.0, 1.0, 0.0));
   ndcScale.setScale(Vector(0.5, 0.5, 1.0));
+  Matrix screenToNdc = ndcTranslate * ndcScale;
   // Raster to NDC space
   Matrix rasterToNdc, ndcToRaster;
   rasterToNdc.setScale(Vector(1.0 / m_resolution.x, 1.0 / m_resolution.y, 1.0));
@@ -337,9 +338,101 @@ void PerspectiveCamera::getTransforms(const PTime time,
   Matrix flipZ;
   flipZ.setScale(Vector(1.0, 1.0, -1.0));
   // Calculate matrices
-  Matrix screenToNdc = ndcTranslate * ndcScale;
   cameraToScreen = flipZ * perspective * fov;
   screenToRaster = screenToNdc * ndcToRaster; 
+}
+
+//----------------------------------------------------------------------------//
+// SphericalCamera
+//----------------------------------------------------------------------------//
+
+Vector SphericalCamera::worldToScreen(const Vector &wsP, const PTime time) const
+{
+  Vector csP = worldToCamera(csP, time);
+  SphericalCoords sc = cartToSphere(csP * Vector(1.0, 1.0, -1.0));
+  return Vector(sc.longitude / M_PI, sc.latitude / (M_PI * 0.5), sc.radius);
+}
+
+//----------------------------------------------------------------------------//
+
+Vector SphericalCamera::screenToWorld(const Vector &ssP, const PTime time) const
+{
+  SphericalCoords sc;
+  sc.longitude = ssP.x * M_PI;
+  sc.latitude  = ssP.y * (M_PI * 0.5);
+  sc.radius    = ssP.z;
+  Vector csP = sphereToCart(sc) * Vector(1.0, 1.0, -1.0);
+  return cameraToWorld(csP, time);
+}
+
+//----------------------------------------------------------------------------//
+
+Vector SphericalCamera::worldToRaster(const Vector &wsP, const PTime time) const
+{
+  Vector ssP = worldToScreen(wsP, time);
+  Vector rsP;
+  m_screenToRaster.multVecMatrix(ssP, rsP);
+  return rsP;
+}
+  
+//----------------------------------------------------------------------------//
+
+Vector SphericalCamera::rasterToWorld(const Vector &rsP, const PTime time) const
+{
+  Vector ssP;
+  m_rasterToScreen.multVecMatrix(rsP, ssP);
+  return screenToWorld(ssP, time);
+}
+
+//----------------------------------------------------------------------------//
+
+void SphericalCamera::recomputeTransforms()
+{
+  Camera::recomputeTransforms();
+
+  // NDC to screen space
+  Matrix ndcTranslate, ndcScale;
+  ndcTranslate.setTranslation(Vector(1.0, 1.0, 0.0));
+  ndcScale.setScale(Vector(0.5, 0.5, 1.0));
+  Matrix screenToNdc = ndcTranslate * ndcScale;
+  // Raster to NDC space
+  Matrix rasterToNdc, ndcToRaster;
+  rasterToNdc.setScale(Vector(1.0 / m_resolution.x, 1.0 / m_resolution.y, 1.0));
+  ndcToRaster = rasterToNdc.inverse();
+  // Store screen to raster and inverse
+  m_screenToRaster = screenToNdc * ndcToRaster;
+  m_rasterToScreen = m_screenToRaster.inverse();
+}
+
+//----------------------------------------------------------------------------//
+
+SphericalCoords SphericalCamera::cartToSphere(const Vector &cc) const
+{
+  SphericalCoords sc;
+
+  sc.radius = std::sqrt(cc.x * cc.x + cc.y * cc.y + cc.z * cc.z);
+
+  if (sc.radius == 0.0) {
+    return SphericalCoords();
+  }
+
+  sc.longitude = atan2(cc.x, cc.z);
+  sc.latitude  = M_PI * 0.5 - acos(cc.y / sc.radius);
+
+  return sc;
+}
+
+//----------------------------------------------------------------------------//
+
+Vector SphericalCamera::sphereToCart(const SphericalCoords &sc) const
+{
+  const float rho   = sc.radius;
+  const float phi   = sc.longitude;
+  const float theta = 0.5 * M_PI - sc.latitude;
+
+  return Vector(rho * std::sin(phi) * std::sin(theta), 
+                rho * std::cos(theta), 
+                rho * std::cos(phi) * std::sin(theta));
 }
 
 //----------------------------------------------------------------------------//
