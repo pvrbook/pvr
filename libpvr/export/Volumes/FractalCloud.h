@@ -53,7 +53,7 @@ public:
 
   DECLARE_CREATE_FUNC(FractalCloud);
   FractalCloud()
-    : m_density(1.0f)
+    : m_density(1.0f), m_stepLength(1.0)
   { }
 
   // From Shader ---------------------------------------------------------------

@@ -80,7 +80,8 @@ IntervalVec FractalCloud::intersect(const RayState &state) const
 
   double t0, t1;
   if (Math::intersect(state.wsRay, wsBounds, t0, t1)) {
-    return IntervalVec(1, Interval(t0, t1, m_stepLength));
+    double stepLength = 0.1 / std::log(1.0 + m_density);
+    return IntervalVec(1, Interval(t0, t1, stepLength));
   } else {
     return IntervalVec();
   }
