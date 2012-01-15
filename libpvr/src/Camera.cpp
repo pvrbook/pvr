@@ -348,7 +348,7 @@ void PerspectiveCamera::getTransforms(const PTime time,
 
 Vector SphericalCamera::worldToScreen(const Vector &wsP, const PTime time) const
 {
-  Vector csP = worldToCamera(csP, time);
+  Vector csP = worldToCamera(wsP, time);
   SphericalCoords sc = cartToSphere(csP * Vector(1.0, 1.0, -1.0));
   return Vector(sc.longitude / M_PI, sc.latitude / (M_PI * 0.5), sc.radius);
 }
