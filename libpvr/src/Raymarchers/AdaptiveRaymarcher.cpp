@@ -102,6 +102,8 @@ void AdaptiveRaymarcher::setParams(const Util::ParamMap &params)
            m_params.doTrapezoidIntegration);
   getValue(params.floatMap, k_strEarlyTermThresh, 
            m_params.earlyTerminationThreshold);
+
+  cout << "Threshold: " << m_params.threshold << endl;
 }
 
 //----------------------------------------------------------------------------//
@@ -166,29 +168,35 @@ AdaptiveRaymarcher::integrate(const RayState &state) const
       sampleState.wsP = state.wsRay(t);
       RaymarchSample sample = m_raymarchSampler->sample(sampleState);
 
+#if 1
+      const double divisor = std::sqrt(Math::max(T) / m_params.threshold);
+#else
+      const double divisor = std::log(1.0 + Math::max(T) / m_params.threshold);
+#endif
+      const double adaptedStepLength = baseStepLength / divisor;
+
       // Check sample ---
 
       if (Math::max(sample.extinction) > 0.0) {
         // Find the maximum allowed step length
         const double meanFreePath = 1.0 / Math::max(sample.extinction);
-        const double suggestedStep = 
-          m_params.threshold * meanFreePath / std::sqrt(Math::max(T));
+        const double suggestedStep = meanFreePath / divisor;
         // Check if we need to reduce the step size
         if (stepLength > suggestedStep * 1.1) {
           // Recompute step with shorter step length
-          stepT1 = std::min(stepT0 + std::min(suggestedStep, baseStepLength),
+          stepT1 = std::min(stepT0 + std::min(suggestedStep, adaptedStepLength),
                             tEnd);
           continue;
         } else {
           // Step length was ok, set up next step
           stepT0 = stepT1;
-          stepT1 = std::min(stepT1 + std::min(suggestedStep, baseStepLength),
+          stepT1 = std::min(stepT1 + std::min(suggestedStep, adaptedStepLength),
                             tEnd);
         }
       } else {
         // No attentuation coefficient. Sample according to base step length.
         stepT0 = stepT1;
-        stepT1 = std::min(stepT1 + baseStepLength, tEnd);
+        stepT1 = std::min(stepT1 + adaptedStepLength, tEnd);
       }
 
       // Accept sample ---
