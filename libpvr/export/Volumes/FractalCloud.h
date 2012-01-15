@@ -47,19 +47,18 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(FractalCloud);
+  PVR_TYPEDEF_SMART_PTRS(FractalCloud);
 
   // Ctor, factory -------------------------------------------------------------
 
-  DECLARE_CREATE_FUNC(FractalCloud);
+  PVR_DEFINE_CREATE_FUNC(FractalCloud);
   FractalCloud()
     : m_density(1.0f), m_stepLength(1.0)
   { }
 
-  // From Shader ---------------------------------------------------------------
+  // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "FractalCloud"; }
+  PVR_DEFINE_TYPENAME(FractalCloud);
 
   // From Volume ---------------------------------------------------------------
 

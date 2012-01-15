@@ -60,7 +60,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(CompositeVolume);
+  PVR_TYPEDEF_SMART_PTRS(CompositeVolume);
   typedef std::vector<ChildAttrs> ChildAttrsVec;
 
   // Ctor, factory -------------------------------------------------------------
@@ -78,8 +78,7 @@ public:
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "CompositeVolume"; }
+  PVR_DEFINE_TYPENAME(CompositeVolume);
 
   // From Volume ---------------------------------------------------------------
 

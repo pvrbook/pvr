@@ -63,13 +63,6 @@ TransmittanceMapOccluder::TransmittanceMapOccluder(Renderer::CPtr baseRenderer,
 
 //----------------------------------------------------------------------------//
 
-std::string TransmittanceMapOccluder::typeName() const
-{ 
-  return "TransmittanceMapOccluder"; 
-}
-
-//----------------------------------------------------------------------------//
-
 Color TransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
 {
   // Error checking

@@ -48,7 +48,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Polygons);
+  PVR_TYPEDEF_SMART_PTRS(Polygons);
 
   // Exceptions ----------------------------------------------------------------
 
@@ -62,7 +62,7 @@ public:
 
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
-  DECLARE_CREATE_FUNC(Polygons);
+  PVR_DEFINE_CREATE_FUNC(Polygons);
 
   // Main methods --------------------------------------------------------------
   

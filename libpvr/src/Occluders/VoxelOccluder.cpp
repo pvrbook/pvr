@@ -100,13 +100,6 @@ VoxelOccluder::VoxelOccluder(Renderer::CPtr renderer,
 
 //----------------------------------------------------------------------------//
 
-std::string VoxelOccluder::typeName() const
-{ 
-  return "VoxelOccluder"; 
-}
-
-//----------------------------------------------------------------------------//
-
 Color VoxelOccluder::sample(const OcclusionSampleState &state) const
 {
   Vector vsP;

@@ -45,25 +45,34 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(PointLight);
-  static Ptr create()
-  { return Ptr(new PointLight); }
-  virtual std::string typeName() const
-  { return "PointLight"; }
-  virtual ~PointLight()
-  { }
-  // From Light
-  virtual LightSample sample(const LightSampleState &state) const
-  {
-    return LightSample(m_intensity * falloff(state.wsP, m_wsP), m_wsP);
-  }
-  // Main methods
-  void setPosition(const Vector &wsP)
-  { m_wsP = wsP; }
-  Vector position() const
-  { return m_wsP; }
+  PVR_TYPEDEF_SMART_PTRS(PointLight);
+
+  // Ctor, factory -------------------------------------------------------------
+
+  PVR_DEFINE_CREATE_FUNC(PointLight);
+
+  // From ParamBase ------------------------------------------------------------
+
+  PVR_DEFINE_TYPENAME(PointLight);
+
+  // From Light ----------------------------------------------------------------
+
+  virtual LightSample sample(const LightSampleState &state) const;
+
+  // Main methods --------------------------------------------------------------
+
+  //! Sets the position of the point light
+  void setPosition(const Vector &wsP);
+  //! Returns the position of the point light
+  Vector position() const;
+
 private:
+
+  // Private data members ------------------------------------------------------
+
+  //! Position of point light
   Vector m_wsP;
+
 };
 
 //----------------------------------------------------------------------------//

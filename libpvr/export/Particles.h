@@ -48,7 +48,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Particles);
+  PVR_TYPEDEF_SMART_PTRS(Particles);
 
   // Exceptions ----------------------------------------------------------------
 

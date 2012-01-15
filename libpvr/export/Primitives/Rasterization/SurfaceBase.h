@@ -95,7 +95,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(SurfaceBase);
+  PVR_TYPEDEF_SMART_PTRS(SurfaceBase);
 
   // From Primitive ------------------------------------------------------------
 

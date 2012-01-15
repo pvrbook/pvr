@@ -47,7 +47,7 @@ public:
   
   // Typedefs ---
 
-  DECLARE_SMART_PTRS(PhysicalSampler);
+  PVR_TYPEDEF_SMART_PTRS(PhysicalSampler);
 
   // Constructor, factory ---
 
@@ -56,8 +56,7 @@ public:
 
   // From ParamBase ---
 
-  virtual std::string typeName() const
-  { return "PhysicalSampler"; }
+  PVR_DEFINE_TYPENAME(PhysicalSampler);
   
   // From RaymarchSampler ---
 

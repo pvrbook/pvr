@@ -91,7 +91,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(RasterizationPrim);
+  PVR_TYPEDEF_SMART_PTRS(RasterizationPrim);
 
   // To be implemented by subclasses -------------------------------------------
 
@@ -139,7 +139,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(PointBase);
+  PVR_TYPEDEF_SMART_PTRS(PointBase);
 
   // From Primitive ------------------------------------------------------------
 

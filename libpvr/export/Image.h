@@ -49,7 +49,7 @@ class Image
 {
 public:
   
-  DECLARE_SMART_PTRS(Image);
+  PVR_TYPEDEF_SMART_PTRS(Image);
 
   // Enums ---------------------------------------------------------------------
 

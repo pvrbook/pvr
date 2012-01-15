@@ -39,7 +39,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Interrupt);
+  PVR_TYPEDEF_SMART_PTRS(Interrupt);
 
   // Main methods --------------------------------------------------------------
 

@@ -80,7 +80,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(PyroclasticLine);
+  PVR_TYPEDEF_SMART_PTRS(PyroclasticLine);
 
   // Factory -------------------------------------------------------------------
 
@@ -88,8 +88,7 @@ public:
   static Ptr create();
 
   //! Returns the type name of the primitive
-  virtual std::string typeName() const
-  { return "PyroclasticLine"; }
+  PVR_DEFINE_TYPENAME(PyroclasticLine);
 
 protected:
 

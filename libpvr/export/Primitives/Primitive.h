@@ -60,7 +60,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Primitive);
+  PVR_TYPEDEF_SMART_PTRS(Primitive);
 
   // Main methods --------------------------------------------------------------
 

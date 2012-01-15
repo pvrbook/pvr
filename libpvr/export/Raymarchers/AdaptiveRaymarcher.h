@@ -45,22 +45,19 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(AdaptiveRaymarcher);
+  PVR_TYPEDEF_SMART_PTRS(AdaptiveRaymarcher);
 
   // Ctor, factory -------------------------------------------------------------
 
-  //! Factory method
-  static Ptr create()
-  { return Ptr(new AdaptiveRaymarcher); }
+  PVR_DEFINE_CREATE_FUNC(AdaptiveRaymarcher);
 
   // From ParamBase ------------------------------------------------------------
 
+  PVR_DEFINE_TYPENAME(Adaptive);
   virtual void setParams(const Util::ParamMap &params);
 
   // From Raymarcher -----------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "Adaptive"; }
   virtual IntegrationResult integrate(const RayState &state) const;
 
 protected:

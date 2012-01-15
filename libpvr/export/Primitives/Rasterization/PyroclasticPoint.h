@@ -53,7 +53,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(PyroclasticPoint);
+  PVR_TYPEDEF_SMART_PTRS(PyroclasticPoint);
 
   // Factory -------------------------------------------------------------------
 
@@ -63,8 +63,7 @@ public:
   // From ParamBase ------------------------------------------------------------
 
   //! Returns the type name of the primitive
-  virtual std::string typeName() const
-  { return "PyroclasticPoint"; }
+  PVR_DEFINE_TYPENAME(PyroclasticPoint);
 
   // From RasterizationPrim ----------------------------------------------------
 

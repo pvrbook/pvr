@@ -52,13 +52,6 @@ RaymarchOccluder::Ptr RaymarchOccluder::create()
 
 //----------------------------------------------------------------------------//
 
-std::string RaymarchOccluder::typeName() const
-{ 
-  return "RaymarchOccluder"; 
-}
-
-//----------------------------------------------------------------------------//
-
 Color RaymarchOccluder::sample(const OcclusionSampleState &state) const
 {
   RayState raymarchState = state.makeSecondaryRayState();

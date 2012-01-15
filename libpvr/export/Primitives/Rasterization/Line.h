@@ -72,7 +72,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Line);
+  PVR_TYPEDEF_SMART_PTRS(Line);
 
   // Factory -------------------------------------------------------------------
 
@@ -80,8 +80,7 @@ public:
   static Ptr create();
 
   //! Returns the type name of the primitive
-  virtual std::string typeName() const
-  { return "Line"; }
+  PVR_DEFINE_TYPENAME(Line);
 
 protected:
 

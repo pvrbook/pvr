@@ -1,26 +1,20 @@
-//-*-c++-*--------------------------------------------------------------------//
-
-/*! \file DensitySampler.h
-  Contains the DensitySampler class and related functions.
- */
-
 //----------------------------------------------------------------------------//
 
-#ifndef __INCLUDED_PVR_DENSITYSAMPLER_H__
-#define __INCLUDED_PVR_DENSITYSAMPLER_H__
+/*! \file PointLight.cpp
+  Contains implementations of PointLight class.
+ */
 
 //----------------------------------------------------------------------------//
 // Includes
 //----------------------------------------------------------------------------//
 
-// System headers
+// Header include
 
-// Library headers
+#include "pvr/Lights/PointLight.h"
 
-// Project headers
+// System includes
 
-#include "pvr/RaymarchSamplers/RaymarchSampler.h"
-#include "pvr/VolumeAttr.h"
+// Project includes
 
 //----------------------------------------------------------------------------//
 // Namespaces
@@ -30,34 +24,31 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// DensitySampler
+// PointLight implementations
 //----------------------------------------------------------------------------//
 
-/*! \class DensitySampler
-   \brief Interprets density as both luminance and attenuation.
- */
-
-//----------------------------------------------------------------------------//
-
-class DensitySampler : public RaymarchSampler
+LightSample PointLight::sample(const LightSampleState &state) const
 {
-public:
-  PVR_TYPEDEF_SMART_PTRS(DensitySampler);
-  DensitySampler();
-  static Ptr create();
-  PVR_DEFINE_TYPENAME(DensitySampler);
-  virtual RaymarchSample sample(const VolumeSampleState &state) const;
-private:
-  VolumeAttr m_densityAttr;
-};
+  return LightSample(m_intensity * falloff(state.wsP, m_wsP), m_wsP);
+}
+
+//----------------------------------------------------------------------------//
+  
+void PointLight::setPosition(const Vector &wsP)
+{ 
+  m_wsP = wsP; 
+}
+
+//----------------------------------------------------------------------------//
+
+Vector PointLight::position() const
+{ 
+  return m_wsP; 
+}
 
 //----------------------------------------------------------------------------//
 
 } // namespace Render
 } // namespace pvr
-
-//----------------------------------------------------------------------------//
-
-#endif // Include guard
 
 //----------------------------------------------------------------------------//

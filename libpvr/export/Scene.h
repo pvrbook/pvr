@@ -49,7 +49,7 @@ class Scene
 {
 public:
   // Typedefs
-  DECLARE_SMART_PTRS(Scene);
+  PVR_TYPEDEF_SMART_PTRS(Scene);
   typedef Util::SPtr<const Volume>::type VolumePtr;
   typedef Util::SPtr<const Light>::type  LightPtr;
   typedef std::vector<LightPtr>          LightVec;

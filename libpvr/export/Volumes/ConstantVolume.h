@@ -36,12 +36,12 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(ConstantVolume);
+  PVR_TYPEDEF_SMART_PTRS(ConstantVolume);
 
   // Constructors and destructor -----------------------------------------------
 
   ConstantVolume(const Matrix &localToWorld);
-  DECLARE_CREATE_FUNC_1_ARG(ConstantVolume, const Matrix &);
+  PVR_DEFINE_CREATE_FUNC_1_ARG(ConstantVolume, const Matrix &);
   
   // Main methods --------------------------------------------------------------
 
@@ -51,8 +51,7 @@ public:
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "ConstantVolume"; }
+  PVR_DEFINE_TYPENAME(ConstantVolume);
 
   // From Volume ---------------------------------------------------------------
 

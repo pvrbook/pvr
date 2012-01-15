@@ -16,6 +16,7 @@ libEnv = env.Clone()
 setupLibBuildEnv(libEnv)
 
 files = Glob(join(buildDir(libEnv), "*.cpp"))
+files += Glob(join(buildDir(libEnv), "Lights", "*.cpp"))
 files += Glob(join(buildDir(libEnv), "Noise", "*.cpp"))
 files += Glob(join(buildDir(libEnv), "Occluders", "*.cpp"))
 files += Glob(join(buildDir(libEnv), "Primitives", "*.cpp"))

@@ -36,7 +36,7 @@ namespace Noise {
 class NoiseFunction
 {
 public:
-  DECLARE_SMART_PTRS(NoiseFunction);
+  PVR_TYPEDEF_SMART_PTRS(NoiseFunction);
   typedef std::pair<float, float> Range;
   virtual float eval(const float x) const = 0;
   virtual float eval(const float x, const float y) const = 0;
@@ -60,8 +60,8 @@ public:
 class PerlinNoise : public NoiseFunction
 {
 public:
-  DECLARE_SMART_PTRS(PerlinNoise);
-  DECLARE_CREATE_FUNC(PerlinNoise);
+  PVR_TYPEDEF_SMART_PTRS(PerlinNoise);
+  PVR_DEFINE_CREATE_FUNC(PerlinNoise);
   virtual float eval(const float x) const
   {
     float result;
@@ -111,8 +111,8 @@ private:
 class AbsPerlinNoise : public NoiseFunction
 {
 public:
-  DECLARE_SMART_PTRS(AbsPerlinNoise);
-  DECLARE_CREATE_FUNC(AbsPerlinNoise);
+  PVR_TYPEDEF_SMART_PTRS(AbsPerlinNoise);
+  PVR_DEFINE_CREATE_FUNC(AbsPerlinNoise);
   virtual float eval(const float x) const
   {
     float result;
@@ -164,7 +164,7 @@ private:
 class Fractal
 {
 public:
-  DECLARE_SMART_PTRS(Fractal);
+  PVR_TYPEDEF_SMART_PTRS(Fractal);
   typedef std::pair<float, float> Range;
   float eval(const float x) const
   { return eval(Imath::V3f(x, 0.0, 0.0)); }
@@ -189,7 +189,7 @@ public:
 class fBm : public Fractal
 {
 public:
-  DECLARE_SMART_PTRS(fBm);
+  PVR_TYPEDEF_SMART_PTRS(fBm);
   fBm(NoiseFunction::CPtr noise,
       float scale, float octaves, float octaveGain, float lacunarity);
   static Ptr create(NoiseFunction::CPtr noise,

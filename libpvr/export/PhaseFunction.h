@@ -43,7 +43,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(PhaseFunction);
+  PVR_TYPEDEF_SMART_PTRS(PhaseFunction);
 
   // To be implemented by subclasses -------------------------------------------
 
@@ -62,18 +62,17 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Composite);
+  PVR_TYPEDEF_SMART_PTRS(Composite);
 
   // Factory -------------------------------------------------------------------
 
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
-  DECLARE_CREATE_FUNC(Composite);
+  PVR_DEFINE_CREATE_FUNC(Composite);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "Composite"; }
+  PVR_DEFINE_TYPENAME(Composite);
 
   // From PhaseFunction --------------------------------------------------------
 
@@ -107,18 +106,17 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Isotropic);
+  PVR_TYPEDEF_SMART_PTRS(Isotropic);
 
   // Factory -------------------------------------------------------------------
 
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
-  DECLARE_CREATE_FUNC(Isotropic);
+  PVR_DEFINE_CREATE_FUNC(Isotropic);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "Isotropic"; }
+  PVR_DEFINE_TYPENAME(Isotropic);
 
   // From PhaseFunction --------------------------------------------------------
 
@@ -136,7 +134,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(HenyeyGreenstein);
+  PVR_TYPEDEF_SMART_PTRS(HenyeyGreenstein);
 
   // Constructor, factory ------------------------------------------------------
 
@@ -144,12 +142,11 @@ public:
   HenyeyGreenstein(float g);
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
-  DECLARE_CREATE_FUNC_1_ARG(HenyeyGreenstein, float);
+  PVR_DEFINE_CREATE_FUNC_1_ARG(HenyeyGreenstein, float);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "HenyeyGreenstein"; }
+  PVR_DEFINE_TYPENAME(HenyeyGreenstein);
 
   // From PhaseFunction --------------------------------------------------------
 
@@ -174,7 +171,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(DoubleHenyeyGreenstein);
+  PVR_TYPEDEF_SMART_PTRS(DoubleHenyeyGreenstein);
 
   // Constructor, factory ------------------------------------------------------
 
@@ -182,12 +179,11 @@ public:
   DoubleHenyeyGreenstein(float g1, float g2, float blend);
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
-  DECLARE_CREATE_FUNC_3_ARG(DoubleHenyeyGreenstein, float, float, float);
+  PVR_DEFINE_CREATE_FUNC_3_ARG(DoubleHenyeyGreenstein, float, float, float);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "DoubleHenyeyGreenstein"; }
+  PVR_DEFINE_TYPENAME(DoubleHenyeyGreenstein);
 
   // From PhaseFunction --------------------------------------------------------
 

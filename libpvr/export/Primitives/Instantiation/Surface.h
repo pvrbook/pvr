@@ -69,16 +69,15 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Surface);
+  PVR_TYPEDEF_SMART_PTRS(Surface);
 
   // Factory -------------------------------------------------------------------
 
-  DECLARE_CREATE_FUNC(Surface);
+  PVR_DEFINE_CREATE_FUNC(Surface);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "SurfaceInstancer"; }
+  PVR_DEFINE_TYPENAME(SurfaceInstancer);
 
   // From Primitive ------------------------------------------------------------
 

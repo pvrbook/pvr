@@ -54,7 +54,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Modeler);
+  PVR_TYPEDEF_SMART_PTRS(Modeler);
 
   typedef Field3D::FrustumFieldMapping::Ptr FrustumMappingPtr;
   typedef Field3D::MatrixFieldMapping::Ptr UniformMappingPtr;

@@ -47,7 +47,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(OtfTransmittanceMapOccluder);
+  PVR_TYPEDEF_SMART_PTRS(OtfTransmittanceMapOccluder);
   
   // Exceptions ----------------------------------------------------------------
 
@@ -60,12 +60,12 @@ public:
   OtfTransmittanceMapOccluder(Renderer::CPtr renderer, 
                               Camera::CPtr camera);
 
-  DECLARE_CREATE_FUNC_2_ARG(OtfTransmittanceMapOccluder, 
+  PVR_DEFINE_CREATE_FUNC_2_ARG(OtfTransmittanceMapOccluder, 
                             Renderer::CPtr, Camera::CPtr);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const;
+  PVR_DEFINE_TYPENAME(OtfTransmittanceMapOccluder);
 
   // From Occluder -------------------------------------------------------------
 

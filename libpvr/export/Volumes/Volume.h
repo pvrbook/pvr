@@ -62,7 +62,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Volume);
+  PVR_TYPEDEF_SMART_PTRS(Volume);
   typedef std::vector<std::string>  AttrNameVec;
   typedef std::vector<std::string>  StringVec;
   typedef std::vector<Volume::CPtr> CVec;

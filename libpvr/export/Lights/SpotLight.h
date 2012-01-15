@@ -46,12 +46,9 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(SpotLight);
-  DECLARE_CREATE_FUNC(SpotLight);
-  virtual std::string typeName() const
-  { return "SpotLight"; }
-  virtual ~SpotLight()
-  { }
+  PVR_TYPEDEF_SMART_PTRS(SpotLight);
+  PVR_DEFINE_CREATE_FUNC(SpotLight);
+  PVR_DEFINE_TYPENAME(SpotLight);
   // From Light
   virtual LightSample sample(const LightSampleState &state) const
   {

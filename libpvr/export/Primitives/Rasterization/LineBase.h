@@ -91,7 +91,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(LineBase);
+  PVR_TYPEDEF_SMART_PTRS(LineBase);
 
   // From Primitive ------------------------------------------------------------
 

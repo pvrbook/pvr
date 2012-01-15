@@ -61,7 +61,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Curve);
+  PVR_TYPEDEF_SMART_PTRS(Curve);
 
   typedef std::pair<float, T> Sample;
   typedef std::vector<Sample> SampleVec;

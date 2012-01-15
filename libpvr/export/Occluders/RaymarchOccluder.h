@@ -45,7 +45,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(RaymarchOccluder);
+  PVR_TYPEDEF_SMART_PTRS(RaymarchOccluder);
 
   // Factory methods -----------------------------------------------------------
 
@@ -53,7 +53,7 @@ public:
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const;
+  PVR_DEFINE_TYPENAME(RaymarchOccluder);
 
   // From Occluder -------------------------------------------------------------
 

@@ -68,7 +68,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Light);
+  PVR_TYPEDEF_SMART_PTRS(Light);
 
   // Constructor, destructor ---------------------------------------------------
 

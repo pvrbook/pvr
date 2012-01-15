@@ -50,7 +50,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(DeepImage);
+  PVR_TYPEDEF_SMART_PTRS(DeepImage);
 
   // Constructor, destructor, factory ------------------------------------------
 

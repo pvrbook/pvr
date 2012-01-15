@@ -50,7 +50,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(ModelerInput);
+  PVR_TYPEDEF_SMART_PTRS(ModelerInput);
 
   // Constructor, destructor, factory ------------------------------------------
 

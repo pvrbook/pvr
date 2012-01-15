@@ -48,7 +48,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(OtfVoxelOccluder);
+  PVR_TYPEDEF_SMART_PTRS(OtfVoxelOccluder);
   
   // Constructor, factory method -----------------------------------------------
 
@@ -56,12 +56,12 @@ public:
   OtfVoxelOccluder(Renderer::CPtr renderer, const Vector &wsLightPos,
                 const size_t res);
 
-  DECLARE_CREATE_FUNC_3_ARG(OtfVoxelOccluder, Renderer::CPtr, const Vector&,
+  PVR_DEFINE_CREATE_FUNC_3_ARG(OtfVoxelOccluder, Renderer::CPtr, const Vector&,
                             const size_t);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const;
+  PVR_DEFINE_TYPENAME(OtfVoxelOccluder);
 
   // From Occluder -------------------------------------------------------------
 

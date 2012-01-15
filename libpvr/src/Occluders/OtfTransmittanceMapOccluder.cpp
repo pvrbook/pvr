@@ -65,13 +65,6 @@ OtfTransmittanceMapOccluder::OtfTransmittanceMapOccluder(Renderer::CPtr renderer
 
 //----------------------------------------------------------------------------//
 
-std::string OtfTransmittanceMapOccluder::typeName() const
-{ 
-  return "OtfTransmittanceMapOccluder"; 
-}
-
-//----------------------------------------------------------------------------//
-
 Color OtfTransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
 {
   // Error checking

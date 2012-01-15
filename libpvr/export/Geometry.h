@@ -49,7 +49,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Geometry);
+  PVR_TYPEDEF_SMART_PTRS(Geometry);
 
   // Exceptions ----------------------------------------------------------------
 

@@ -49,7 +49,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Occluder);
+  PVR_TYPEDEF_SMART_PTRS(Occluder);
 
   // Constructors, destructor --------------------------------------------------
 
@@ -73,10 +73,9 @@ public:
 class NullOccluder : public Occluder
 {
 public:
-  DECLARE_SMART_PTRS(NullOccluder);
-  DECLARE_CREATE_FUNC(NullOccluder);
-  virtual std::string typeName() const
-  { return "NullOccluder"; }
+  PVR_TYPEDEF_SMART_PTRS(NullOccluder);
+  PVR_DEFINE_CREATE_FUNC(NullOccluder);
+  PVR_DEFINE_TYPENAME(NullOccluder);
   virtual Color sample(const OcclusionSampleState &state) const
   { return Colors::one(); }
 };

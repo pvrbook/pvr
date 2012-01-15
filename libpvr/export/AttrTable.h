@@ -182,7 +182,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(AttrTable);
+  PVR_TYPEDEF_SMART_PTRS(AttrTable);
 
   typedef std::vector<std::string>           StringVec;
   typedef std::vector<StringVec>             StringTableVec;

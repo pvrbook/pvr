@@ -74,13 +74,6 @@ OtfVoxelOccluder::OtfVoxelOccluder(Renderer::CPtr renderer,
 
 //----------------------------------------------------------------------------//
 
-std::string OtfVoxelOccluder::typeName() const
-{ 
-  return "OtfVoxelOccluder"; 
-}
-
-//----------------------------------------------------------------------------//
-
 Color OtfVoxelOccluder::sample(const OcclusionSampleState &state) const
 {
   Vector vsP;

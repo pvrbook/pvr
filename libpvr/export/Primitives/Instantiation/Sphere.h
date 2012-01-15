@@ -54,16 +54,15 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Sphere);
+  PVR_TYPEDEF_SMART_PTRS(Sphere);
 
   // Factory -------------------------------------------------------------------
 
-  DECLARE_CREATE_FUNC(Sphere);
+  PVR_DEFINE_CREATE_FUNC(Sphere);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "SphereInstancer"; }
+  PVR_DEFINE_TYPENAME(SphereInstancer);
 
   // From Primitive ------------------------------------------------------------
 

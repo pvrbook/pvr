@@ -48,7 +48,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(BufferIntersection);
+  PVR_TYPEDEF_SMART_PTRS(BufferIntersection);
 
   // To be implemented by subclasses -------------------------------------------
 
@@ -66,7 +66,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(UniformMappingIntersection);
+  PVR_TYPEDEF_SMART_PTRS(UniformMappingIntersection);
 
   // Ctor ----------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(FrustumMappingIntersection);
+  PVR_TYPEDEF_SMART_PTRS(FrustumMappingIntersection);
 
   // Ctor ----------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(EmptySpaceOptimizer);
+  PVR_TYPEDEF_SMART_PTRS(EmptySpaceOptimizer);
 
   // To be implemented by subclasses -------------------------------------------
 
@@ -143,19 +143,18 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(SparseUniformOptimizer);
+  PVR_TYPEDEF_SMART_PTRS(SparseUniformOptimizer);
 
   // Ctor, factory -------------------------------------------------------------
 
-  DECLARE_CREATE_FUNC_2_ARG(SparseUniformOptimizer, SparseBuffer::Ptr,
+  PVR_DEFINE_CREATE_FUNC_2_ARG(SparseUniformOptimizer, SparseBuffer::Ptr,
                             Field3D::MatrixFieldMapping::Ptr);
   SparseUniformOptimizer(SparseBuffer::Ptr sparse, 
                          Field3D::MatrixFieldMapping::Ptr mapping);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "SparseUniformOptimizer"; }
+  PVR_DEFINE_TYPENAME(SparseUniformOptimizer);
 
   // From EmptySpaceOptimizer --------------------------------------------------
 
@@ -188,19 +187,18 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(SparseFrustumOptimizer);
+  PVR_TYPEDEF_SMART_PTRS(SparseFrustumOptimizer);
 
   // Ctor, factory -------------------------------------------------------------
 
-  DECLARE_CREATE_FUNC_2_ARG(SparseFrustumOptimizer, SparseBuffer::Ptr,
+  PVR_DEFINE_CREATE_FUNC_2_ARG(SparseFrustumOptimizer, SparseBuffer::Ptr,
                             Field3D::FrustumFieldMapping::Ptr);
   SparseFrustumOptimizer(SparseBuffer::Ptr sparse, 
                          Field3D::FrustumFieldMapping::Ptr mapping);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "SparseFrustumOptimizer"; }
+  PVR_DEFINE_TYPENAME(SparseFrustumOptimizer);
 
   // From EmptySpaceOptimizer --------------------------------------------------
 
@@ -236,7 +234,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(VoxelVolume);
+  PVR_TYPEDEF_SMART_PTRS(VoxelVolume);
 
   // Enums ---------------------------------------------------------------------
   
@@ -266,8 +264,7 @@ public:
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "VoxelVolume"; }
+  PVR_DEFINE_TYPENAME(VoxelVolume);
 
   // From Volume ---------------------------------------------------------------
 

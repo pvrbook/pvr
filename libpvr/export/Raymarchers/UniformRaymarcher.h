@@ -45,7 +45,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(UniformRaymarcher);
+  PVR_TYPEDEF_SMART_PTRS(UniformRaymarcher);
 
   // Ctor, factory -------------------------------------------------------------
 
@@ -57,9 +57,8 @@ public:
 
   // From ParamBase ------------------------------------------------------------
 
+  PVR_DEFINE_TYPENAME(Uniform);
   virtual void setParams(const Util::ParamMap &params);
-  virtual std::string typeName() const
-  { return "Uniform"; }
 
   // From Raymarcher -----------------------------------------------------------
 

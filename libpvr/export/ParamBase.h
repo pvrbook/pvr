@@ -40,7 +40,7 @@ namespace Util {
 class ParamBase
 {
 public:
-  DECLARE_SMART_PTRS(ParamBase);
+  PVR_TYPEDEF_SMART_PTRS(ParamBase);
   //! Virtual destructor
   virtual ~ParamBase()
   { }
@@ -71,7 +71,7 @@ namespace Model {
 class Filter : public Util::ParamBase
 {
 public:
-  DECLARE_SMART_PTRS(Filter);
+  PVR_TYPEDEF_SMART_PTRS(Filter);
 };
 
 //----------------------------------------------------------------------------//
@@ -83,7 +83,7 @@ public:
 class VoxelShader : public Util::ParamBase
 {
 public:
-  DECLARE_SMART_PTRS(VoxelShader);
+  PVR_TYPEDEF_SMART_PTRS(VoxelShader);
 };
 
 //----------------------------------------------------------------------------//

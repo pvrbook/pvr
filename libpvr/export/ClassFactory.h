@@ -50,7 +50,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(ClassFactory);
+  PVR_TYPEDEF_SMART_PTRS(ClassFactory);
 
   //! Convenience typedef 
   typedef typename Class_T::Ptr ClassPtr;

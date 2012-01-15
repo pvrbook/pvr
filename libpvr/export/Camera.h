@@ -78,7 +78,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Camera);
+  PVR_TYPEDEF_SMART_PTRS(Camera);
 
   typedef std::vector<Matrix> MatrixVec;
 
@@ -209,7 +209,7 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(PerspectiveCamera);
+  PVR_TYPEDEF_SMART_PTRS(PerspectiveCamera);
 
   // Constructor, destructor, factory ------------------------------------------
 
@@ -338,11 +338,11 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(SphericalCamera);
+  PVR_TYPEDEF_SMART_PTRS(SphericalCamera);
 
   // Constructor, destructor, factory ------------------------------------------
 
-  DECLARE_CREATE_FUNC(SphericalCamera);
+  PVR_DEFINE_CREATE_FUNC(SphericalCamera);
   
   // Main methods --------------------------------------------------------------
 

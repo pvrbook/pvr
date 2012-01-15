@@ -66,16 +66,15 @@ public:
   
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Line);
+  PVR_TYPEDEF_SMART_PTRS(Line);
 
   // Factory -------------------------------------------------------------------
 
-  DECLARE_CREATE_FUNC(Line);
+  PVR_DEFINE_CREATE_FUNC(Line);
 
   // From ParamBase ------------------------------------------------------------
 
-  virtual std::string typeName() const
-  { return "LineInstancer"; }
+  PVR_DEFINE_TYPENAME(LineInstancer);
 
   // From Primitive ------------------------------------------------------------
 

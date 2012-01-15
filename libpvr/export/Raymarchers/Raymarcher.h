@@ -78,7 +78,7 @@ public:
 
   // Typedefs ------------------------------------------------------------------
 
-  DECLARE_SMART_PTRS(Raymarcher);
+  PVR_TYPEDEF_SMART_PTRS(Raymarcher);
 
   // Main methods --------------------------------------------------------------
 
