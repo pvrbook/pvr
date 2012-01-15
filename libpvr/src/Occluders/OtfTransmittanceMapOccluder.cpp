@@ -50,15 +50,17 @@ namespace Render {
 
 OtfTransmittanceMapOccluder::OtfTransmittanceMapOccluder(Renderer::CPtr renderer, 
                                                          Camera::CPtr camera)
-  : m_camera(camera)
+  : m_clipBehindCamera(true), m_camera(camera)
 { 
   m_resolution = m_camera->resolution();
   m_floatRasterBounds = static_cast<Imath::V2f>(m_resolution);
   m_intRasterBounds = m_resolution - Imath::V2i(1);
   m_renderer = renderer;
   m_transmittanceMap.setSize(m_resolution.x, m_resolution.y);
-  m_computed.resize(m_resolution.x * m_resolution.y);
-  std::fill(m_computed.begin(), m_computed.end(), 0);
+  m_computed.resize(m_resolution.x * m_resolution.y, 0);
+  if (boost::shared_dynamic_cast<const SphericalCamera>(camera)) {
+    m_clipBehindCamera = false;
+  } 
 }
 
 //----------------------------------------------------------------------------//
@@ -77,18 +79,24 @@ Color OtfTransmittanceMapOccluder::sample(const OcclusionSampleState &state) con
     throw MissingCameraException("");
   }
 
+  // cout << state.wsP << endl;
+
   // Transform to camera space for depth and raster space for pixel coordinate
   Vector csP = m_camera->worldToCamera(state.wsP, state.rayState.time);
   Vector rsP = m_camera->worldToRaster(state.wsP, state.rayState.time);
   
+  // cout << "  " << csP << " -> " << rsP << endl;
+  
   // Bounds checks
-  if (csP.z > 0.0) {
+  if (m_clipBehindCamera && csP.z > 0.0) {
     return Colors::one();
   }
   if (rsP.x < 0.0 || rsP.x >= m_floatRasterBounds.x ||
       rsP.y < 0.0 || rsP.y >= m_floatRasterBounds.y) {
     return Colors::one();
   }
+
+  // cout << "  Accepted" << endl;
   
   // Compute depth to sample at
   float depth = (state.wsP - m_camera->position(state.rayState.time)).length();

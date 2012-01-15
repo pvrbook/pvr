@@ -8,6 +8,7 @@ import os
 import sys
 
 from random import random, seed, uniform
+from math import sin, cos
 
 from pvr import *
 
@@ -19,11 +20,11 @@ import pvr.renderers
 # Settings
 # ------------------------------------------------------------------------------
 
-seed(1)
+seed(2)
 
 reduceRes  =    8
 camResMult =    1 / float(reduceRes)
-lightResMult =  1
+lightResMult =  1 / float(reduceRes)
 
 raymarcherParams = {
     "use_volume_step_length" : 1,
@@ -38,7 +39,7 @@ RenderGlobals.setupMotionBlur(24.0, 0.5)
 # Camera
 # ------------------------------------------------------------------------------
 
-camera = pvr.cameras.standard(1.0 / reduceRes)
+camera = pvr.cameras.standard(camResMult)
 
 # ------------------------------------------------------------------------------
 # Renderer
@@ -58,26 +59,45 @@ renderer.setCamera(camera)
 
 c = CompositeVolume()
 
-for i in range(0, 10):
-    Tp = Matrix()
-    Tp.translate(V3f(-0.5))
+Tp = Matrix()
+Tp.translate(V3f(-0.5))
+
+for i in range(0, 25):
     S = Matrix()
-    S.scale(V3f(uniform(0.1, 1.0)))
+    S.scale(V3f(uniform(0.4, 0.8)))
     R = Matrix()
     R.setEulerAngles(V3f(random() * 180, random() * 180, random() * 180))
     T = Matrix()
-    T.translate(V3f(random() - 0.5, random() - 0.5, random() - 0.5) * 2)
+    rho = uniform(0.5, 1.0) * 1.6
+    phi = uniform(-3.14, 3.14)
+    theta = uniform(0.0, 3.14)
+    T.translate(V3f(rho * cos(phi) * sin(theta),
+                    rho * cos(theta),
+                    rho * sin(phi) * sin(theta)))
     volume = ConstantVolume(Tp * S * R * T)
-    volume.addAttribute("scattering", V3f(uniform(0.5,1), uniform(0.5,1), uniform(0.5,1)) * 10)
+    volume.addAttribute("scattering", V3f(1, 2, 4) * 4)
     c.add(volume)
+
+S = Matrix()
+S.scale(V3f(10.0))
+
+volume = ConstantVolume(Tp * S)
+volume.addAttribute("scattering", V3f(0.1))
+c.add(volume)
 
 renderer.addVolume(c)
 
 # Lights
-
-lights = pvr.lights.standardThreePoint(renderer, lightResMult)
-for light in lights:
-    renderer.addLight(light)
+lightParms = {
+    "position" : V3f(0.0), 
+    "intensity" : Color(2.0),
+    "rotation" : V3f(0.0, 90.0, 0.0),
+    "fov" : 170.0
+}
+light = pvr.lights.makePointLight(renderer, lightParms, lightResMult, 
+                                  OtfTransmittanceMapOccluder)
+light.setFalloffEnabled(True)
+renderer.addLight(light)
 
 # Execute render
 renderer.printSceneInfo()

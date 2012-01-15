@@ -17,7 +17,7 @@ import pvr.renderers
 # Settings
 # ------------------------------------------------------------------------------
 
-reduceRes  =    4
+reduceRes  =    8
 frustumRes =    V3i(2048 / reduceRes, 1556 / reduceRes, 
                     int(200 / pow(reduceRes, 0.5)))
 camResMult =    1 / float(reduceRes)

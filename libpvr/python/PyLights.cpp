@@ -37,9 +37,12 @@ void exportLights()
   // Light ---
 
   class_<Light, Light::Ptr, boost::noncopyable>("Light", no_init)
-    .def("typeName",     &Light::typeName)
-    .def("setIntensity", &Light::setIntensity)
-    .def("setOccluder",  &Light::setOccluder)
+    .def("typeName",          &Light::typeName)
+    .def("setIntensity",      &Light::setIntensity)
+    .def("setFalloffEnabled", &Light::setFalloffEnabled)
+    .def("falloffEnabled",    &Light::falloffEnabled)
+    .def("setOccluder",       &Light::setOccluder)
+    .def("occluder",          &Light::occluder)
     ;
   
   implicitly_convertible<Light::Ptr, Light::CPtr>();

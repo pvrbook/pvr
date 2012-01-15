@@ -55,7 +55,7 @@ public:
   // From Light
   virtual LightSample sample(const LightSampleState &state) const
   {
-    return LightSample(m_intensity, m_wsP);
+    return LightSample(m_intensity * falloff(state.wsP, m_wsP), m_wsP);
   }
   // Main methods
   void setPosition(const Vector &wsP)

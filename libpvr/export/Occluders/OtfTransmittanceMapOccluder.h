@@ -81,6 +81,7 @@ protected:
 
   // Data members --------------------------------------------------------------
 
+  bool                      m_clipBehindCamera;
   Renderer::CPtr            m_renderer;
   Camera::CPtr              m_camera;
   Imath::V2f                m_floatRasterBounds;
