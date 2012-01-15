@@ -34,7 +34,7 @@
 #include "pvr/Raymarchers/AdaptiveRaymarcher.h"
 #include "pvr/Raymarchers/UniformRaymarcher.h"
 #include "pvr/RaymarchSamplers/DensitySampler.h"
-#include "pvr/RaymarchSamplers/ScatteringSampler.h"
+#include "pvr/RaymarchSamplers/PhysicalSampler.h"
 #include "pvr/Volumes/VoxelVolume.h"
 
 //----------------------------------------------------------------------------//
@@ -127,7 +127,7 @@ void registerStandardTypes()
       ClassFactory<RaymarchSampler>::singleton();
     
     factory->registerClass(factoryFunc<RaymarchSampler, DensitySampler>);
-    factory->registerClass(factoryFunc<RaymarchSampler, ScatteringSampler>);
+    factory->registerClass(factoryFunc<RaymarchSampler, PhysicalSampler>);
   }
 
   // Volume classes

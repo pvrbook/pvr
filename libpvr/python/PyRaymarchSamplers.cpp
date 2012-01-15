@@ -15,7 +15,7 @@
 // Library includes
 
 #include <pvr/RaymarchSamplers/RaymarchSampler.h>
-#include <pvr/RaymarchSamplers/ScatteringSampler.h>
+#include <pvr/RaymarchSamplers/PhysicalSampler.h>
 
 #include "Common.h"
 
@@ -48,14 +48,14 @@ void exportRaymarchSamplers()
   
   implicitly_convertible<RaymarchSampler::Ptr, RaymarchSampler::CPtr>();
 
-  // ScatteringSampler ---
+  // PhysicalSampler ---
 
-  class_<ScatteringSampler, bases<RaymarchSampler>, ScatteringSampler::Ptr>
-    ("ScatteringSampler", no_init)
-    .def("__init__", make_constructor(ScatteringSampler::create))
+  class_<PhysicalSampler, bases<RaymarchSampler>, PhysicalSampler::Ptr>
+    ("PhysicalSampler", no_init)
+    .def("__init__", make_constructor(PhysicalSampler::create))
     ;
   
-  implicitly_convertible<ScatteringSampler::Ptr, ScatteringSampler::CPtr>();
+  implicitly_convertible<PhysicalSampler::Ptr, PhysicalSampler::CPtr>();
 
 }
 

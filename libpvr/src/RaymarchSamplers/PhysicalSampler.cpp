@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------//
 
-/*! \file ScatteringSampler.cpp
-  Contains implementations of ScatteringSampler class and related functions.
+/*! \file PhysicalSampler.cpp
+  Contains implementations of PhysicalSampler class and related functions.
  */
 
 //----------------------------------------------------------------------------//
@@ -10,7 +10,7 @@
 
 // Header include
 
-#include "pvr/RaymarchSamplers/ScatteringSampler.h"
+#include "pvr/RaymarchSamplers/PhysicalSampler.h"
 
 // System includes
 
@@ -54,25 +54,27 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// ScatteringSampler
+// PhysicalSampler
 //----------------------------------------------------------------------------//
 
-ScatteringSampler::ScatteringSampler()
-  : m_scatteringAttr("scattering")
+PhysicalSampler::PhysicalSampler()
+  : m_scatteringAttr("scattering"), 
+    m_absorptionAttr("absorption"),
+    m_emissionAttr("emission")
 {
 
 }
 
 //----------------------------------------------------------------------------//
 
-ScatteringSampler::Ptr ScatteringSampler::create()
+PhysicalSampler::Ptr PhysicalSampler::create()
 {
-  return Ptr(new ScatteringSampler); 
+  return Ptr(new PhysicalSampler); 
 }
 
 //----------------------------------------------------------------------------//
 
-RaymarchSample ScatteringSampler::sample(const VolumeSampleState &state) const
+RaymarchSample PhysicalSampler::sample(const VolumeSampleState &state) const
 {
   const Scene          &scene          = *RenderGlobals::scene();
   const Volume::CPtr    volume         = scene.volume;
@@ -80,11 +82,17 @@ RaymarchSample ScatteringSampler::sample(const VolumeSampleState &state) const
   LightSampleState      lightState     (state.rayState);
   OcclusionSampleState  occlusionState (state.rayState);
 
-  VolumeSample          sample         = volume->sample(state, m_scatteringAttr);
-
-  Color                 L              = Colors::zero();
-  const Color &         sigma_s        = sample.value;
   const Vector          wo             = -state.rayState.wsRay.dir;
+
+  VolumeSample          abSample       = volume->sample(state, m_absorptionAttr);
+  VolumeSample          emSample       = volume->sample(state, m_emissionAttr);
+  VolumeSample          scSample       = volume->sample(state, m_scatteringAttr);
+
+  const Color &         sigma_s        = scSample.value;
+  const Color &         sigma_a        = abSample.value;
+  const Color &         em             = emSample.value;
+
+  Color                 L_sc           = Colors::zero();
 
   // Only perform calculation if ray is primary and scattering coefficient is
   // greater than zero.
@@ -108,15 +116,15 @@ RaymarchSample ScatteringSampler::sample(const VolumeSampleState &state) const
 
       // Find the scattering probability
       const Vector wi = (state.wsP - lightSample.wsP).normalized();
-      const float p = sample.phaseFunction->probability(wi, wo);
+      const float p = scSample.phaseFunction->probability(wi, wo);
 
       // Update luminance
-      L += sigma_s * p * lightSample.luminance * transmittance;
+      L_sc += sigma_s * p * lightSample.luminance * transmittance;
 
     }
   }
 
-  return RaymarchSample(L, sigma_s);
+  return RaymarchSample(L_sc + em, sigma_s + sigma_a);
 }
 
 //----------------------------------------------------------------------------//

@@ -1,13 +1,13 @@
 //-*-c++-*--------------------------------------------------------------------//
 
-/*! \file ScatteringSampler.h
-  Contains the ScatteringSampler class and related functions.
+/*! \file PhysicalSampler.h
+  Contains the PhysicalSampler class and related functions.
  */
 
 //----------------------------------------------------------------------------//
 
-#ifndef __INCLUDED_PVR_SCATTERINGSAMPLER_H__
-#define __INCLUDED_PVR_SCATTERINGSAMPLER_H__
+#ifndef __INCLUDED_PVR_PHYSICALSAMPLER_H__
+#define __INCLUDED_PVR_PHYSICALSAMPLER_H__
 
 //----------------------------------------------------------------------------//
 // Includes
@@ -32,32 +32,32 @@ namespace pvr {
 namespace Render {
 
 //----------------------------------------------------------------------------//
-// ScatteringSampler
+// PhysicalSampler
 //----------------------------------------------------------------------------//
 
-/*! \class ScatteringSampler
+/*! \class PhysicalSampler
    \brief Looks for scattering and performs a simplified lighting calculation.
  */
 
 //----------------------------------------------------------------------------//
 
-class ScatteringSampler : public RaymarchSampler
+class PhysicalSampler : public RaymarchSampler
 {
 public:
   
   // Typedefs ---
 
-  DECLARE_SMART_PTRS(ScatteringSampler);
+  DECLARE_SMART_PTRS(PhysicalSampler);
 
   // Constructor, factory ---
 
-  ScatteringSampler();
+  PhysicalSampler();
   static Ptr create();
 
   // From ParamBase ---
 
   virtual std::string typeName() const
-  { return "ScatteringSampler"; }
+  { return "PhysicalSampler"; }
   
   // From RaymarchSampler ---
 
@@ -67,7 +67,12 @@ private:
 
   // Private data members ---
 
+  //! Used for sampling the scattering attribute
   VolumeAttr m_scatteringAttr;
+  //! Used for sampling the absorption attribute
+  VolumeAttr m_absorptionAttr;
+  //! Used for sampling the emission attribute
+  VolumeAttr m_emissionAttr;
 
 };
 

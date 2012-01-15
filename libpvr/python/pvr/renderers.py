@@ -21,7 +21,7 @@ def standard(params):
     p.update(params)
     # Set up Renderer
     renderer = Renderer()
-    sampler = ScatteringSampler()
+    sampler = PhysicalSampler()
     raymarcher = UniformRaymarcher()
     raymarcher.setRaymarchSampler(sampler)
     raymarcher.setParams(p)
