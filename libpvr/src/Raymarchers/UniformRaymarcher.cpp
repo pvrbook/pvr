@@ -62,6 +62,39 @@ namespace {
 
   //--------------------------------------------------------------------------//
 
+  void updateTransmittance(const Render::RayState &state, 
+                           const double stepLength, 
+                           const Color &sigma_e, const Color &holdout, 
+                           Color &T, Color &T_ho, Color &T_out)
+  {
+    // Update holdout transmittance 
+    Color extinction = sigma_e;
+    if (state.rayDepth > 0) {
+      extinction += holdout;
+    } else {
+      // Update accumulated holdout
+      if (Math::max(holdout) > 0.0f) {
+        T_ho *= exp(-holdout * stepLength);
+      }
+    }
+
+    // Update transmittance
+    Color expValue = Colors::one();
+    if (Math::max(extinction) > 0.0f) {
+      expValue = exp(-extinction * stepLength);
+      T *= expValue;
+    }
+
+    // Update output transmittance
+    if (state.rayDepth == 0) {
+      T_out.x = Imath::lerp(1.0f - T_ho.x, T_out.x, expValue.x);
+      T_out.y = Imath::lerp(1.0f - T_ho.y, T_out.y, expValue.y);
+      T_out.z = Imath::lerp(1.0f - T_ho.z, T_out.z, expValue.z);
+    }
+  }
+
+  //--------------------------------------------------------------------------//
+
 } // local namespace
 
 //----------------------------------------------------------------------------//
@@ -89,6 +122,14 @@ UniformRaymarcher::Params::Params()
 
 //----------------------------------------------------------------------------//
 // UniformRaymarcher
+//----------------------------------------------------------------------------//
+
+UniformRaymarcher::UniformRaymarcher()
+  : m_holdoutAttr("holdout")
+{
+
+}
+
 //----------------------------------------------------------------------------//
 
 void UniformRaymarcher::setParams(const Util::ParamMap &params)
@@ -127,8 +168,10 @@ UniformRaymarcher::integrate(const RayState &state) const
   // Ray integration variables ---
 
   VolumeSampleState sampleState(state);
-  Color             L = Colors::zero();
-  Color             T = Colors::one();
+  Color             L     = Colors::zero();
+  Color             T     = Colors::one();
+  Color             T_ho  = Colors::one();
+  Color             T_out = Colors::one();
 
   // Interval loop ---
 
@@ -160,20 +203,22 @@ UniformRaymarcher::integrate(const RayState &state) const
 
     while (stepT0 < tEnd) {
 
-      const double t = (stepT0 + stepT1) * 0.5;
-      sampleState.wsP = state.wsRay(t);
-
+      // Information about current step
       const double stepLength = stepT1 - stepT0;
+      const double t          = (stepT0 + stepT1) * 0.5;
+      sampleState.wsP         = state.wsRay(t);
 
+      // Get holdout, luminance and extinction from the scene
+      VolumeSample hoSample = 
+        RenderGlobals::scene()->volume->sample(sampleState, m_holdoutAttr);
       RaymarchSample sample = m_raymarchSampler->sample(sampleState);
 
       // Update transmittance
-      if (Math::max(sample.extinction) > 0.0f) {
-        T *= exp(-sample.extinction * stepLength);
-      }
+      updateTransmittance(state, stepLength, sample.extinction, hoSample.value,
+                          T, T_ho, T_out);
 
       // Update luminance
-      L += sample.luminance * T * stepLength;
+      L += sample.luminance * T * T_ho * stepLength;
 
       // Early termination
       if (m_params.doEarlyTermination &&
@@ -187,14 +232,14 @@ UniformRaymarcher::integrate(const RayState &state) const
         updateDeepFunctions(stepT1, L, T, lf, tf);
       }
 
-      // Set up next steps
-      stepT0 = stepT1;
-      stepT1 = min(tEnd, stepT1 + baseStepLength);
-
       // Terminate if requested
       if (doTerminate) {
         break;
       }
+
+      // Set up next steps
+      stepT0 = stepT1;
+      stepT1 = min(tEnd, stepT1 + baseStepLength);
 
     } // end raymarch of single interval
 
@@ -212,7 +257,11 @@ UniformRaymarcher::integrate(const RayState &state) const
     lf->removeDuplicates();
   }
 
-  return IntegrationResult(L, lf, T, tf);
+  if (state.rayDepth == 0) {
+    return IntegrationResult(L, lf, T_out, tf);
+  } else {
+    return IntegrationResult(L, lf, T, tf);
+  }
 }
 
 //----------------------------------------------------------------------------//

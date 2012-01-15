@@ -20,6 +20,7 @@
 // Project headers
 
 #include "pvr/Raymarchers/Raymarcher.h"
+#include "pvr/Volumes/Volume.h"
 
 //----------------------------------------------------------------------------//
 // Namespaces
@@ -48,6 +49,8 @@ public:
 
   // Ctor, factory -------------------------------------------------------------
 
+  //! Default constructor
+  UniformRaymarcher();
   //! Factory method
   static Ptr create()
   { return Ptr(new UniformRaymarcher); }
@@ -86,6 +89,8 @@ protected:
   
   //! Holds user parameters.
   Params m_params;
+  //! Holdout attribute
+  VolumeAttr m_holdoutAttr;
 
 };
 
