@@ -47,23 +47,33 @@ public:
   // Typedefs ------------------------------------------------------------------
 
   PVR_TYPEDEF_SMART_PTRS(SpotLight);
+
+  // Ctor, factory -------------------------------------------------------------
+
   PVR_DEFINE_CREATE_FUNC(SpotLight);
+
+  // From ParamBase ------------------------------------------------------------
+
   PVR_DEFINE_TYPENAME(SpotLight);
-  // From Light
-  virtual LightSample sample(const LightSampleState &state) const
-  {
-    return LightSample(m_intensity, m_wsP);
-  }
-  // Main methods
-  void setCamera(Camera::CPtr camera)
-  { 
-    m_camera = camera; 
-    m_wsP = camera->position(PTime(0.0));
-  }
-  Camera::CPtr camera() const
-  { return m_camera; }
+
+  // From Light ----------------------------------------------------------------
+
+  virtual LightSample sample(const LightSampleState &state) const;
+
+  // Main methods --------------------------------------------------------------
+
+  //! Sets the camera to use for projection
+  void setCamera(Camera::CPtr camera);
+  //! Returns the camera used for projection
+  Camera::CPtr camera() const;
+
 private:
+
+  // Private data members ------------------------------------------------------
+
+  //! Position of spot light
   Vector m_wsP;
+  //! Camera to use for projection
   Camera::CPtr m_camera;
 };
 
