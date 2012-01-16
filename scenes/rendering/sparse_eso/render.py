@@ -23,7 +23,7 @@ bufferRes =     1024 / reduceRes
 camResMult =    1 / float(reduceRes)
 lightResMult =  1 / float(reduceRes)
 
-primType = "SurfaceInstancer"
+primType = Prim.Inst.Surface
 
 primParams = {
     # Base per-point
@@ -79,8 +79,7 @@ modeler.setCamera(camera)
 # Add input
 input = ModelerInput()
 geo   = Geometry.read("surface.bgeo")
-# geo.meshes().debugPrint()
-prim  = createInstantiationPrim(primType)
+prim  = primType()
 prim.setParams(primParams)
 input.setGeometry(geo)
 input.setVolumePrimitive(prim)

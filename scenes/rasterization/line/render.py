@@ -22,7 +22,7 @@ frustumRes =    V3i(2048 / reduceRes, 1556 / reduceRes, 200 / reduceRes)
 camResMult =    1 / float(reduceRes)
 lightResMult =  1 / float(reduceRes)
 
-primType = "Line"
+primType = Prim.Rast.Line
 
 primParams = {
     # Per-point
@@ -61,7 +61,7 @@ modeler.setCamera(camera)
 # Add input
 input = ModelerInput()
 geo   = Geometry.read("line.bgeo")
-prim  = createRasterizationPrim(primType)
+prim  = primType()
 prim.setParams(primParams)
 input.setGeometry(geo)
 input.setVolumePrimitive(prim)

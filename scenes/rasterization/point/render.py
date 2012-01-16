@@ -57,7 +57,7 @@ modeler.setCamera(camera)
 # Add input
 input = ModelerInput()
 geo   = Geometry.read("point.bgeo")
-prim  = createRasterizationPrim("Point")
+prim  = Prim.Rast.Point()
 prim.setParams(primParams)
 input.setGeometry(geo)
 input.setVolumePrimitive(prim)

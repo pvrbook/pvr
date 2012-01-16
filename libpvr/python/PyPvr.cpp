@@ -41,7 +41,6 @@ using namespace pvr;
 
 void exportAttrTable();
 void exportCameraFunctions();
-void exportClassFactory();
 void exportCurve();
 void exportDeepImage();
 void exportGeometry();
@@ -112,7 +111,6 @@ BOOST_PYTHON_MODULE(_pvr)
 
   exportAttrTable();
   exportCameraFunctions();
-  exportClassFactory();
   exportCurve();
   exportDeepImage();
   exportField3D();

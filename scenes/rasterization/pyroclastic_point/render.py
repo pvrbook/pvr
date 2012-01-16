@@ -22,7 +22,7 @@ frustumRes =    V3i(2048 / reduceRes, 1556 / reduceRes, 200 / reduceRes)
 camResMult =    1 / float(reduceRes)
 lightResMult =  1 / float(reduceRes)
 
-primType = "PyroclasticPoint"
+primType = Prim.Rast.PyroclasticPoint
 
 primParams = {
     # Base controls
@@ -70,7 +70,7 @@ modeler.setCamera(camera)
 # Add input
 input = ModelerInput()
 geo   = Geometry.read("point.bgeo")
-prim  = createRasterizationPrim(primType)
+prim  = primType()
 prim.setParams(primParams)
 input.setGeometry(geo)
 input.setVolumePrimitive(prim)

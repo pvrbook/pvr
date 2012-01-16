@@ -36,7 +36,7 @@ namespace Util {
   
 //! Base class that provides a convenient entry point for control
 //! via ParamMap input. Also provides the typeName() necessary for
-//! ClassFactory registration. 
+//! runtime identification (mostly logging)
 class ParamBase
 {
 public:
