@@ -233,6 +233,11 @@ void exportTypes()
     .def_readwrite("r", &Color::x)
     .def_readwrite("g", &Color::y)
     .def_readwrite("b", &Color::z)
+    .def(self + self)
+    .def(self - self)
+    .def(self * self)
+    .def(self * long())
+    .def(self * float())
     ;
 
   // Matrix ---
@@ -243,6 +248,8 @@ void exportTypes()
     &Imath::M44d::setAxisAngle;
   const Imath::M44d& (Imath::M44d::*scaleHelper)(const Imath::V3f&) = 
     &Imath::M44d::scale;
+  const Imath::M44d& (Imath::M44d::*rotateHelper)(const Imath::V3f&) = 
+    &Imath::M44d::rotate;
   const Imath::M44d& (Imath::M44d::*translateHelper)(const Imath::V3f&) = 
     &Imath::M44d::translate;
   class_<Imath::Matrix44<double> >("Matrix")
@@ -252,6 +259,7 @@ void exportTypes()
     .def("setAxisAngle",   setAxisHelper,        bpRetNone())
     .def("makeIdentity",   &Imath::M44d::makeIdentity)
     .def("scale",          scaleHelper,          bpRetNone()) 
+    .def("rotate",         rotateHelper,         bpRetNone()) 
     .def("translate",      translateHelper,      bpRetNone())
     ;
 

@@ -125,7 +125,7 @@ volume2 = VoxelVolume()
 volume2.setBuffer(buffer2)
 volume2.addAttribute("scattering", V3f(1.0))
 
-phaseFunction = DoubleHenyeyGreenstein(0.5, 0.0, 0.8)
+phaseFunction = DoubleHenyeyGreenstein(0.5, 0.0, 0.2)
 volume2.setPhaseFunction(phaseFunction)
 
 composite = CompositeVolume()

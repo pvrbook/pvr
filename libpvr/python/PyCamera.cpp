@@ -75,6 +75,7 @@ void exportCurve()
   BindCurve<Color>::bind("ColorCurve");
   BindCurve<Vector>::bind("VectorCurve");
   BindCurve<Quat>::bind("QuatCurve");
+  BindCurve<Matrix>::bind("MatrixCurve");
 }
 
 //----------------------------------------------------------------------------//

@@ -112,7 +112,7 @@ float DoubleHenyeyGreenstein::probability(const Vector &in,
     std::pow(1.0f + m_g1 * m_g1 - 2.0f * m_g1 * cosTheta, 1.5f);
   float p2 = k_isotropic * (1.0f - m_g2 * m_g2) / 
     std::pow(1.0f + m_g2 * m_g2 - 2.0f * m_g2 * cosTheta, 1.5f);
-  return Math::fit01(m_blend, p1, p2);
+  return Math::fit01(m_blend, p2, p1);
 }
 
 //----------------------------------------------------------------------------//

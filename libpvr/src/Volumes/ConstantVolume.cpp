@@ -34,11 +34,15 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-ConstantVolume::ConstantVolume(const Matrix &localToWorld)
+  ConstantVolume::ConstantVolume(const Util::MatrixCurve &localToWorld)
   : m_localToWorld(localToWorld),
     m_maxAttrValue(0.0f)
 {
-  m_worldToLocal = localToWorld.inverse();
+  for (size_t i = 0, size = localToWorld.numSamples(); i < size; ++i) {
+    float t = localToWorld.samplePoints()[i];
+    Matrix m = localToWorld.sampleValues()[i].inverse();
+    m_worldToLocal.addSample(t, m);
+  }
 }
 
 //----------------------------------------------------------------------------//
@@ -62,7 +66,7 @@ VolumeSample ConstantVolume::sample(const VolumeSampleState &state,
 
   // Check if sample falls within volume
   Vector lsP;
-  m_worldToLocal.multVecMatrix(state.wsP, lsP);
+  m_worldToLocal.interpolate(state.rayState.time).multVecMatrix(state.wsP, lsP);
   if (Bounds::zeroOne().intersects(lsP)) {
     return VolumeSample(m_attrValues[attribute.index()], m_phaseFunction);
   } else {
@@ -74,7 +78,13 @@ VolumeSample ConstantVolume::sample(const VolumeSampleState &state,
 
 BBox ConstantVolume::wsBounds() const
 {
-  return Imath::transform(Bounds::zeroOne(), m_localToWorld);
+  BBox bounds;
+  for (size_t i = 0, size = m_localToWorld.numSamples(); i < size; ++i) {
+    Matrix m = m_localToWorld.sampleValues()[i];
+    BBox b = Imath::transform(Bounds::zeroOne(), m);
+    bounds.extendBy(b);
+  }
+  return bounds;
 }
 
 //----------------------------------------------------------------------------//
@@ -83,8 +93,9 @@ IntervalVec ConstantVolume::intersect(const RayState &state) const
 {
   // Transform ray to local space
   Ray lsRay;
-  m_worldToLocal.multVecMatrix(state.wsRay.pos, lsRay.pos);
-  m_worldToLocal.multDirMatrix(state.wsRay.dir, lsRay.dir);
+  const Matrix wsToLs = m_worldToLocal.interpolate(state.time);
+  wsToLs.multVecMatrix(state.wsRay.pos, lsRay.pos);
+  wsToLs.multDirMatrix(state.wsRay.dir, lsRay.dir);
   // Intersect against unity bounds
   double t0, t1;
   if (Math::intersect(lsRay, Bounds::zeroOne(), t0, t1)) {

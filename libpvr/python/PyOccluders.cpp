@@ -59,7 +59,6 @@ void exportOccluders()
   class_<RaymarchOccluder, bases<Occluder>, RaymarchOccluder::Ptr>
     ("RaymarchOccluder", no_init)
     .def("__init__", make_constructor(RaymarchOccluder::create))
-    .def("setRaymarcher", &RaymarchOccluder::setRaymarcher)
     ;
   
   implicitly_convertible<RaymarchOccluder::Ptr, RaymarchOccluder::CPtr>();

@@ -45,9 +45,10 @@ namespace Render {
 // RaymarchOccluder
 //----------------------------------------------------------------------------//
 
-RaymarchOccluder::Ptr RaymarchOccluder::create()
-{ 
-  return Ptr(new RaymarchOccluder); 
+RaymarchOccluder::RaymarchOccluder(Renderer::CPtr renderer)
+  : m_renderer(renderer)
+{
+  
 }
 
 //----------------------------------------------------------------------------//
@@ -55,14 +56,7 @@ RaymarchOccluder::Ptr RaymarchOccluder::create()
 Color RaymarchOccluder::sample(const OcclusionSampleState &state) const
 {
   RayState raymarchState = state.makeSecondaryRayState();
-  return m_raymarcher->integrate(raymarchState).transmittance;
-}
-
-//----------------------------------------------------------------------------//
-
-void RaymarchOccluder::setRaymarcher(Raymarcher::CPtr raymarcher)
-{ 
-  m_raymarcher = raymarcher; 
+  return m_renderer->trace(raymarchState).transmittance;
 }
 
 //----------------------------------------------------------------------------//

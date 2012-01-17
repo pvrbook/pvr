@@ -72,6 +72,8 @@ def makePointLight(renderer, parms, resMult, occlType):
     elif occlType == OtfVoxelOccluder:
         occluder = OtfVoxelOccluder(renderer, parms["position"], 
                                     int(256 * resMult))
+    elif occlType == RaymarchOccluder:
+        occluder = RaymarchOccluder(renderer)
     else:
         occluder = NullOccluder()
     light.setOccluder(occluder)
@@ -109,6 +111,8 @@ def makeSpotLight(renderer, parms, resMult, occlType):
     elif occlType == OtfVoxelOccluder:
         occluder = OtfVoxelOccluder(renderer, parms["position"], 
                                     int(256 * resMult))
+    elif occlType == RaymarchOccluder:
+        occluder = RaymarchOccluder(renderer)
     else:
         occluder = NullOccluder()
     light.setOccluder(occluder)

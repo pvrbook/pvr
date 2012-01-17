@@ -117,7 +117,7 @@ namespace Render {
 
 Renderer::Params::Params()
   : doPrimary(true), doLuminanceMap(false), doTransmittanceMap(false), 
-    doRandomizePixelSamples(false)
+    doRandomizePixelSamples(false), numPixelSamples(1)
 { 
   
 }
@@ -250,15 +250,23 @@ void Renderer::setDoRandomizePixelSamples(const bool enabled)
 
 //----------------------------------------------------------------------------//
 
+void Renderer::setNumPixelSamples(const size_t numSamples)
+{
+  m_params.numPixelSamples = numSamples;
+}
+
+//----------------------------------------------------------------------------//
+
+size_t Renderer::numPixelSamples() const
+{
+  return m_params.numPixelSamples;
+}
+  
+//----------------------------------------------------------------------------//
+
 //! \todo Replace RNG with a proper Sampler!!!
 void Renderer::execute()
 {
-  if (m_params.doPrimary) {
-    Log::print("Rendering image " + str(m_primary->size()));
-  } else {
-    Log::print("Rendering transmittance map " + str(m_primary->size()));
-  }
-
   if (!m_camera) {
     throw MissingCameraException();
   }
@@ -273,6 +281,18 @@ void Renderer::execute()
 
   if (!m_raymarcher) {
     throw MissingRaymarcherException();
+  }
+
+  // Log reporting ---
+
+  const size_t numSamples = m_params.numPixelSamples;
+
+  if (m_params.doPrimary) {
+    Log::print("Rendering image " + str(m_primary->size()) + " (" + 
+               str(numSamples) + " x " + str(numSamples) + ")");
+  } else {
+    Log::print("Rendering transmittance map " + str(m_primary->size()) + " (" + 
+               str(numSamples) + " x " + str(numSamples) + ")");
   }
 
   // Initialization ---
@@ -291,25 +311,46 @@ void Renderer::execute()
     Sys::Interrupt::throwOnAbort();
     // Print progress
     progress.update(i.progress());
-    // Set up pixel sample and time
-    float xSample = i.rsX();
-    float ySample = i.rsY();
-    if (m_params.doRandomizePixelSamples) {
-      xSample += m_rng.nextf() - 0.5f;
-      ySample += m_rng.nextf() - 0.5f;
+    // Pixel result
+    Color luminance = Colors::zero();
+    Color alpha = Colors::zero();
+    // Transmittance functions to be averaged
+    std::vector<ColorCurve::CPtr> tf, lf;
+    // For each pixel sample (in each dimension)
+    for (size_t iX = 0; iX < numSamples; iX++) {
+      for (size_t iY = 0; iY < numSamples; iY++) {
+        float xSample = i.rsX();
+        float ySample = i.rsY();
+        if (m_params.doRandomizePixelSamples) {
+          xSample += m_rng.nextf() - 0.5f;
+          ySample += m_rng.nextf() - 0.5f;
+        }
+        PTime pTime((iX + iY * numSamples + m_rng.nextf()) / 
+                    (numSamples * numSamples));
+        // Render pixel
+        IntegrationResult result = integrateRay(xSample, ySample, pTime);
+        // Update accumulated result
+        luminance += result.luminance;
+        alpha += Colors::one() - result.transmittance;
+        if (result.transmittanceFunction) {
+          tf.push_back(result.transmittanceFunction);
+        }
+        if (result.luminanceFunction) {
+          lf.push_back(result.luminanceFunction);
+        }
+      }
     }
-    PTime pTime(m_rng.nextf());
-    // Render pixel
-    IntegrationResult result = integrateRay(xSample, ySample, pTime);
+    // Normalize luminance and transmittance
+    luminance *= 1.0 / m_params.numPixelSamples;
+    alpha *= 1.0 / m_params.numPixelSamples;
     // Update resulting image and transmittance/luminance maps
-    Color alpha = Colors::one() - result.transmittance;
-    i.setPixel(result.luminance);
+    i.setPixel(luminance);
     i.setPixelAlpha((alpha.x + alpha.y + alpha.z) / 3.0f);
-    if (result.transmittanceFunction) {
-      m_deepTransmittance->setPixel(i.x, i.y, result.transmittanceFunction);
+    if (tf.size() > 0) {
+      m_deepTransmittance->setPixel(i.x, i.y, ColorCurve::average(tf));
     }
-    if (result.luminanceFunction) {
-      m_deepLuminance->setPixel(i.x, i.y, result.luminanceFunction);
+    if (lf.size() > 0) {
+      m_deepLuminance->setPixel(i.x, i.y, ColorCurve::average(lf));
     }
   }
 

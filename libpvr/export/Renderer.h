@@ -103,8 +103,14 @@ public:
   void setTransmittanceMapEnabled(const bool enabled);
   //! Sets whether to enable computation of the deep luminance map.
   void setLuminanceMapEnabled(const bool enabled);
+
   //! Sets whether to randomize pixel samples
   void setDoRandomizePixelSamples(const bool enabled);
+  //! Sets the number of pixel samples to use
+  //! \note The number of rays fired will be the square of this number
+  void setNumPixelSamples(const size_t numSamples);
+  //! Returns the number of pixel samples to use
+  size_t numPixelSamples() const;
 
   // Execution -----------------------------------------------------------------
 
@@ -142,6 +148,7 @@ private:
     bool doLuminanceMap;
     bool doTransmittanceMap;
     bool doRandomizePixelSamples;
+    size_t numPixelSamples;
   };
 
   // Private data members ------------------------------------------------------

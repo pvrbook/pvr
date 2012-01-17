@@ -20,7 +20,7 @@
 // Project headers
 
 #include "pvr/Occluders/Occluder.h"
-#include "pvr/Raymarchers/Raymarcher.h"
+#include "pvr/Renderer.h"
 
 //----------------------------------------------------------------------------//
 // Namespaces
@@ -49,7 +49,8 @@ public:
 
   // Factory methods -----------------------------------------------------------
 
-  static Ptr create();
+  RaymarchOccluder(Renderer::CPtr renderer);
+  PVR_DEFINE_CREATE_FUNC_1_ARG(RaymarchOccluder, Renderer::CPtr)
 
   // From ParamBase ------------------------------------------------------------
 
@@ -59,15 +60,11 @@ public:
 
   virtual Color sample(const OcclusionSampleState &state) const;
 
-  // Main methods --------------------------------------------------------------
-
-  void setRaymarcher(Raymarcher::CPtr raymarcher);
-
 protected:
 
   // Data members --------------------------------------------------------------
 
-  Raymarcher::CPtr m_raymarcher;
+  Renderer::CPtr m_renderer;
 };
 
 //----------------------------------------------------------------------------//

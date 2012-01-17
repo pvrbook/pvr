@@ -29,6 +29,7 @@
 
 #include "pvr/AttrTable.h"
 #include "pvr/Exception.h"
+#include "pvr/Math.h"
 #include "pvr/Types.h"
 
 //----------------------------------------------------------------------------//
@@ -84,23 +85,25 @@ public:
   //! \param t Sample position
   //! \param value Sample value
   void addSample(const float t, const T &value);
-
   //! Interpolates a value from the curve.
   //! \param t Position along curve
   T interpolate(const float t) const;
-
   //! Returns number of samples in curve
   size_t numSamples() const
   { return m_samples.size(); }
-  
+  //! Returns a const reference to the samples in the curve.
+  const SampleVec& samples() const
+  { return m_samples; }
   //! Returns the sample locations
   std::vector<float> samplePoints() const;
-
   //! Returns the sample values
   std::vector<T> sampleValues() const;
 
   //! Removes duplicated values
   void removeDuplicates();
+
+  //! Average a set of Curves into a single one.
+  static CPtr average(const std::vector<CPtr> &curves);
 
 private:
   
@@ -117,7 +120,6 @@ private:
     {
       return test.first > m_match;
     }
-  private:
     float m_match;
   };
 
@@ -127,13 +129,13 @@ private:
   //! This defaults to zero, but for some types (for example Quaternion), 
   //! We need more arguments to the constructor. In these cases the method
   //! is specialized for the given T type.
-  T defaultReturnValue() const
+  static T defaultReturnValue() 
   { return T(0); }
 
   //! The default implementation for linear interpolation. Works for all classes
   //! for which Imath::lerp is implemented (i.e float/double, V2f, V3f).
   //! For other types this method needs to be specialized.
-  T lerp(const Sample &lower, const Sample &upper, const float t) const
+  static T lerp(const Sample &lower, const Sample &upper, const float t) 
   { return Imath::lerp(lower.second, upper.second, t); }
 
   // Private data members ------------------------------------------------------
@@ -149,6 +151,7 @@ typedef Curve<float>  FloatCurve;
 typedef Curve<Color>  ColorCurve;
 typedef Curve<Vector> VectorCurve;
 typedef Curve<Quat>   QuatCurve;
+typedef Curve<Matrix> MatrixCurve;
 
 //----------------------------------------------------------------------------//
 // Template implementations
@@ -259,13 +262,80 @@ void Curve<T>::removeDuplicates()
 }
 
 //----------------------------------------------------------------------------//
+
+template <typename T>
+typename Curve<T>::CPtr 
+Curve<T>::average(const std::vector<Curve<T>::CPtr> &curves)
+{
+  typename Curve<T>::Ptr result(new Curve<T>);
+
+  if (curves.size() == 0) {
+    return result;
+  }
+
+  if (curves.size() == 1) {
+    return curves[0];
+  }
+
+  // Find first and last sample in all curves
+  float first = std::numeric_limits<float>::max();
+  float last = std::numeric_limits<float>::min();
+  size_t numSamples = 0;
+  for (size_t c = 0, numCurves = curves.size(); c < numCurves; ++c) {
+    first = std::min(first, curves[c]->samplePoints().front());
+    last = std::max(last, curves[c]->samplePoints().back());
+    numSamples = std::max(numSamples, curves[c]->samplePoints().size());
+  }
+
+  // Average curves
+  for (size_t i = 0; i < numSamples; ++i) {
+    T value = defaultReturnValue();
+    float t = Math::fit(static_cast<float>(i), 0.0f, 
+                        static_cast<float>(numSamples - 1), first, last);
+    for (size_t c = 0, numCurves = curves.size(); c < numCurves; ++c) {
+      value += curves[c]->interpolate(t);
+    }
+    value *= 1.0 / curves.size();
+    result->addSample(t, value);
+  }
+
+  return result;
+}
+
+//----------------------------------------------------------------------------//
 // Template specializations
+//----------------------------------------------------------------------------//
+
+//! Template specialization for matrices. 
+//! The default constructor gives us the appropriate identity matrix
+template <>
+inline Imath::Matrix44<float> 
+Curve<Imath::Matrix44<float> >::defaultReturnValue() 
+{ 
+  Imath::Matrix44<float> identity;
+  identity.makeIdentity();
+  return identity;
+}
+
+//----------------------------------------------------------------------------//
+
+//! Template specialization for quaternionsmatrices. 
+//! The default constructor gives us the appropriate identity matrix
+template <>
+inline Imath::Matrix44<double> 
+Curve<Imath::Matrix44<double> >::defaultReturnValue() 
+{ 
+  Imath::Matrix44<double> identity;
+  identity.makeIdentity();
+  return identity;
+}
+
 //----------------------------------------------------------------------------//
 
 //! Template specialization for quaternions. The default constructor gives
 //! us the appropriate default orientation.
 template <>
-inline Quat Curve<Quat>::defaultReturnValue() const
+inline Quat Curve<Quat>::defaultReturnValue() 
 {
   return Quat();
 }
@@ -276,7 +346,7 @@ inline Quat Curve<Quat>::defaultReturnValue() const
 template <>
 inline Quat Curve<Quat>::lerp(const Curve<Quat>::Sample &lower, 
                               const Curve<Quat>::Sample &upper, 
-                              const float t) const
+                              const float t) 
 {
   return Imath::slerp(lower.second, upper.second, static_cast<double>(t));
 }

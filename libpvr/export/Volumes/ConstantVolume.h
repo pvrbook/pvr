@@ -17,6 +17,7 @@
 
 // Project headers
 
+#include "pvr/Curve.h"
 #include "pvr/Volumes/Volume.h"
 
 //----------------------------------------------------------------------------//
@@ -40,8 +41,8 @@ public:
 
   // Constructors and destructor -----------------------------------------------
 
-  ConstantVolume(const Matrix &localToWorld);
-  PVR_DEFINE_CREATE_FUNC_1_ARG(ConstantVolume, const Matrix &);
+  ConstantVolume(const Util::MatrixCurve &localToWorld);
+  PVR_DEFINE_CREATE_FUNC_1_ARG(ConstantVolume, const Util::MatrixCurve &);
   
   // Main methods --------------------------------------------------------------
 
@@ -66,13 +67,14 @@ protected:
 
   // Utility methods -----------------------------------------------------------
 
+  
 
   // Data members --------------------------------------------------------------
   
   //! Local to world transform
-  Matrix m_localToWorld;
+  Util::MatrixCurve m_localToWorld;
   //! World to local transform
-  Matrix m_worldToLocal;
+  Util::MatrixCurve m_worldToLocal;
   //! World space bounds
   BBox m_wsBounds;
   //! Attribute names
