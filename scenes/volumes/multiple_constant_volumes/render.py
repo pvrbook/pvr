@@ -59,15 +59,10 @@ renderer.setCamera(camera)
 c = CompositeVolume()
 
 for i in range(0, 10):
-    Tp = Matrix()
-    Tp.translate(V3f(-0.5))
-    S = Matrix()
-    S.scale(V3f(uniform(0.1, 1.0)))
-    R = Matrix()
-    R.setEulerAngles(V3f(random() * 180, random() * 180, random() * 180))
-    T = Matrix()
-    T.translate(V3f(random() - 0.5, random() - 0.5, random() - 0.5) * 2)
-    volume = ConstantVolume(Tp * S * R * T)
+    s = V3f(uniform(0.1, 1.0))
+    r = Euler(random() * 180, random() * 180, random() * 180)
+    t = V3f(random() - 0.5, random() - 0.5, random() - 0.5) * 2
+    volume = ConstantVolume(trsTransform(t, r, s))
     volume.addAttribute("scattering", V3f(uniform(0.5,1), uniform(0.5,1), uniform(0.5,1)) * 10)
     c.add(volume)
 

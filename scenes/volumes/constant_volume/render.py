@@ -52,21 +52,14 @@ renderer.setCamera(camera)
 
 # Volumes
 
-T = Matrix()
-T.translate(V3f(-0.5))
-R = Matrix()
-R.setEulerAngles(V3f(5.0, 15.0, 5.0))
-S = Matrix()
-S.scale(V3f(2.0))
-volume = ConstantVolume(T * R * S)
+r = Euler(5.0, 15.0, 5.0)
+s = V3f(2.0)
+volume = ConstantVolume(trsTransform(V3f(0.0), r, s))
 volume.addAttribute("scattering", V3f(10.0))
 renderer.addVolume(volume)
 
 # Lights
 
-#lights = pvr.lights.standardThreePoint(renderer, 1.0 / reduceRes)
-#for light in lights:
-#    renderer.addLight(light)
 renderer.addLight(pvr.lights.standardKey(renderer, lightResMult))
 
 # Execute render

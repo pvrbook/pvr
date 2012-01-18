@@ -53,30 +53,22 @@ renderer.setCamera(camera)
 
 # Volumes
 
-Tp = Matrix()
-Tp.translate(V3f(-0.5))
-R = Matrix()
-S = Matrix()
-S.scale(V3f(2.0))
-T = Matrix()
-T.translate(V3f(0.5, 0.0, 0.0))
 samples = MatrixCurve()
-samples.addSample(0.0, Tp * S * R)
-R.rotate(V3f(0.0, 0.0, radians(20.0)))
-samples.addSample(1.0, Tp * S * R * T)
+
+t = V3f(0.0)
+r = Euler()
+s = V3f(2.0)
+samples.addSample(0.0, trsTransform(t, r, s))
+t = V3f(0.5, 0.0, 0.0)
+r = Euler(0.0, 0.0, radians(20.0))
+samples.addSample(1.0, trsTransform(t, r, s))
 volume = ConstantVolume(samples)
 volume.addAttribute("scattering", V3f(2, 4, 8) * 2.0)
 renderer.addVolume(volume)
 
 # Lights
 
-#lights = pvr.lights.standardThreePoint(renderer, 1.0 / reduceRes)
-#for light in lights:
-#    renderer.addLight(light)
-renderer.addLight(pvr.lights.standardKey(renderer, lightResMult, 
-                                         #occlType = TransmittanceMapOccluder))
-                                         occlType = OtfTransmittanceMapOccluder))
-                                         #occlType = RaymarchOccluder))
+renderer.addLight(pvr.lights.standardKey(renderer, lightResMult))
 
 # Execute render
 renderer.printSceneInfo()

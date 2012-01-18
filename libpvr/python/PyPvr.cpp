@@ -49,6 +49,7 @@ void exportField3D();
 void exportImage();
 void exportLights();
 void exportLog();
+void exportMath();
 void exportModeler();
 void exportModelerInput();
 void exportNoiseFunctions();
@@ -119,6 +120,7 @@ BOOST_PYTHON_MODULE(_pvr)
   exportImage();
   exportLights();
   exportLog();
+  exportMath();
   exportModeler();
   exportModelerInput();
   exportNoiseClasses();
@@ -134,7 +136,6 @@ BOOST_PYTHON_MODULE(_pvr)
   exportRenderer();
   exportTypes();
   exportVolumes();
-
 }
 
 //----------------------------------------------------------------------------//

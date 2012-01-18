@@ -178,6 +178,18 @@ template <typename T>
 bool isInBounds(const Imath::Vec3<T> &vsP, const Imath::Box3i &dataWindow);
 
 //----------------------------------------------------------------------------//
+
+//! Builds a transform matrix suitable for use as a localToWorld transform
+//! If all inputs are nil, the output is a 1 unit cube region centered
+//! on the origin.
+//! \note Rotation is specified as Euler angles in radians.
+//! \note Transform order is Scale -> Rotate -> Translate.
+template <typename U>
+Imath::Matrix44<U> trsTransform(const Imath::Vec3<U>  &t, 
+                                const Imath::Euler<U> &r,
+                                const Imath::Vec3<U>  &s);
+
+//----------------------------------------------------------------------------//
 // Template implementations
 //----------------------------------------------------------------------------//
 
@@ -415,6 +427,21 @@ bool isInBounds(const Imath::Vec3<T> &vsP, const Imath::Box3i &dataWindow)
     }
   }
   return true;
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename U>
+Imath::Matrix44<U> trsTransform(const Imath::Vec3<U>  &t, 
+                                const Imath::Euler<U> &r,
+                                const Imath::Vec3<U>  &s)
+{
+  Imath::Matrix44<U> Tp, T, R, S;
+  Tp.translate(Imath::Vec3<U>(-0.5));
+  T.translate(t);
+  R.rotate(r);
+  S.scale(s);
+  return Tp * S * R * T;
 }
 
 //----------------------------------------------------------------------------//

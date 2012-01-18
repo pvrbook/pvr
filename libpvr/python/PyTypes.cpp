@@ -45,13 +45,7 @@ DECLARE_PVR_RT_EXC(Vec3AssignException, "Error assigning values to Vec3:");
 // Helper classes
 //----------------------------------------------------------------------------//
 
-#if 0
-template <class Vec3_T>
-struct BindVec3
-{
-  static void 
-}
-#endif
+
 
 //----------------------------------------------------------------------------//
 // Helper functions
