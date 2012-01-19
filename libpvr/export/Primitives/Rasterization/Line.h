@@ -76,10 +76,10 @@ public:
 
   // Factory -------------------------------------------------------------------
 
-  //! Factory function
-  static Ptr create();
+  PVR_DEFINE_CREATE_FUNC(Line);
 
-  //! Returns the type name of the primitive
+  // From ParamBase ------------------------------------------------------------
+
   PVR_DEFINE_TYPENAME(Line);
 
 protected:
@@ -88,11 +88,6 @@ protected:
 
   virtual void getSample(const RasterizationState &state,
                          RasterizationSample &sample) const;
-
-  // Utility methods -----------------------------------------------------------
-
-  // virtual void updatePointAttrs(Geo::AttrVisitor::const_iterator i, 
-  //                               const size_t numPoints) const;
 
 };
 

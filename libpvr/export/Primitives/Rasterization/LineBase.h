@@ -147,7 +147,7 @@ protected:
     SegmentInfo()
       : index(0), t(0.0), distance(std::numeric_limits<double>::max()),
         radius(0.0)
-    { /* Empty */ }
+    { }
     //! Index of segment
     size_t index;
     //! Parametric coordinate on segment
