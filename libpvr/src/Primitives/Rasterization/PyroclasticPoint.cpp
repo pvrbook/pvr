@@ -127,47 +127,59 @@ void PyroclasticPoint::execute(Geo::Geometry::CPtr geometry,
 void PyroclasticPoint::getSample(const RasterizationState &state,
                                  RasterizationSample &sample) const
 {
+  // Point attributes
+  const V3f    &density       = m_attrs.density;  
+  const float   wsRadius      = m_attrs.radius;
+  const Vector  wsCenter      = m_attrs.wsCenter.as<Vector>();
+  const Vector  wsVelocity    = m_attrs.wsVelocity.as<Vector>();
+  const Matrix &rotation      = m_attrs.rotation;
+  const bool    isPyroclastic = m_attrs.pyroclastic;
+  const bool    isPyro2D      = m_attrs.pyro2D;
+  const bool    isAntialiased = m_attrs.antialiased;
+  const int     seed          = m_attrs.seed;
+  const float   gamma         = m_attrs.gamma;
+  const float   amplitude     = m_attrs.amplitude;
+  Fractal::CPtr fractal       = m_attrs.fractal;
+
   // Transform to the point's local coordinate system
-  float radius = m_attrs.radius;
-  Vector lsP, lsPUnrot = (state.wsP - m_attrs.wsCenter.as<Vector>()) / radius;
-  m_attrs.rotation.multVecMatrix(lsPUnrot, lsP);
+  Vector lsP, lsPUnrot = (state.wsP - wsCenter) / wsRadius;
+  rotation.multVecMatrix(lsPUnrot, lsP);
   Vector nsP = lsP;
-  if (m_attrs.pyroclastic && m_attrs.pyro2D) {
+
+  // Normalize noise coordinate if '2D' displacement is desired
+  if (isPyroclastic && isPyro2D) {
     nsP.normalize();
   }
+
   // Offset by seed
-  Rand32 rng(m_attrs.seed.value());
-  Vector offset;
-  offset.x = rng.nextf(-100, 100);
-  offset.y = rng.nextf(-100, 100);
-  offset.z = rng.nextf(-100, 100);
-  nsP += offset;
+  nsP += Math::offsetVector<double>(seed);
+
   // Compute fractal function
-  double fractalFunc = m_attrs.fractal->eval(nsP);
-  fractalFunc = Math::gamma(fractalFunc, m_attrs.gamma.value());
-  fractalFunc *= m_attrs.amplitude;
+  double fractalFunc = fractal->eval(nsP);
+  fractalFunc = Math::gamma(fractalFunc, gamma);
+  fractalFunc *= amplitude;
+
   // Calculate sample value
-  if (m_attrs.pyroclastic) {
-    // Thresholded
+  if (isPyroclastic) {
     double sphereFunc = lsP.length() - 1.0;
     float filterWidth = state.wsVoxelSize.length();
-    double thresholdWidth = filterWidth * 0.5 / radius;
+    double thresholdWidth = filterWidth * 0.5 / wsRadius;
     double pyroValue;
-    if (m_attrs.antialiased) {
+    if (isAntialiased) {
       pyroValue = Math::fit(sphereFunc - fractalFunc, 
                             -thresholdWidth, thresholdWidth, 1.0, 0.0);
     } else {
       pyroValue = (sphereFunc - fractalFunc) < 0.0 ? 1.0 : 0.0;
     }
     pyroValue = Imath::clamp(pyroValue, 0.0, 1.0);
-    sample.value = m_attrs.density.value() * pyroValue;
+    sample.value = density * pyroValue;
   } else {
-    // Normal
     double distanceFunc = 1.0 - lsP.length();
-    sample.value = m_attrs.density.value() * 
-    std::max(0.0, distanceFunc + fractalFunc);
+    sample.value = density * std::max(0.0, distanceFunc + fractalFunc);
   }
-  sample.wsVelocity = m_attrs.wsVelocity.as<Vector>();
+
+  // Update velocity
+  sample.wsVelocity = wsVelocity;
 }
 
 //----------------------------------------------------------------------------//
@@ -177,12 +189,15 @@ BBox PyroclasticPoint::pointWsBounds
 {
   BBox wsBBox;
   m_attrs.update(i);
+
   // Check fractal range
   Fractal::Range range = m_attrs.fractal->range();
+
   // Compute start and end of motion
   Vector wsStart = m_attrs.wsCenter.value();
   Vector wsEnd = m_attrs.wsCenter.value() + 
     m_attrs.wsVelocity.value() * RenderGlobals::dt();
+
   // Pad to account for displacement
   Vector padding = Vector(m_attrs.radius.value() + 
                           range.second * m_attrs.amplitude * m_attrs.radius);
@@ -190,6 +205,7 @@ BBox PyroclasticPoint::pointWsBounds
   wsBBox.extendBy(wsStart - padding);
   wsBBox.extendBy(wsEnd + padding);
   wsBBox.extendBy(wsEnd - padding);
+
   return wsBBox;
 }
   
@@ -201,6 +217,7 @@ void PyroclasticPoint::
 AttrState::update(const Geo::AttrVisitor::const_iterator &i)
 {
   using namespace Noise;
+
   // Update point attributes
   i.update(wsCenter);
   i.update(wsVelocity);
@@ -218,6 +235,7 @@ AttrState::update(const Geo::AttrVisitor::const_iterator &i)
   i.update(absNoise);
   i.update(antialiased);
   i.update(pyroclastic);
+
   // Set up fractal
   NoiseFunction::CPtr noise;
   if (absNoise) {
@@ -227,6 +245,7 @@ AttrState::update(const Geo::AttrVisitor::const_iterator &i)
   }
   fractal = Fractal::CPtr(new fBm(noise, scale, octaves, 
                                   octaveGain, lacunarity));
+
   // Set up rotation matrix
   rotation = Euler(orientation.value()).toMatrix44().transpose();
 }

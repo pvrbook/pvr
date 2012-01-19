@@ -17,6 +17,8 @@
 
 // Library includes
 
+#include <OpenEXR/ImathRandom.h>
+
 // Project includes
 
 #include "pvr/Types.h"
@@ -442,6 +444,20 @@ Imath::Matrix44<U> trsTransform(const Imath::Vec3<U>  &t,
   R.rotate(r);
   S.scale(s);
   return Tp * S * R * T;
+}
+
+//----------------------------------------------------------------------------//
+
+//! Returns an offset vector based on the given seed value
+template <typename T>
+Imath::Vec3<T> offsetVector(const int seed)
+{
+  Imath::Rand32 rng(seed);
+  Imath::Vec3<T> offset;
+  offset.x = rng.nextf(-100, 100);
+  offset.y = rng.nextf(-100, 100);
+  offset.z = rng.nextf(-100, 100);
+  return offset;
 }
 
 //----------------------------------------------------------------------------//

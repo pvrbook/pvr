@@ -34,7 +34,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-  ConstantVolume::ConstantVolume(const Util::MatrixCurve &localToWorld)
+ConstantVolume::ConstantVolume(const Util::MatrixCurve &localToWorld)
   : m_localToWorld(localToWorld),
     m_maxAttrValue(0.0f)
 {
