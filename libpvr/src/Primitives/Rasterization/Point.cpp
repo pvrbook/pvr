@@ -109,17 +109,23 @@ void Point::execute(Geo::Geometry::CPtr geometry,
     progress.update(static_cast<float>(count) / points.size());
     // Update attributes
     m_attrs.update(i);
+    // Point attributes
+    const V3f    &density     = m_attrs.density;
+    const float   wsRadius    = m_attrs.radius;
+    const Vector  wsCenter    = m_attrs.wsCenter.as<Vector>();
+    const Vector  wsVelocity  = m_attrs.wsVelocity.as<Vector>();
+    const bool    antialiased = m_attrs.antialiased;
     // Skip if density at or below zero
-    if (Math::max(m_attrs.density.value()) <= 0.0) {
+    if (Math::max(density) <= 0.0) {
       continue;
     }
     // Transform to voxel space
     Vector vsP;
-    mapping->worldToVoxel(m_attrs.wsCenter.as<Vector>(), vsP);
+    mapping->worldToVoxel(wsCenter, vsP);
     // Determine relative size of the point, compared to the shortest
     // edge of a voxel.
     Vector wsVoxelSize = pvr::Model::wsVoxelSize(mapping, vsP);
-    double relativeSize = m_attrs.radius / Math::min(wsVoxelSize);
+    double relativeSize = wsRadius / Math::min(wsVoxelSize);
     
     // Check relative size of point
     if (relativeSize > 1.0) {
@@ -131,8 +137,7 @@ void Point::execute(Geo::Geometry::CPtr geometry,
       // Calculate rasterization bounds
       //! \bug Rasterization bounds do not include filter width
       BBox vsBounds = 
-        vsSphereBounds(mapping, m_attrs.wsCenter.as<Vector>(), 
-                       m_attrs.radius + filterWidth * 0.5);
+        vsSphereBounds(mapping, wsCenter, wsRadius + filterWidth * 0.5);
       // Call rasterize(), which will query getSample() for values
       rasterize(vsBounds, buffer);
 
@@ -144,20 +149,19 @@ void Point::execute(Geo::Geometry::CPtr geometry,
       // Account for voxel size
       V3f voxelVolume = V3f(wsVoxelSize.x * wsVoxelSize.y * wsVoxelSize.z);
       V3f voxelDensity = 
-        m_attrs.density.value() / voxelVolume * sphereVolume(m_attrs.radius);
+        density / voxelVolume * sphereVolume(wsRadius);
       // Write points
-      if (m_attrs.wsVelocity.value().length() == 0) {
-        if (m_attrs.antialiased) {
+      if (wsVelocity.length() == 0) {
+        if (antialiased) {
           writeAntialiasedPoint(vsP, voxelDensity, buffer);
         } else {
           writePoint(vsP, voxelDensity, buffer);
         }
       } else {
-        Vector wsEnd = m_attrs.wsCenter.as<Vector>() + 
-          m_attrs.wsVelocity.as<Vector>() * RenderGlobals::dt();
+        Vector wsEnd = wsCenter + wsVelocity * RenderGlobals::dt();
         Vector vsEnd;
         mapping->worldToVoxel(wsEnd, vsEnd);
-        if (m_attrs.antialiased) {
+        if (antialiased) {
           writeLine<true>(vsP, vsEnd, voxelDensity, buffer);
         } else {
           writeLine<false>(vsP, vsEnd, voxelDensity, buffer);

@@ -58,10 +58,11 @@ void Line::getSample(const RasterizationState &state,
   }
 
   SegmentInfo info;
-  float falloff = 1.0;
 
   if (findClosestSegment(state, info)) {
+
     // Compute falloff depending on whether we want antialiasing
+    float falloff;
     if (m_basePolyAttrs.antialiased.value()) {
       float halfWidth = state.wsVoxelSize.length() * 0.5;
       falloff = 1.0 - Math::smoothStep(info.distance, 
@@ -70,9 +71,11 @@ void Line::getSample(const RasterizationState &state,
     } else {
       falloff = info.distance < info.radius ? 1.0 : 0.0;
     }
+
     // Set values in RasterizationSample
-    sample.value = falloff * LINE_INTERP(density, info);
+    sample.value      = falloff * LINE_INTERP(density, info);
     sample.wsVelocity = LINE_INTERP(wsVelocity, info);
+
   }
 }
 

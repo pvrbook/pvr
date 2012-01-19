@@ -106,8 +106,8 @@ ModelerInput::Ptr Surface::execute(const Geo::Geometry::CPtr geo) const
   Log::print("  Output: " + str(numInstancePoints) + " points");
 
   // Iteration variables
-  Meshes::CPtr meshes = geo->meshes();
-  AttrVisitor  meshVisitor(meshes->meshAttrs(), m_params);
+  Meshes::CPtr meshes      (geo->meshes());
+  AttrVisitor  meshVisitor (meshes->meshAttrs(), m_params);
   AttrVisitor  pointVisitor(meshes->pointAttrs(), m_params);
 
   for (AttrIter iMesh = meshVisitor.begin(), endMesh = meshVisitor.end(); 
@@ -115,9 +115,9 @@ ModelerInput::Ptr Surface::execute(const Geo::Geometry::CPtr geo) const
     // Update mesh attributes
     updateSurfAttrs(iMesh);
     // Update point attribute
-    size_t first = meshes->startPoint(iMesh.index());
-    size_t numCols = meshes->numCols(iMesh.index());
-    size_t numRows = meshes->numRows(iMesh.index());
+    size_t first     = meshes->startPoint(iMesh.index());
+    size_t numCols   = meshes->numCols(iMesh.index());
+    size_t numRows   = meshes->numRows(iMesh.index());
     size_t numPoints = numCols * numRows;
     updatePointAttrs(pointVisitor.begin(first), numPoints);
     // Seed random number generator
