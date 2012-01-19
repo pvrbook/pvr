@@ -73,13 +73,18 @@ PyroclasticLine::Ptr PyroclasticLine::create()
 
 //----------------------------------------------------------------------------//
 
-//! \todo Make a pyroclastic(fractal, p, ...) function
 void PyroclasticLine::getSample(const RasterizationState &state,
                                 RasterizationSample &sample) const
 {
   if (m_basePointAttrs.size() < 2) {
     return;
   }
+
+  // Per-Polygon attribute
+  const bool    isPyroclastic = m_polyAttrs.pyroclastic;
+  const bool    isPyro2D      = m_polyAttrs.pyro2D;
+  const V3f     scale         = m_polyAttrs.scale;
+  Fractal::CPtr fractal       = m_polyAttrs.fractal;
 
   SegmentInfo info;
   
@@ -94,35 +99,35 @@ void PyroclasticLine::getSample(const RasterizationState &state,
     float      u          = PYRO_LINE_INTERP(u, info);
     float      gamma      = PYRO_LINE_INTERP(gamma, info);
     float      amplitude  = PYRO_LINE_INTERP(amplitude, info);
+
     // Transform to local space
     Vector lsP = lineWsToLs(state.wsP, N.cross(T), N, T, 
                             wsCenter, u, info.radius);
+
     // Normalize the length of the vector in the XY plane
     // if user wants "2D" style displacement.
-    if (m_polyAttrs.pyroclastic && m_polyAttrs.pyro2D) {
+    if (isPyroclastic && isPyro2D) {
       lsP = Math::normalizeXY(lsP);
     }
+
     // Transform to noise space
-    Vector nsP = lsP / m_polyAttrs.scale.value();
+    Vector nsP = lsP / scale;
+
     // Evaluate fractal
-    double fractalVal = m_polyAttrs.fractal->eval(nsP);
+    double fractalVal = fractal->eval(nsP);
     fractalVal = Math::gamma(fractalVal, gamma);
     fractalVal *= amplitude;
+
     // Calculate sample value
-    if (m_polyAttrs.pyroclastic) {
-      // Thresholded
-      float filterWidth = state.wsVoxelSize.length();
-      double thresholdWidth = filterWidth * 0.5 / info.radius;
-      double sphereFunc = info.distance / info.radius - 1.0;
-      float pyroValue = Math::fit(sphereFunc - fractalVal, 
-                                  -thresholdWidth, thresholdWidth, 1.0, 0.0);
-      pyroValue = Imath::clamp(pyroValue, 0.0f, 1.0f);
-      sample.value = pyroValue * density;
+    if (isPyroclastic) {
+      float  filterWidth  = state.wsVoxelSize.length() / info.radius;
+      double distanceFunc = info.distance / info.radius - 1.0;
+      float  pyro         = pyroclastic(distanceFunc, fractalVal, filterWidth);
+      sample.value        = pyro * density;
     } else {
-      // Normal
       double distanceFunc = 1.0 - info.distance / info.radius;
-      float noiseValue = std::max(0.0, distanceFunc + fractalVal);
-      sample.value = noiseValue * density;
+      float  noise        = std::max(0.0, distanceFunc + fractalVal);
+      sample.value        = noise * density;
     }
 
   }

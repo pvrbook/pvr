@@ -207,6 +207,16 @@ private:
 };
 
 //----------------------------------------------------------------------------//
+// Utility functions
+//----------------------------------------------------------------------------//
+
+//! Performs antialiased pyroclastic noise function, given a distance function,
+//! a noise value and a filter width. The filter width and distance function
+//! should be in the same space.
+float pyroclastic(const float distance, const float noise,
+                  const float filterWidth);
+
+//----------------------------------------------------------------------------//
 
 } // namespace Noise
 } // namespace pvr

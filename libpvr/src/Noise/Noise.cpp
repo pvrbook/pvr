@@ -117,6 +117,18 @@ Fractal::Range fBm::range() const
 }
 
 //----------------------------------------------------------------------------//
+// Utility functions
+//----------------------------------------------------------------------------//
+
+float pyroclastic(const float distance, const float noise,
+                  const float filterWidth)
+{
+  float width     = filterWidth * 0.5;
+  float pyroValue = Math::fit(distance - noise, -width, width, 1.0, 0.0);
+  return Imath::clamp(pyroValue, 0.0f, 1.0f);
+}
+
+//----------------------------------------------------------------------------//
 
 } // namespace Noise
 } // namespace pvr

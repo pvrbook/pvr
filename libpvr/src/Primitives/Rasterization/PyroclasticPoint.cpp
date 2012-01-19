@@ -135,7 +135,6 @@ void PyroclasticPoint::getSample(const RasterizationState &state,
   const Matrix &rotation      = m_attrs.rotation;
   const bool    isPyroclastic = m_attrs.pyroclastic;
   const bool    isPyro2D      = m_attrs.pyro2D;
-  const bool    isAntialiased = m_attrs.antialiased;
   const int     seed          = m_attrs.seed;
   const float   gamma         = m_attrs.gamma;
   const float   amplitude     = m_attrs.amplitude;
@@ -155,27 +154,20 @@ void PyroclasticPoint::getSample(const RasterizationState &state,
   nsP += Math::offsetVector<double>(seed);
 
   // Compute fractal function
-  double fractalFunc = fractal->eval(nsP);
-  fractalFunc = Math::gamma(fractalFunc, gamma);
-  fractalFunc *= amplitude;
+  double fractalVal = fractal->eval(nsP);
+  fractalVal = Math::gamma(fractalVal, gamma);
+  fractalVal *= amplitude;
 
   // Calculate sample value
   if (isPyroclastic) {
-    double sphereFunc = lsP.length() - 1.0;
-    float filterWidth = state.wsVoxelSize.length();
-    double thresholdWidth = filterWidth * 0.5 / wsRadius;
-    double pyroValue;
-    if (isAntialiased) {
-      pyroValue = Math::fit(sphereFunc - fractalFunc, 
-                            -thresholdWidth, thresholdWidth, 1.0, 0.0);
-    } else {
-      pyroValue = (sphereFunc - fractalFunc) < 0.0 ? 1.0 : 0.0;
-    }
-    pyroValue = Imath::clamp(pyroValue, 0.0, 1.0);
-    sample.value = density * pyroValue;
+    double sphereFunc   = lsP.length() - 1.0;
+    float  filterWidth  = state.wsVoxelSize.length() / wsRadius;
+    float  pyro         = pyroclastic(sphereFunc, fractalVal, filterWidth);
+    sample.value        = density * pyro;
   } else {
     double distanceFunc = 1.0 - lsP.length();
-    sample.value = density * std::max(0.0, distanceFunc + fractalFunc);
+    float  noise        = std::max(0.0, distanceFunc + fractalVal);
+    sample.value        = density * noise;
   }
 
   // Update velocity
