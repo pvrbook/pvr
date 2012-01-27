@@ -88,7 +88,7 @@ Occluder::CPtr Light::occluder() const
 
 //----------------------------------------------------------------------------//
 
-float Light::falloff(const Vector &p1, const Vector &p2) const
+float Light::falloffFactor(const Vector &p1, const Vector &p2) const
 { 
   if (m_falloffEnabled) { 
     float distanceSq = (p1 - p2).length2();

@@ -186,8 +186,9 @@ def setupEnv(env, pathToRoot = "."):
     baseLibPaths = systemLibPaths[sys.platform][architectureStr()]
     baseLibs = systemLibs[sys.platform]
     # Compiler
-    #if sys.platform == "darwin":
-    #    env.Replace(CXX = "g++-4.2")
+    compiler = ARGUMENTS.get('compiler', '')
+    if compiler != '':
+        env.Replace(CXX = compiler)
     # System include paths
     env.Append(CPPPATH = baseIncludePaths)
     # System lib paths

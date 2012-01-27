@@ -51,8 +51,10 @@ public:
 
   // Constructor, factory ---
 
+  //! Default constructor. Sets up volume attribute names.
   PhysicalSampler();
-  static Ptr create();
+
+  PVR_DEFINE_CREATE_FUNC(PhysicalSampler);
 
   // From ParamBase ---
 

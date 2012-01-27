@@ -42,12 +42,17 @@ namespace Render {
 class DensitySampler : public RaymarchSampler
 {
 public:
+  // Typedefs ---
   PVR_TYPEDEF_SMART_PTRS(DensitySampler);
+  // Ctor, factory ---
   DensitySampler();
-  static Ptr create();
+  PVR_DEFINE_CREATE_FUNC(DensitySampler);
+  // From ParamBase ---
   PVR_DEFINE_TYPENAME(DensitySampler);
+  // From RaymarchSampler ---
   virtual RaymarchSample sample(const VolumeSampleState &state) const;
 private:
+  // Private data members ---
   VolumeAttr m_densityAttr;
 };
 

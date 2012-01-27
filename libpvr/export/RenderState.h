@@ -76,10 +76,14 @@ struct RayState
 
 struct LightSampleState
 {
+  //! Constructor, requires an existing RayState to be passed in
   LightSampleState(const RayState &rState)
     : rayState(rState)
   { }
+  //! Const reference to ray state. Used so that each Light can access
+  //! sample time, etc.
   const RayState &rayState;
+  //! Point in world space that is being sampled.
   Vector wsP;
 };
 

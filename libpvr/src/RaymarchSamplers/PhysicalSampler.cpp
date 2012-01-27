@@ -67,35 +67,28 @@ PhysicalSampler::PhysicalSampler()
 
 //----------------------------------------------------------------------------//
 
-PhysicalSampler::Ptr PhysicalSampler::create()
-{
-  return Ptr(new PhysicalSampler); 
-}
-
-//----------------------------------------------------------------------------//
-
 RaymarchSample PhysicalSampler::sample(const VolumeSampleState &state) const
 {
-  const Scene          &scene          = *RenderGlobals::scene();
-  const Volume::CPtr    volume         = scene.volume;
+  const Scene::CPtr    scene          = RenderGlobals::scene();
+  const Volume::CPtr   volume         = scene->volume;
 
-  LightSampleState      lightState     (state.rayState);
-  OcclusionSampleState  occlusionState (state.rayState);
+  LightSampleState     lightState     (state.rayState);
+  OcclusionSampleState occlusionState (state.rayState);
 
-  const Vector          wo             = -state.rayState.wsRay.dir;
+  const Vector         wo             = -state.rayState.wsRay.dir;
 
-  VolumeSample          abSample       = volume->sample(state, m_absorptionAttr);
-  VolumeSample          emSample       = volume->sample(state, m_emissionAttr);
-  VolumeSample          scSample       = volume->sample(state, m_scatteringAttr);
+  VolumeSample         abSample       = volume->sample(state, m_absorptionAttr);
+  VolumeSample         emSample       = volume->sample(state, m_emissionAttr);
+  VolumeSample         scSample       = volume->sample(state, m_scatteringAttr);
 
-  const Color &         sigma_s        = scSample.value;
-  const Color &         sigma_a        = abSample.value;
-  const Color &         em             = emSample.value;
-
-  Color                 L_sc           = Colors::zero();
+  const Color &        sigma_s        = scSample.value;
+  const Color &        sigma_a        = abSample.value;
+  const Color &        L_em           = emSample.value;
 
   // Only perform calculation if ray is primary and scattering coefficient is
   // greater than zero.
+
+  Color                L_sc           = Colors::zero();
 
   if (Math::max(sigma_s) > 0.0f &&
       state.rayState.rayType == RayState::FullRaymarch) {
@@ -105,7 +98,7 @@ RaymarchSample PhysicalSampler::sample(const VolumeSampleState &state) const
     occlusionState.wsP = state.wsP;
 
     // For each light source
-    BOOST_FOREACH (Light::CPtr light, scene.lights) {
+    BOOST_FOREACH (Light::CPtr light, scene->lights) {
 
       // Sample the light
       LightSample lightSample = light->sample(lightState);
@@ -124,7 +117,7 @@ RaymarchSample PhysicalSampler::sample(const VolumeSampleState &state) const
     }
   }
 
-  return RaymarchSample(L_sc + em, sigma_s + sigma_a);
+  return RaymarchSample(L_sc + L_em, sigma_s + sigma_a);
 }
 
 //----------------------------------------------------------------------------//

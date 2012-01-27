@@ -57,7 +57,6 @@ struct LightSample
 
 /*! \class Light
   \brief Base class for all lights.
-  \todo Put implementations in .cpp file
  */
 
 //----------------------------------------------------------------------------//
@@ -72,7 +71,9 @@ public:
 
   // Constructor, destructor ---------------------------------------------------
 
+  //! Default constructor
   Light();
+  //! Virtual destructor
   virtual ~Light();
 
   // To be implemented by subclasses -------------------------------------------
@@ -103,7 +104,7 @@ protected:
   // Utility methods -----------------------------------------------------------
 
   //! Computes falloff given a distance
-  float falloff(const Vector &p1, const Vector &p2) const;
+  float falloffFactor(const Vector &p1, const Vector &p2) const;
   
   // Data members --------------------------------------------------------------
 

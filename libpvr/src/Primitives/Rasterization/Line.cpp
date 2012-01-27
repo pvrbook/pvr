@@ -43,13 +43,6 @@ namespace Rast {
 // Line
 //----------------------------------------------------------------------------//
 
-Line::Ptr Line::create()
-{
-  return Ptr(new Line);
-}
-
-//----------------------------------------------------------------------------//
-
 void Line::getSample(const RasterizationState &state,
                      RasterizationSample &sample) const
 {

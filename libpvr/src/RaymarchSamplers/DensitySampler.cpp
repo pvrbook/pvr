@@ -45,13 +45,6 @@ DensitySampler::DensitySampler()
 
 //----------------------------------------------------------------------------//
 
-DensitySampler::Ptr DensitySampler::create()
-{
-  return Ptr(new DensitySampler); 
-}
-
-//----------------------------------------------------------------------------//
-
 RaymarchSample
 DensitySampler::sample(const VolumeSampleState &state) const
 {

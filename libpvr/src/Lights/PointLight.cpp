@@ -29,7 +29,7 @@ namespace Render {
 
 LightSample PointLight::sample(const LightSampleState &state) const
 {
-  return LightSample(m_intensity * falloff(state.wsP, m_wsP), m_wsP);
+  return LightSample(m_intensity * falloffFactor(state.wsP, m_wsP), m_wsP);
 }
 
 //----------------------------------------------------------------------------//
