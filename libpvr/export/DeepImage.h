@@ -38,8 +38,8 @@ namespace Render {
 //----------------------------------------------------------------------------//
 
 /*! \class DeepImage 
-  \brief Stores a 2d array of Curve<Color> (a deep image)
-
+  \brief Stores a 2d array of Curve<Color> (a deep image).
+  PVR uses a fixed number of samples per pixel.
  */
 
 //----------------------------------------------------------------------------//
@@ -53,6 +53,9 @@ public:
   PVR_TYPEDEF_SMART_PTRS(DeepImage);
 
   // Constructor, destructor, factory ------------------------------------------
+
+  //! Default constructor. Creates a 2x2 image.
+  DeepImage();
 
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
@@ -69,6 +72,11 @@ public:
 
   //! Returns the size of the image
   Imath::V2i size() const;
+
+  //! Sets the number of samples to use per pixel 
+  void setNumSamples(const size_t numSamples);
+  //! Returns the number of samples per pixel
+  size_t numSamples() const;
 
   //! Sets the transmittance function of a pixel
   void setPixel(const size_t x, const size_t y, 
@@ -100,12 +108,19 @@ private:
   //! Returns a reference to the given pixel's color curve.
   Util::ColorCurve& pixel(const size_t x, const size_t y);
 
+  //! Converts a ColorCurve to a curve with a fixed number of samples
+  Util::ColorCurve::Ptr makeFixedSample(Util::ColorCurve::CPtr curve) const;
+
   // Private data members ------------------------------------------------------
 
   //! Stores the samples that define the DeepImage.
   PixelsVec  m_pixels;
+  //! Width of image
   size_t     m_width;
+  //! Height of image
   size_t     m_height;
+  //! Number of samples per pixel
+  size_t     m_numSamples;
 
 };
 

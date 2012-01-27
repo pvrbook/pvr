@@ -49,6 +49,14 @@ namespace Render {
 // DeepImage
 //----------------------------------------------------------------------------//
 
+DeepImage::DeepImage()
+  : m_numSamples(32)
+{
+  setSize(2, 2);
+}
+
+//----------------------------------------------------------------------------//
+
 DeepImage::Ptr DeepImage::create()
 { 
   return Ptr(new DeepImage); 
@@ -80,13 +88,29 @@ Imath::V2i DeepImage::size() const
 
 //----------------------------------------------------------------------------//
 
+void DeepImage::setNumSamples(const size_t numSamples)
+{
+  m_numSamples = numSamples;
+}
+
+//----------------------------------------------------------------------------//
+
+size_t DeepImage::numSamples() const
+{
+  return m_numSamples;
+}
+
+
+//----------------------------------------------------------------------------//
+
 void DeepImage::setPixel(const size_t x, const size_t y, 
                          const Util::ColorCurve::CPtr func)
 {
   assert(x < m_width && "Pixel x coordinate out of bounds");
   assert(y < m_height && "Pixel y coordinate out of bounds");
   assert(func != NULL && "Got null pointer for pixel function");
-  pixel(x, y) = *func;
+  Util::ColorCurve::Ptr fixedSampleCurve = makeFixedSample(func);
+  pixel(x, y) = *fixedSampleCurve;
 }
   
 //----------------------------------------------------------------------------//
@@ -96,7 +120,7 @@ void DeepImage::setPixel(const size_t x, const size_t y,
 {
   assert(x < m_width && "Pixel x coordinate out of bounds");
   assert(y < m_height && "Pixel y coordinate out of bounds");
-  pixel(x, y) = Util::ColorCurve(value);
+  pixel(x, y) = *makeFixedSample(ColorCurve::Ptr(new ColorCurve(value)));
 }
   
 //----------------------------------------------------------------------------//
@@ -157,6 +181,67 @@ void DeepImage::printStats() const
   Log::print("  Approximate memory use: " + str(mbUsed) + " MB");
 }
 
+//----------------------------------------------------------------------------//
+
+Util::ColorCurve::Ptr 
+DeepImage::makeFixedSample(Util::ColorCurve::CPtr curve) const
+{
+  using namespace Math;
+
+  typedef ColorCurve::SampleVec SampleVec;
+  typedef SampleVec::const_iterator CIter;
+  
+  const ColorCurve::SampleVec &samples = curve->samples();
+
+  // Handle case of no samples
+  if (samples.size() == 0) {
+    return ColorCurve::Ptr(new ColorCurve(m_numSamples, Color(0.0)));
+  }
+
+  // Handle case of zero samples
+  if (samples.size() == 1) {
+    return ColorCurve::Ptr(new ColorCurve(m_numSamples, 
+                                          samples[0].second));
+  }
+
+  Color first = samples.front().second;
+  Color last = samples.back().second;
+  int sign = first.x > last.x ? 1 : -1;
+
+  // Check that function is monotonic
+  Color lastVal = samples[0].second;
+  for (size_t i = 1; i < samples.size(); ++i) {
+    Color value = samples[i].second;
+    if (value.x > sign * lastVal.x || 
+        value.y > sign * lastVal.y || 
+        value.z > sign * lastVal.z) {
+      Log::warning("Non-monotonic curve in DeepImage::makeFixedSample()");
+      return makeFixedSample(ColorCurve::Ptr(new ColorCurve(Color(0.0))));
+    }
+    last = value;
+  }
+
+  // Resample curve
+  ColorCurve::Ptr result(new ColorCurve);
+  result->addSample(samples[0].first, samples[0].second);
+  lastVal = samples[0].second;
+  size_t p = 0;
+  for (size_t i = 1; i < m_numSamples; ++i) {
+    float t = static_cast<float>(i) / static_cast<float>(m_numSamples - 1);
+    Color value = fit01(t, first, last);
+    while (avg(samples[p].second) > avg(value) * sign) {
+      lastVal = samples[p].second;
+      p++;
+    }
+    float factor = Imath::lerpfactor(avg(value), avg(lastVal), 
+                                     avg(samples[p].second));
+    Color interp = fit01(factor, lastVal, samples[p].second);
+    float position = fit01(factor, samples[p-1].first, samples[p].first);
+    result->addSample(position, interp);
+  }
+
+  return result;
+}
 
 //----------------------------------------------------------------------------//
 

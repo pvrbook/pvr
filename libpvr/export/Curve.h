@@ -73,6 +73,7 @@ public:
   { }
   Curve(const T &initialValue)
   { addSample(0.0f, initialValue); }
+  Curve(const size_t numSamples, const T &initialValue);
 
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
@@ -158,7 +159,17 @@ typedef Curve<Matrix> MatrixCurve;
 //----------------------------------------------------------------------------//
 
 template <typename T>
-void Util::Curve<T>::addSample(const float t, const T &value)
+Curve<T>::Curve(const size_t numSamples, const T &initialValue)
+{
+  for (size_t i = 0; i < numSamples; i++) {
+    addSample(static_cast<float>(i), initialValue);
+  }
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+void Curve<T>::addSample(const float t, const T &value)
 {
   using namespace std;
   // Find the first sample location that is greater than the interpolation

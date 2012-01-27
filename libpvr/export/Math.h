@@ -71,6 +71,12 @@ Imath::Vec3<T> abs(const Imath::Vec3<T> &vec);
 
 //----------------------------------------------------------------------------//
 
+//! Average value of Vec3<T> components
+template <typename T>
+T avg(const Imath::Vec3<T> &vec);
+
+//----------------------------------------------------------------------------//
+
 //! Max component from Vec3<T>
 template <typename T>
 T max(const Imath::Vec3<T> &vec);
@@ -239,6 +245,14 @@ template <typename T>
 Imath::Vec3<T> abs(const Imath::Vec3<T> &vec)
 {
   return Imath::Vec3<T>(std::abs(vec.x), std::abs(vec.y), std::abs(vec.z));
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+T avg(const Imath::Vec3<T> &vec)
+{
+  return (vec.x + vec.y + vec.z) / static_cast<T>(3);
 }
 
 //----------------------------------------------------------------------------//
