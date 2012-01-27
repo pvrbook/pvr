@@ -59,11 +59,11 @@ public:
   // Constructor, factory method -----------------------------------------------
 
   //! Constructor requires a Renderer and Camera to use for precomputation.
-  TransmittanceMapOccluder(Renderer::CPtr renderer, 
-                           Camera::CPtr camera);
+  TransmittanceMapOccluder(Renderer::CPtr renderer, Camera::CPtr camera,
+                           const size_t numSamples);
 
-  PVR_DEFINE_CREATE_FUNC_2_ARG(TransmittanceMapOccluder, 
-                            Renderer::CPtr, Camera::CPtr);
+  PVR_DEFINE_CREATE_FUNC_3_ARG(TransmittanceMapOccluder, 
+                               Renderer::CPtr, Camera::CPtr, const size_t);
 
   // From ParamBase ------------------------------------------------------------
 

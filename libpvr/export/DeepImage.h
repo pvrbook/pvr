@@ -108,9 +108,6 @@ private:
   //! Returns a reference to the given pixel's color curve.
   Util::ColorCurve& pixel(const size_t x, const size_t y);
 
-  //! Converts a ColorCurve to a curve with a fixed number of samples
-  Util::ColorCurve::Ptr makeFixedSample(Util::ColorCurve::CPtr curve) const;
-
   // Private data members ------------------------------------------------------
 
   //! Stores the samples that define the DeepImage.
@@ -149,6 +146,14 @@ DeepImage::pixel(const size_t x, const size_t y)
   assert(y < m_height && "DeepImage::pixel(): y out of range");
   return m_pixels[x + y * m_width];
 }
+
+//----------------------------------------------------------------------------//
+// Utility Functions
+//----------------------------------------------------------------------------//
+
+//! Converts a ColorCurve to a curve with a fixed number of samples
+Util::ColorCurve::Ptr makeFixedSample(Util::ColorCurve::CPtr curve,
+                                      const size_t numSamples);
 
 //----------------------------------------------------------------------------//
 

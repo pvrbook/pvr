@@ -37,6 +37,7 @@ void exportDeepImage()
   class_<DeepImage, DeepImage::Ptr>
     ("DeepImage", no_init)
     .def("__init__",      make_constructor(DeepImage::create))
+    .def("setNumSamples", &DeepImage::setNumSamples)
     .def("pixelFunction", &DeepImage::pixelFunction)
     .def("printStats",    &DeepImage::printStats)
     ;

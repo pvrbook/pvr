@@ -111,6 +111,9 @@ public:
   void setNumPixelSamples(const size_t numSamples);
   //! Returns the number of pixel samples to use
   size_t numPixelSamples() const;
+  //! Sets the number of samples to use for deep images (transmittance and
+  //! luminance)
+  void setNumDeepSamples(const size_t numSamples);
 
   // Execution -----------------------------------------------------------------
 

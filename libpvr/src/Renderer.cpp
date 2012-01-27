@@ -264,7 +264,18 @@ size_t Renderer::numPixelSamples() const
   
 //----------------------------------------------------------------------------//
 
-//! \todo Replace RNG with a proper Sampler!!!
+void Renderer::setNumDeepSamples(const size_t numSamples)
+{
+  if (m_deepTransmittance) {
+    m_deepTransmittance->setNumSamples(numSamples);
+  }
+  if (m_deepLuminance) {
+    m_deepLuminance->setNumSamples(numSamples);
+  }
+}
+
+//----------------------------------------------------------------------------//
+
 void Renderer::execute()
 {
   if (!m_camera) {

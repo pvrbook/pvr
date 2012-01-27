@@ -84,7 +84,8 @@ lightParms = {
     "position" : V3f(0.0), 
     "intensity" : Color(2.0),
     "rotation" : V3f(0.0, 90.0, 0.0),
-    "fov" : 170.0
+    "fov" : 170.0,
+    "num_samples" : 128
 }
 light = pvr.lights.makePointLight(renderer, lightParms, lightResMult, 
                                   OtfTransmittanceMapOccluder)

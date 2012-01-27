@@ -60,12 +60,16 @@ def makePointLight(renderer, parms, resMult, occlType):
     cam.setResolution(resolution)
     # Intensity
     light.setIntensity(parms["intensity"])
+    # Number of samples
+    numSamples = 32
+    if "num_samples" in parms.keys():
+        numSamples = parms["num_samples"]
     # Occluder
     occluder = None
     if occlType == TransmittanceMapOccluder:
-        occluder = TransmittanceMapOccluder(renderer, cam)
+        occluder = TransmittanceMapOccluder(renderer, cam, numSamples)
     elif occlType == OtfTransmittanceMapOccluder:
-        occluder = OtfTransmittanceMapOccluder(renderer, cam)
+        occluder = OtfTransmittanceMapOccluder(renderer, cam, numSamples)
     elif occlType == VoxelOccluder:
         occluder = VoxelOccluder(renderer, parms["position"], 
                                  int(256 * resMult))
@@ -99,12 +103,16 @@ def makeSpotLight(renderer, parms, resMult, occlType):
     light.setIntensity(parms["intensity"])
     # Camera
     light.setCamera(cam)
+    # Number of samples
+    numSamples = 32
+    if "num_samples" in parms.keys():
+        numSamples = parms["num_samples"]
     # Occluder
     occluder = None
     if occlType == TransmittanceMapOccluder:
-        occluder = TransmittanceMapOccluder(renderer, cam)
+        occluder = TransmittanceMapOccluder(renderer, cam, numSamples)
     elif occlType == OtfTransmittanceMapOccluder:
-        occluder = OtfTransmittanceMapOccluder(renderer, cam)
+        occluder = OtfTransmittanceMapOccluder(renderer, cam, numSamples)
     elif occlType == VoxelOccluder:
         occluder = VoxelOccluder(renderer, parms["position"], 
                                  int(256 * resMult))

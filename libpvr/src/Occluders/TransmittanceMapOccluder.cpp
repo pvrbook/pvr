@@ -49,13 +49,15 @@ namespace Render {
 //----------------------------------------------------------------------------//
 
 TransmittanceMapOccluder::TransmittanceMapOccluder(Renderer::CPtr baseRenderer, 
-                                                   Camera::CPtr camera)
+                                                   Camera::CPtr camera,
+                                                   const size_t numSamples)
   : m_camera(camera)
 { 
   Renderer::Ptr renderer = baseRenderer->clone();
   renderer->setCamera(camera);
   renderer->setPrimaryEnabled(false);
   renderer->setTransmittanceMapEnabled(true);
+  renderer->setNumDeepSamples(numSamples);
   renderer->execute();
   m_transmittanceMap = renderer->transmittanceMap();
   m_rasterBounds = static_cast<Imath::V2f>(m_transmittanceMap->size());
@@ -92,6 +94,10 @@ Color TransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
   // Finally interpolate
   return m_transmittanceMap->lerp(rsP.x, rsP.y, depth);
 }
+
+//----------------------------------------------------------------------------//
+
+
 
 //----------------------------------------------------------------------------//
 

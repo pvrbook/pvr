@@ -51,7 +51,8 @@ namespace Render {
 //----------------------------------------------------------------------------//
 
 OtfTransmittanceMapOccluder::OtfTransmittanceMapOccluder(Renderer::CPtr renderer, 
-                                                         Camera::CPtr camera)
+                                                         Camera::CPtr camera,
+                                                         const size_t numSamples)
   : m_clipBehindCamera(true), m_camera(camera)
 { 
   m_resolution = m_camera->resolution();
@@ -59,6 +60,7 @@ OtfTransmittanceMapOccluder::OtfTransmittanceMapOccluder(Renderer::CPtr renderer
   m_intRasterBounds = m_resolution - Imath::V2i(1);
   m_renderer = renderer;
   m_transmittanceMap.setSize(m_resolution.x, m_resolution.y);
+  m_transmittanceMap.setNumSamples(numSamples);
   m_computed.resize(m_resolution.x * m_resolution.y, 0);
   if (boost::shared_dynamic_cast<const SphericalCamera>(camera)) {
     m_clipBehindCamera = false;
