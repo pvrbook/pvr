@@ -64,32 +64,30 @@ namespace {
 
   void updateTransmittance(const Render::RayState &state, 
                            const double stepLength, 
-                           const Color &sigma_e, const Color &holdout, 
-                           Color &T, Color &T_ho, Color &T_out)
+                           Color &sigma_e, const Color &sigma_h, 
+                           Color &T_e, Color &T_h, Color &T_alpha, Color &O)
   {
     // Update holdout transmittance 
-    Color extinction = sigma_e;
     if (state.rayDepth > 0) {
-      extinction += holdout;
+      sigma_e += sigma_h;
     } else {
       // Update accumulated holdout
-      if (Math::max(holdout) > 0.0f) {
-        T_ho *= exp(-holdout * stepLength);
+      if (Math::max(sigma_h) > 0.0f) {
+        T_h *= exp(-sigma_h * stepLength);
       }
     }
 
     // Update transmittance
     Color expValue = Colors::one();
-    if (Math::max(extinction) > 0.0f) {
-      expValue = exp(-extinction * stepLength);
-      T *= expValue;
+    if (Math::max(sigma_e) > 0.0f) {
+      expValue = exp(-sigma_e * stepLength);
+      T_e *= expValue;
     }
 
     // Update output transmittance
     if (state.rayDepth == 0) {
-      T_out.x = Imath::lerp(1.0f - T_ho.x, T_out.x, expValue.x);
-      T_out.y = Imath::lerp(1.0f - T_ho.y, T_out.y, expValue.y);
-      T_out.z = Imath::lerp(1.0f - T_ho.z, T_out.z, expValue.z);
+      O = Math::lerp(T_alpha, O, exp(-sigma_h * stepLength));
+      T_alpha = Math::lerp(O, T_alpha, expValue);
     }
   }
 
@@ -168,10 +166,11 @@ UniformRaymarcher::integrate(const RayState &state) const
   // Ray integration variables ---
 
   VolumeSampleState sampleState(state);
-  Color             L     = Colors::zero();
-  Color             T     = Colors::one();
-  Color             T_ho  = Colors::one();
-  Color             T_out = Colors::one();
+  Color             L       = Colors::zero();
+  Color             T_e     = Colors::one();
+  Color             T_h     = Colors::one();
+  Color             T_alpha = Colors::one();
+  Color             O       = Colors::zero();
 
   // Interval loop ---
 
@@ -215,21 +214,21 @@ UniformRaymarcher::integrate(const RayState &state) const
 
       // Update transmittance
       updateTransmittance(state, stepLength, sample.extinction, hoSample.value,
-                          T, T_ho, T_out);
+                          T_e, T_h, T_alpha, O);
 
       // Update luminance
-      L += sample.luminance * T * T_ho * stepLength;
+      L += sample.luminance * T_e * T_h * stepLength;
 
       // Early termination
       if (m_params.doEarlyTermination &&
-          Math::max(T) < m_params.earlyTerminationThreshold) {
-        T = Colors::zero();
+          Math::max(T_e) < m_params.earlyTerminationThreshold) {
+        T_e = Colors::zero();
         doTerminate = true;
       }
 
       // Update transmittance and luminance functions
       if (tf || lf) {
-        updateDeepFunctions(stepT1, L, T, lf, tf);
+        updateDeepFunctions(stepT1, L, T_e, lf, tf);
       }
 
       // Terminate if requested
@@ -258,9 +257,9 @@ UniformRaymarcher::integrate(const RayState &state) const
   }
 
   if (state.rayDepth == 0) {
-    return IntegrationResult(L, lf, T_out, tf);
+    return IntegrationResult(L, lf, T_alpha, tf);
   } else {
-    return IntegrationResult(L, lf, T, tf);
+    return IntegrationResult(L, lf, T_e, tf);
   }
 }
 
