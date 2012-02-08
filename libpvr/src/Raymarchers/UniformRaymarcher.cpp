@@ -65,29 +65,32 @@ namespace {
   void updateTransmittance(const Render::RayState &state, 
                            const double stepLength, 
                            Color &sigma_e, const Color &sigma_h, 
-                           Color &T_e, Color &T_h, Color &T_alpha, Color &O)
+                           Color &T_e, Color &T_h, Color &T_alpha, Color &T_m)
   {
+    Color expSigmaE = Colors::one();
+    Color expSigmaH = Colors::one();
+
     // Update holdout transmittance 
     if (state.rayDepth > 0) {
       sigma_e += sigma_h;
     } else {
       // Update accumulated holdout
       if (Math::max(sigma_h) > 0.0f) {
-        T_h *= exp(-sigma_h * stepLength);
+        expSigmaH = exp(-sigma_h * stepLength);
+        T_h *= expSigmaH;
       }
     }
 
     // Update transmittance
-    Color expValue = Colors::one();
     if (Math::max(sigma_e) > 0.0f) {
-      expValue = exp(-sigma_e * stepLength);
-      T_e *= expValue;
+      expSigmaE = exp(-sigma_e * stepLength);
+      T_e *= expSigmaE;
     }
 
     // Update output transmittance
     if (state.rayDepth == 0) {
-      O = Math::lerp(T_alpha, O, exp(-sigma_h * stepLength));
-      T_alpha = Math::lerp(O, T_alpha, expValue);
+      T_m     = Math::lerp(T_alpha, T_m, expSigmaH);
+      T_alpha = Math::lerp(T_m, T_alpha, expSigmaE);
     }
   }
 
@@ -170,7 +173,7 @@ UniformRaymarcher::integrate(const RayState &state) const
   Color             T_e     = Colors::one();
   Color             T_h     = Colors::one();
   Color             T_alpha = Colors::one();
-  Color             O       = Colors::zero();
+  Color             T_m     = Colors::zero();
 
   // Interval loop ---
 
@@ -214,7 +217,7 @@ UniformRaymarcher::integrate(const RayState &state) const
 
       // Update transmittance
       updateTransmittance(state, stepLength, sample.extinction, hoSample.value,
-                          T_e, T_h, T_alpha, O);
+                          T_e, T_h, T_alpha, T_m);
 
       // Update luminance
       L += sample.luminance * T_e * T_h * stepLength;
