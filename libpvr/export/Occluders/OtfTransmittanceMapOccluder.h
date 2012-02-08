@@ -77,6 +77,7 @@ protected:
 
   size_t offset(const size_t x, const size_t y) const
   { return x + m_resolution.x * y; }
+  void updateCoordinate(const Vector &rsP) const;
   void updatePixel(const size_t x, const size_t y) const;
 
   // Data members --------------------------------------------------------------

@@ -53,14 +53,20 @@ TransmittanceMapOccluder::TransmittanceMapOccluder(Renderer::CPtr baseRenderer,
                                                    const size_t numSamples)
   : m_camera(camera)
 { 
+  // Clone Renderer to create a mutable copy
   Renderer::Ptr renderer = baseRenderer->clone();
+  // Configure Renderer
   renderer->setCamera(camera);
   renderer->setPrimaryEnabled(false);
   renderer->setTransmittanceMapEnabled(true);
   renderer->setNumDeepSamples(numSamples);
+  // Execute render and grab transmittace map
   renderer->execute();
   m_transmittanceMap = renderer->transmittanceMap();
+  // Record the bounds of the transmittance map
   m_rasterBounds = static_cast<Imath::V2f>(m_transmittanceMap->size());
+  // Check if space behind camera is valid
+  m_clipBehindCamera = !camera->canTransformNegativeCamZ();
 }
 
 //----------------------------------------------------------------------------//
@@ -80,7 +86,7 @@ Color TransmittanceMapOccluder::sample(const OcclusionSampleState &state) const
   Vector rsP = m_camera->worldToRaster(state.wsP, state.rayState.time);
   
   // Bounds checks
-  if (csP.z > 0.0) {
+  if (m_clipBehindCamera && csP.z < 0.0) {
     return Colors::one();
   }
   if (rsP.x < 0.0 || rsP.x > m_rasterBounds.x ||

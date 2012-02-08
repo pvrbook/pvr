@@ -377,8 +377,8 @@ void Modeler::setupFrustumMapping(const BBox &wsBounds) const
   std::vector<Vector> wsCornerPoints = Math::cornerPoints(wsBounds);
   BOOST_FOREACH (const Vector &wsP, wsCornerPoints) {
     Vector csP = m_camera->worldToCamera(wsP, PTime(0.0));
-    near = std::min(near, -csP.z);
-    far = std::max(far, -csP.z);
+    near = std::min(near, csP.z);
+    far = std::max(far, csP.z);
   }
   // Clip at zero
   near = std::max(near, 0.0);

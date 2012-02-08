@@ -60,14 +60,8 @@ OtfVoxelOccluder::OtfVoxelOccluder(Renderer::CPtr renderer,
   : m_renderer(renderer), m_wsLightPos(wsLightPos)
 {
   BBox wsBounds = renderer->scene()->volume->wsBounds();
-
-  Matrix localToWorld = Math::coordinateSystem(wsBounds);
-  MatrixFieldMapping::Ptr mapping(new MatrixFieldMapping);
-  mapping->setLocalToWorld(localToWorld);
-
   V3i bufferRes = wsBounds.size() / Math::max(wsBounds.size()) * res;
-
-  m_buffer.setMapping(mapping);
+  m_buffer.setMapping(Math::makeMatrixMapping(wsBounds));
   m_buffer.setSize(bufferRes);
   m_buffer.clear(Color(-1.0));
 }
@@ -102,21 +96,21 @@ Color OtfVoxelOccluder::sample(const OcclusionSampleState &state) const
 
 //----------------------------------------------------------------------------//
 
-void 
+void
 OtfVoxelOccluder::updateVoxel(const int i, const int j, const int k) const
 {
+  // Transform point from voxel to world space
   Vector wsP;
   m_buffer.mapping()->voxelToWorld(discToCont(V3i(i, j, k)), wsP);
-
+  // Set up the ray state
   RayState state;
   state.rayType = RayState::TransmittanceOnly;
   state.rayDepth = 1;
   state.wsRay.pos = wsP;
   state.wsRay.dir = (m_wsLightPos - wsP).normalized();
   state.tMax = (m_wsLightPos - wsP).length();
-
+  // Trace ray and record transmittance
   IntegrationResult result = m_renderer->trace(state);
-
   m_buffer.fastLValue(i, j, k) = result.transmittance;
 }
 

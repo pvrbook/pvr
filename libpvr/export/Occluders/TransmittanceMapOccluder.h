@@ -77,6 +77,7 @@ protected:
 
   // Data members --------------------------------------------------------------
 
+  bool            m_clipBehindCamera;
   DeepImage::CPtr m_transmittanceMap;
   Camera::CPtr    m_camera;
   Imath::V2f      m_rasterBounds;
