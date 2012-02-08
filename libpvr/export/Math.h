@@ -109,6 +109,13 @@ S fit01(const T &t, const S &newMin, const S &newMax);
 
 //----------------------------------------------------------------------------//
 
+//! Component-wise linear interpolation
+template <typename T>
+Imath::Vec3<T> lerp(const Imath::Vec3<T> &a, const Imath::Vec3<T> &b,
+                    const Imath::Vec3<T> &t);
+
+//----------------------------------------------------------------------------//
+
 //! Linear interpolation in 2D array
 //! \param Coordinate in X. Range [0, 1].
 //! \param Coordinate in Y. Range [0, 1].
@@ -181,6 +188,11 @@ Imath::Matrix44<T> coordinateSystem(const Imath::Box<Imath::Vec3<T> > &box);
 
 //----------------------------------------------------------------------------//
 
+//! Creates a MatrixFieldMapping given a bounding box
+Field3D::MatrixFieldMapping::Ptr makeMatrixMapping(const BBox bounds);
+
+//----------------------------------------------------------------------------//
+
 //! Checks continuous coordinate against discrete coordinate bounds
 template <typename T>
 bool isInBounds(const Imath::Vec3<T> &vsP, const Imath::Box3i &dataWindow);
@@ -196,6 +208,18 @@ template <typename U>
 Imath::Matrix44<U> trsTransform(const Imath::Vec3<U>  &t, 
                                 const Imath::Euler<U> &r,
                                 const Imath::Vec3<U>  &s);
+
+//----------------------------------------------------------------------------//
+
+//! Returns an offset vector based on the given seed value
+template <typename T>
+Imath::Vec3<T> offsetVector(const int seed);
+
+//----------------------------------------------------------------------------//
+
+//! Returns the parametric position of i in a sequence of num items.
+template <typename Int_T>
+float parametric(const Int_T i, const Int_T num);
 
 //----------------------------------------------------------------------------//
 // Template implementations
@@ -287,6 +311,17 @@ S fit01(const T &t, const S &newMin, const S &newMax)
 {
   T interpT = Imath::lerpfactor(t, T(0.0), T(1.0));
   return Imath::lerp(newMin, newMax, interpT);
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+Imath::Vec3<T> lerp(const Imath::Vec3<T> &a, const Imath::Vec3<T> &b,
+                    const Imath::Vec3<T> &t)
+{
+  return Imath::Vec3<T>(Imath::lerp(a.x, b.x, t.x),
+                        Imath::lerp(a.y, b.y, t.y),
+                        Imath::lerp(a.z, b.z, t.z));
 }
 
 //----------------------------------------------------------------------------//
@@ -433,6 +468,16 @@ Imath::Matrix44<T> coordinateSystem(const Imath::Box<Imath::Vec3<T> > &box)
 
 //----------------------------------------------------------------------------//
 
+inline Field3D::MatrixFieldMapping::Ptr makeMatrixMapping(const BBox wsBounds)
+{
+  Matrix localToWorld = Math::coordinateSystem(wsBounds);
+  Field3D::MatrixFieldMapping::Ptr mapping(new Field3D::MatrixFieldMapping);
+  mapping->setLocalToWorld(localToWorld);
+  return mapping;
+}
+
+//----------------------------------------------------------------------------//
+
 template <typename T>
 bool isInBounds(const Imath::Vec3<T> &vsP, const Imath::Box3i &dataWindow) 
 {
@@ -462,7 +507,6 @@ Imath::Matrix44<U> trsTransform(const Imath::Vec3<U>  &t,
 
 //----------------------------------------------------------------------------//
 
-//! Returns an offset vector based on the given seed value
 template <typename T>
 Imath::Vec3<T> offsetVector(const int seed)
 {
@@ -472,6 +516,14 @@ Imath::Vec3<T> offsetVector(const int seed)
   offset.y = rng.nextf(-100, 100);
   offset.z = rng.nextf(-100, 100);
   return offset;
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename Int_T>
+float parametric(const Int_T i, const Int_T num)
+{
+  return static_cast<float>(i) / static_cast<float>(num - 1);
 }
 
 //----------------------------------------------------------------------------//
