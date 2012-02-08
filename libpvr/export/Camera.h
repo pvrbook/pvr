@@ -1,5 +1,29 @@
 //-*-c++-*--------------------------------------------------------------------//
 
+/*
+  PVR source code Copyright(c) 2012 Magnus Wrenninge
+
+  This file is part of PVR.
+
+  PVR is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3 of the License, or
+  (at your option) any later version.  Note that the text contents of
+  the book "Production Volume Rendering" are *not* licensed under the
+  GNU GPL.
+
+  PVR is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ */
+
+//----------------------------------------------------------------------------//
+
 /*! \file Camera.h
   Contains the Camera class and related functions.
  */
@@ -146,6 +170,9 @@ public:
   virtual Vector worldToRaster(const Vector &wsP, const PTime time) const = 0;
   //! Returns the world-space coordinate given a raster-space coordinate.
   virtual Vector rasterToWorld(const Vector &rsP, const PTime time) const = 0;
+  //! Whether the camera's transforms are well-defined behind the camera,
+  //! i.e. where csP.z < 0.0
+  virtual bool canTransformNegativeCamZ() const = 0;
 
   // Cloning -------------------------------------------------------------------
 
@@ -216,10 +243,7 @@ public:
   //! Constructs a default PerspectiveCamera 
   PerspectiveCamera();
 
-  //! Factory creation function. Always use this when creating objects
-  //! that need lifespan management.
-  //! \todo Replace with #define
-  static Ptr create();
+  PVR_DEFINE_CREATE_FUNC(PerspectiveCamera);
 
   // Main methods --------------------------------------------------------------
 
@@ -227,6 +251,8 @@ public:
   void setClipPlanes(const double near, const double far);
   //! Sets the animation curve for the vertical field-of-view. 
   void setVerticalFOV(const Util::FloatCurve &curve);
+
+  // Access to transformation matrices -----------------------------------------
 
   //! Returns the world to screen transform matrices
   const MatrixVec& worldToScreenMatrices() const;
@@ -241,6 +267,7 @@ public:
   virtual Vector screenToWorld(const Vector &ssP, const PTime time) const;
   virtual Vector worldToRaster(const Vector &wsP, const PTime time) const;
   virtual Vector rasterToWorld(const Vector &rsP, const PTime time) const;
+  virtual bool canTransformNegativeCamZ() const;
 
   // Cloning -------------------------------------------------------------------
 
@@ -282,7 +309,7 @@ protected:
 
 private:
 
-  // From Camera ---------------------------------------------------------------
+  // Cloning -------------------------------------------------------------------
   
   virtual PerspectiveCamera* rawClone() const
   { return new PerspectiveCamera(*this); }
@@ -300,17 +327,17 @@ struct SphericalCoords
 {
   //! Radial coordinate
   float radius;
-  //! Azimuthal angle, longitude
-  //! PVR follows a convention of [-pi,pi] range for longitude, with the 
-  //! positive direction going to the right, looking down the cartesian z axis.
-  float longitude; 
   //! Zenith angle, latitude
   //! PVR follows a convention of [-pi/2,pi/2] range for latitude, with the
   //! positive direction going up, looking down the cartesian z axis.
   float latitude;
+  //! Azimuthal angle, longitude
+  //! PVR follows a convention of [-pi,pi] range for longitude, with the 
+  //! positive direction going to the right, looking down the cartesian z axis.
+  float longitude; 
   //! Default constructor
   SphericalCoords()
-    : radius(0.0f), longitude(0.0f), latitude(0.0f)
+    : radius(0.0f), latitude(0.0f), longitude(0.0f)
   { }
 };
 
@@ -344,10 +371,6 @@ public:
 
   PVR_DEFINE_CREATE_FUNC(SphericalCamera);
   
-  // Main methods --------------------------------------------------------------
-
-  
-
   // From Camera ---------------------------------------------------------------
   
   PVR_DEFINE_STATIC_CLONE_FUNC(SphericalCamera);
@@ -356,6 +379,7 @@ public:
   virtual Vector screenToWorld(const Vector &ssP, const PTime time) const;
   virtual Vector worldToRaster(const Vector &wsP, const PTime time) const;
   virtual Vector rasterToWorld(const Vector &rsP, const PTime time) const;
+  virtual bool canTransformNegativeCamZ() const;
 
   // Cloning -------------------------------------------------------------------
 
