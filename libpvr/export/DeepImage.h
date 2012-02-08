@@ -51,6 +51,7 @@ public:
   // Typedefs ------------------------------------------------------------------
 
   PVR_TYPEDEF_SMART_PTRS(DeepImage);
+  typedef Util::ColorCurve Curve;
 
   // Constructor, destructor, factory ------------------------------------------
 
@@ -68,31 +69,24 @@ public:
   // Main methods --------------------------------------------------------------
 
   //! Sets the size of the image
-  void setSize(const size_t width, const size_t height);
-
+  void       setSize(const size_t width, const size_t height);
   //! Returns the size of the image
   Imath::V2i size() const;
-
   //! Sets the number of samples to use per pixel 
-  void setNumSamples(const size_t numSamples);
+  void       setNumSamples(const size_t numSamples);
   //! Returns the number of samples per pixel
-  size_t numSamples() const;
-
+  size_t     numSamples() const;
   //! Sets the transmittance function of a pixel
-  void setPixel(const size_t x, const size_t y, 
-                const Util::ColorCurve::CPtr func);
+  void       setPixel(const size_t x, const size_t y, const Curve::CPtr func);
   //! Sets the transmittance function of a pixel to a single value
-  void setPixel(const size_t x, const size_t y, 
-                const Color &value);
-
-  Util::ColorCurve::Ptr 
-  pixelFunction(const size_t x, const size_t y) const;
-
+  void       setPixel(const size_t x, const size_t y, const Color &value);
+  //! Returns a pointer to the underlying pixel function
+  //! \note Creates a mutable copy of the data.
+  Curve::Ptr pixelFunction(const size_t x, const size_t y) const;
   //! Interpolated transmittance at a given raster coordinate and depth.
-  Color lerp(const float rsX, const float rsY, const float z) const;
-
+  Color      lerp(const float rsX, const float rsY, const float z) const;
   //! Prints statistics about the image
-  void printStats() const;
+  void       printStats() const;
 
 private:
   

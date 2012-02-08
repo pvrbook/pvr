@@ -209,11 +209,12 @@ Util::ColorCurve::Ptr makeFixedSample(Util::ColorCurve::CPtr curve,
   }
 
   Color first = samples.front().second;
-  Color last = samples.back().second;
-  int sign = first.x >= last.x ? 1 : -1;
+  Color last  = samples.back().second;
+  int   sign  = first.x >= last.x ? 1 : -1;
 
   // Check that function is monotonic
-  Color lastVal = samples[0].second;
+  bool  monotonic = true;
+  Color lastVal   = samples[0].second;
   for (size_t i = 1; i < samples.size(); ++i) {
     Color value = samples[i].second;
     if (value.x > sign * lastVal.x || 
@@ -226,26 +227,31 @@ Util::ColorCurve::Ptr makeFixedSample(Util::ColorCurve::CPtr curve,
     last = value;
   }
 
-  // Resample curve
-  ColorCurve::Ptr result(new ColorCurve);
-  result->addSample(samples[0].first, samples[0].second);
-  lastVal = samples[0].second;
-  size_t p = 0;
-  for (size_t i = 1; i < numSamples; ++i) {
-    float t = static_cast<float>(i) / static_cast<float>(numSamples - 1);
-    Color value = fit01(t, first, last);
-    while (avg(samples[p].second) > avg(value) * sign) {
-      lastVal = samples[p].second;
-      p++;
+  // If function is monotonic, divide equally over the range of transmittance
+  // If the function is non-monotonic, divide equally in depth.
+  if (monotonic) {
+    ColorCurve::Ptr result(new ColorCurve);
+    result->addSample(samples[0].first, samples[0].second);
+    lastVal = samples[0].second;
+    size_t p = 0;
+    for (size_t i = 1; i < numSamples; ++i) {
+      float t = static_cast<float>(i) / static_cast<float>(numSamples - 1);
+      Color value = fit01(t, first, last);
+      while (avg(samples[p].second) > avg(value) * sign) {
+        lastVal = samples[p].second;
+        p++;
+      }
+      float factor = Imath::lerpfactor(avg(value), avg(lastVal), 
+                                       avg(samples[p].second));
+      Color interp = fit01(factor, lastVal, samples[p].second);
+      float position = fit01(factor, samples[p-1].first, samples[p].first);
+      result->addSample(position, interp);
     }
-    float factor = Imath::lerpfactor(avg(value), avg(lastVal), 
-                                     avg(samples[p].second));
-    Color interp = fit01(factor, lastVal, samples[p].second);
-    float position = fit01(factor, samples[p-1].first, samples[p].first);
-    result->addSample(position, interp);
+    return result;
+  } else {
+    //! \todo Finish
+    return ColorCurve::Ptr(new ColorCurve(*curve));;
   }
-
-  return result;
 }
 
 //----------------------------------------------------------------------------//
