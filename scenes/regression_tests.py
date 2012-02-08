@@ -55,6 +55,7 @@ def handleDir(arg, dir, files):
                 runTest(dir)
             compareResults(dir)
         except TestFail as e:
+            sys.exit(1)
             failureDirs.append(e.dir)
         except ResultFail as e:
             failedResults.append(e.dir)
