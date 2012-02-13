@@ -517,7 +517,7 @@ Volume::StringVec VoxelVolume::info() const
   for (size_t i = 0, size = m_attrNames.size(); i < size; ++i) {
     info.push_back(m_attrNames[i] + " : " + str(m_attrValues[i]));
   }
-  if (m_useEmptySpaceOptimization) {
+  if (m_eso && m_useEmptySpaceOptimization) {
     info.push_back("Empty space optimization: " + m_eso->typeName());
   } else {
     info.push_back("Empty space optimization disabled");
@@ -570,6 +570,8 @@ void VoxelVolume::setBuffer(VoxelBuffer::Ptr buffer)
       m_eso = SparseUniformOptimizer::create(sparse, mMapping);
     } else if (fMapping) {
       m_eso = SparseFrustumOptimizer::create(sparse, fMapping);
+    } else {
+      Log::warning("VoxelVolume::setBuffer(): Unrecognized mapping type.");
     }
   }
 }
