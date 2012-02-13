@@ -126,14 +126,30 @@ Renderer::Params::Params()
 // Renderer
 //----------------------------------------------------------------------------//
 
+Renderer::Renderer()
+  : m_primary(Image::create()),
+    m_deepTransmittance(DeepImage::create()),
+    m_deepLuminance(DeepImage::create())
+{
+  
+}
+
+//----------------------------------------------------------------------------//
+
 Renderer::Ptr Renderer::clone() const
 {
   // First copy everything from this
   Ptr renderer(new Renderer(*this));
   // Deep-copy the non-const data members
-  renderer->m_primary = m_primary->clone();
-  renderer->m_deepTransmittance = m_deepTransmittance->clone();
-  renderer->m_deepLuminance = m_deepLuminance->clone();
+  if (m_primary) {
+    renderer->m_primary = m_primary->clone();
+  }
+  if (m_deepTransmittance) {
+    renderer->m_deepTransmittance = m_deepTransmittance->clone();
+  }
+  if (m_deepLuminance) {
+    renderer->m_deepLuminance = m_deepLuminance->clone();
+  }
   if (m_scene) {
     renderer->m_scene = m_scene->clone();
   }

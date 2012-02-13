@@ -71,6 +71,8 @@ public:
 
   // Constructor, destructor, factory ------------------------------------------
 
+  //! Default constructor
+  Renderer();
   //! Factory method. Use this for all objects that require lifetime management
   static Ptr create();
   //! Clones the Renderer. Will clear all the non-const data members but keeps
