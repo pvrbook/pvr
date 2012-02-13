@@ -68,20 +68,15 @@ public:
   // Accessors -----------------------------------------------------------------
 
   //! Returns the number of frames per second
-  static float fps()
-  { return ms_fps; }
+  static float      fps();
   //! Returns the shutter length
-  static float shutter() 
-  { return ms_shutter; }
+  static float      shutter();
   //! Returns length (in seconds) of open shutter time.
-  static float dt()
-  { return ms_dt; }
+  static float      dt();
   //! Returns a pointer to the current scene
-  static SceneCPtr scene()
-  { return ms_scene; }
+  static SceneCPtr  scene();
   //! Returns a pointer to the current camera
-  static CameraCPtr camera()
-  { return ms_camera; }
+  static CameraCPtr camera();
 
 private:
 

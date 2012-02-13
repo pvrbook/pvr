@@ -136,6 +136,8 @@ public:
 
 private:
 
+  // Utility methods -----------------------------------------------------------
+
   //! Builds a frustum mapping using m_camera and the provided bounds
   void setupFrustumMapping(const BBox &wsBounds) const;
   //! Builds a uniform/matrix mapping using the provided bounds.

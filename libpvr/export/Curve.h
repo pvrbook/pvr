@@ -85,26 +85,22 @@ public:
   //! Adds a sample point to the curve.
   //! \param t Sample position
   //! \param value Sample value
-  void addSample(const float t, const T &value);
+  void               addSample(const float t, const T &value);
   //! Interpolates a value from the curve.
   //! \param t Position along curve
-  T interpolate(const float t) const;
+  T                  interpolate(const float t) const;
   //! Returns number of samples in curve
-  size_t numSamples() const
-  { return m_samples.size(); }
+  size_t             numSamples() const;
   //! Returns a const reference to the samples in the curve.
-  const SampleVec& samples() const
-  { return m_samples; }
+  const SampleVec&   samples() const;
   //! Returns the sample locations
   std::vector<float> samplePoints() const;
   //! Returns the sample values
-  std::vector<T> sampleValues() const;
-
+  std::vector<T>     sampleValues() const;
   //! Removes duplicated values
-  void removeDuplicates();
-
+  void               removeDuplicates();
   //! Average a set of Curves into a single one.
-  static CPtr average(const std::vector<CPtr> &curves);
+  static CPtr        average(const std::vector<CPtr> &curves);
 
 private:
   
@@ -311,6 +307,22 @@ Curve<T>::average(const std::vector<Curve<T>::CPtr> &curves)
   }
 
   return result;
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+size_t Curve<T>::numSamples() const
+{ 
+  return m_samples.size(); 
+}
+
+//----------------------------------------------------------------------------//
+
+template <typename T>
+const typename Curve<T>::SampleVec& Curve<T>::samples() const
+{ 
+  return m_samples; 
 }
 
 //----------------------------------------------------------------------------//

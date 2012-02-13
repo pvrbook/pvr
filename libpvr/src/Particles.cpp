@@ -57,13 +57,6 @@ Particles::Particles()
 
 //----------------------------------------------------------------------------//
 
-Particles::Ptr Particles::create()
-{
-  return Ptr(new Particles);
-}
-
-//----------------------------------------------------------------------------//
-
 void Particles::resize(const size_t size)
 { 
   m_pointAttrs.resize(size); 

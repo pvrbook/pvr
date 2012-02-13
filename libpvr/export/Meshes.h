@@ -59,7 +59,6 @@ public:
 
   //! Constructs an empty Meshes object with "P" point attribute 
   Meshes();
-
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
   PVR_DEFINE_CREATE_FUNC(Meshes);
@@ -67,41 +66,29 @@ public:
   // Main methods --------------------------------------------------------------
   
   //! Returns number of meshes in collection
-  size_t size() const;
-
-  //! Adds a point to the collection
-  //! \returns The index of the point
-  // size_t addPoint();
-
+  size_t           size() const;
   //! Adds a mesh to the collection
   //! \returns The index of the mesh
-  size_t addMesh(const size_t numRows, const size_t numCols);
-
+  size_t           addMesh(const size_t numRows, const size_t numCols);
   //! Number of rows
-  size_t numRows(const size_t meshIdx) const;
+  size_t           numRows(const size_t meshIdx) const;
   //! Number of columns
-  size_t numCols(const size_t meshIdx) const;
-
-  //! Sets the start point index for a given mesh index
-  // void setStartPoint(const size_t meshIdx, const size_t pointIdx);
+  size_t           numCols(const size_t meshIdx) const;
   //! Returns the first vertex of a given mesh index
-  size_t startPoint(const size_t meshIdx) const;
-
+  size_t           startPoint(const size_t meshIdx) const;
   //! Returns the point index of the given vertex
-  size_t pointForVertex(const size_t meshIdx, 
-                        const size_t row, const size_t col) const;
-
+  size_t           pointForVertex(const size_t meshIdx, 
+                                  const size_t row, const size_t col) const;
   //! Access to point data
-  AttrTable& pointAttrs();
-
+  AttrTable&       pointAttrs();
   //! Const access to point data
   const AttrTable& pointAttrs() const;
-
   //! Access to mesh data
-  AttrTable& meshAttrs();
-
+  AttrTable&       meshAttrs();
   //! Const access to primitive data
   const AttrTable& meshAttrs() const;
+
+  // Debugging -----------------------------------------------------------------
 
   //! DEBUG
   void print() const;

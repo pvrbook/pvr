@@ -59,29 +59,21 @@ public:
 
   //! Creates an empty Particles object with the "P" position attribute in place
   Particles();
-
-  //! Factory creation function. Always use this when creating objects
-  //! that need lifespan management.
-  static Ptr create();
+  PVR_DEFINE_CREATE_FUNC(Particles);
 
   // Main methods --------------------------------------------------------------
 
   //! Resizes the particle system to the given size. Will destroy existing
   //! data but keeps attribute definitions
-  void resize(const size_t size);
-
+  void             resize(const size_t size);
   //! Adds a given number of particles to the collection
-  void add(const size_t numItems);
-
+  void             add(const size_t numItems);
   //! Returns number of particles in particle set
-  size_t size() const;
-
+  size_t           size() const;
   //! Sets the position of a given point
-  void setPosition(const size_t idx, const Imath::V3f &pos);
-
+  void             setPosition(const size_t idx, const Imath::V3f &pos);
   //! Access to point data
-  AttrTable& pointAttrs();
-
+  AttrTable&       pointAttrs();
   //! Const access to point data
   const AttrTable& pointAttrs() const;
 

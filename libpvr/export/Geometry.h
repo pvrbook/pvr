@@ -79,29 +79,29 @@ public:
   */
 
   //! Sets the particles member
-  void setParticles(Particles::Ptr particles);
+  void                 setParticles(Particles::Ptr particles);
   //! Sets the polygons member
-  void setPolygons(Polygons::Ptr polygons);
+  void                 setPolygons(Polygons::Ptr polygons);
   //! Sets the meshes member
-  void setMeshes(Meshes::Ptr meshes);
+  void                 setMeshes(Meshes::Ptr meshes);
   
   //! Returns pointer to the particles member
-  Particles::Ptr particles(); 
-  Particles::CPtr particles() const;
+  Particles::Ptr       particles(); 
+  Particles::CPtr      particles() const;
 
   //! Returns pointer to the polygons member
-  Polygons::Ptr polygons();
-  Polygons::CPtr polygons() const;
+  Polygons::Ptr        polygons();
+  Polygons::CPtr       polygons() const;
 
   //! Returns pointer to the meshes member
-  Meshes::Ptr meshes();
-  Meshes::CPtr meshes() const;
+  Meshes::Ptr          meshes();
+  Meshes::CPtr         meshes() const;
 
   //! Access to object attributes
-  AttrTable& objectAttrs();
+  AttrTable&           objectAttrs();
 
   //! Const access to object attributes
-  const AttrTable& objectAttrs() const;
+  const AttrTable&     objectAttrs() const;
 
   //! \}
 

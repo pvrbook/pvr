@@ -49,6 +49,7 @@ public:
 
   // Factory methods -----------------------------------------------------------
 
+  //! Default constructor
   RaymarchOccluder(Renderer::CPtr renderer);
   PVR_DEFINE_CREATE_FUNC_1_ARG(RaymarchOccluder, Renderer::CPtr)
 

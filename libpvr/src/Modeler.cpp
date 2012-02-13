@@ -372,7 +372,7 @@ void Modeler::setupFrustumMapping(const BBox &wsBounds) const
 
   // Clone the camera so we can change the clip planes
   PerspectiveCamera::Ptr cam = m_camera->clone();
-  // Check each corner vertex
+  // Check each corner vertex of the incoming bounds
   double near = std::numeric_limits<double>::max(), far = 0.0f;
   std::vector<Vector> wsCornerPoints = Math::cornerPoints(wsBounds);
   BOOST_FOREACH (const Vector &wsP, wsCornerPoints) {
@@ -380,7 +380,7 @@ void Modeler::setupFrustumMapping(const BBox &wsBounds) const
     near = std::min(near, csP.z);
     far = std::max(far, csP.z);
   }
-  // Clip at zero
+  // Clamp at zero
   near = std::max(near, 0.0);
   far = std::max(far, 0.0);
   // Set clip planes on cloned camera
