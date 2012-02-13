@@ -30,22 +30,14 @@ namespace Model {
 // ModelerInput
 //----------------------------------------------------------------------------//
 
-ModelerInput::Ptr 
-ModelerInput::create()
-{
-  return Ptr(new ModelerInput);
-}
-
-//----------------------------------------------------------------------------//
-
-void ModelerInput::setGeometry(Geo::Geometry::Ptr geometry)
+void ModelerInput::setGeometry(Geo::Geometry::CPtr geometry)
 {
   m_geometry = geometry;
 }
   
 //----------------------------------------------------------------------------//
 
-Geo::Geometry::Ptr ModelerInput::geometry() const
+Geo::Geometry::CPtr ModelerInput::geometry() const
 {
   return m_geometry;
 }
@@ -64,20 +56,6 @@ Prim::Primitive::CPtr ModelerInput::volumePrimitive() const
   return m_primitive;
 }
   
-//----------------------------------------------------------------------------//
-
-void ModelerInput::addFilter(Filter::CPtr filter) 
-{
-  m_filters.push_back(filter);
-}
-
-//----------------------------------------------------------------------------//
-
-void ModelerInput::applyFilters()
-{
-  //! \todo Implement!
-}
-
 //----------------------------------------------------------------------------//
 
 } // namespace Model

@@ -133,7 +133,6 @@ BBox PointBase::wsBounds(Geo::Geometry::CPtr geometry) const
   BBox wsBBox;
   AttrVisitor visitor(geometry->particles()->pointAttrs(), m_params);
 
-  //! \todo Replace with BOOST_FOREACH?
   for (AttrVisitor::const_iterator i = visitor.begin(), end = visitor.end(); 
        i != end; ++i) {
     BBox pointBounds = pointWsBounds(i);

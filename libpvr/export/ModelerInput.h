@@ -56,31 +56,25 @@ public:
 
   //! Factory creation function. Always use this when creating objects
   //! that need lifespan management.
-  static Ptr create();
+  PVR_DEFINE_CREATE_FUNC(ModelerInput);
 
   // Main methods --------------------------------------------------------------
 
   //! Sets the geometry data that the input should use
-  void setGeometry(Geo::Geometry::Ptr geometry);
+  void                  setGeometry(Geo::Geometry::CPtr geometry);
   //! Returns a pointer to the geometry contained by the ModelerInput.
-  Geo::Geometry::Ptr geometry() const;
+  Geo::Geometry::CPtr   geometry() const;
   //! Sets the volumetric primitive to use for generating data
-  void setVolumePrimitive(Prim::Primitive::CPtr primitive);
+  void                  setVolumePrimitive(Prim::Primitive::CPtr primitive);
   //! Returns the volumetric primitive currently assigned.
   Prim::Primitive::CPtr volumePrimitive() const;
-  //! Adds the given Filter to the chain of Filters that gets called after
-  //! each new set of ModelerInput is created by InstantiationPrims.
-  void addFilter(Filter::CPtr filter);
-  //! Executes the Filters
-  void applyFilters();
 
 protected:
   
   // Protected data members ----------------------------------------------------
 
-  Geo::Geometry::Ptr        m_geometry;
-  Prim::Primitive::CPtr     m_primitive;
-  std::vector<Filter::CPtr> m_filters;
+  Geo::Geometry::CPtr   m_geometry;
+  Prim::Primitive::CPtr m_primitive;
 
 };
 

@@ -40,11 +40,20 @@ namespace Util {
 class ParamBase
 {
 public:
+
+  // Typedefs ------------------------------------------------------------------
+
   PVR_TYPEDEF_SMART_PTRS(ParamBase);
+
+  // Ctor, dtor ----------------------------------------------------------------
+
   //! Virtual destructor
   virtual ~ParamBase()
   { }
-  //! Returns the class' type name. Used for plugin registration
+
+  // To be implemented by subclasses -------------------------------------------
+
+  //! Returns the class' type name.
   virtual std::string typeName() const = 0;    
   //! Subclasses implement this to decide what they want to do with
   //! default attribute values. ParamBase itself does nothing.

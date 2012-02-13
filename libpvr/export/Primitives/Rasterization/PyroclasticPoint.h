@@ -106,7 +106,7 @@ protected:
         pyroclastic("pyroclastic",    1), 
         pyro2D     ("pyroclastic_2d", 1), 
         absNoise   ("absolute_noise", 1),
-        antialiased("antialiased", 1)
+        antialiased("antialiased",    1)
     { }
      
     // Main methods ---

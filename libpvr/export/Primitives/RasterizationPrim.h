@@ -52,7 +52,7 @@ struct RasterizationSample
 
   RasterizationSample()
     : value(Imath::V3f(0.0)), wsVelocity(Vector(0.0))
-  { /* Empty */ }
+  { }
 };
 
 //----------------------------------------------------------------------------//
@@ -70,7 +70,7 @@ struct RasterizationState
 
   RasterizationState()
     : wsP(Vector(0.0)), wsVoxelSize(Vector(0.0))
-  { /* Empty */ }
+  { }
 };
 
 //----------------------------------------------------------------------------//
