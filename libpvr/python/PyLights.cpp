@@ -60,9 +60,10 @@ void exportLights()
   // SpotLight ---
 
   class_<SpotLight, bases<Light>, SpotLight::Ptr>("SpotLight", no_init)
-    .def("__init__",    make_constructor(SpotLight::create))
-    .def("setCamera",   &SpotLight::setCamera)
-    .def("camera",      &SpotLight::camera)
+    .def("__init__",      make_constructor(SpotLight::create))
+    .def("setCamera",     &SpotLight::setCamera)
+    .def("camera",        &SpotLight::camera)
+    .def("setConeAngles", &SpotLight::setConeAngles)
     ;
   
   implicitly_convertible<SpotLight::Ptr, SpotLight::CPtr>();
