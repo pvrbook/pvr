@@ -118,12 +118,13 @@ UniformMappingIntersection::UniformMappingIntersection
   
 //----------------------------------------------------------------------------//
 
+//! \note worldToLocalDir does not yet take a time argument.
 IntervalVec UniformMappingIntersection::intersect(const Ray &wsRay, 
                                                   const PTime time) const
 {
   // Transform ray to local space for intersection test
   Ray lsRay;
-  m_mapping->worldToLocal(wsRay.pos, lsRay.pos);
+  m_mapping->worldToLocal(wsRay.pos, lsRay.pos, time);
   m_mapping->worldToLocalDir(wsRay.dir, lsRay.dir);
   // Use unit bounding box to intersect against
   BBox lsBBox = Bounds::zeroOne();
@@ -144,23 +145,7 @@ FrustumMappingIntersection::FrustumMappingIntersection
 (Field3D::FrustumFieldMapping::Ptr mapping)
   : m_mapping(mapping)
 {
-  typedef std::vector<Vector> PointVec;
-  // Get the eight corners of the local space bounding box
-  BBox lsBounds = Bounds::zeroOne();
-  PointVec lsCorners = Math::cornerPoints(lsBounds);
-  // Get the world space positions of the eight corners of the frustum
-  PointVec wsCorners(lsCorners.size());
-  for (PointVec::iterator lsP = lsCorners.begin(), wsP = wsCorners.begin(),
-         end = lsCorners.end(); lsP != end; ++lsP, ++wsP) {
-    mapping->localToWorld(*lsP, *wsP);
-  }
-  // Construct plane for each face of frustum
-  m_planes[0] = Plane(wsCorners[4], wsCorners[0], wsCorners[6]);
-  m_planes[1] = Plane(wsCorners[1], wsCorners[5], wsCorners[3]);
-  m_planes[2] = Plane(wsCorners[4], wsCorners[5], wsCorners[0]);
-  m_planes[3] = Plane(wsCorners[2], wsCorners[3], wsCorners[6]);
-  m_planes[4] = Plane(wsCorners[0], wsCorners[1], wsCorners[2]);
-  m_planes[5] = Plane(wsCorners[5], wsCorners[4], wsCorners[7]);
+  
 }
 
 //----------------------------------------------------------------------------//
@@ -168,11 +153,33 @@ FrustumMappingIntersection::FrustumMappingIntersection
 IntervalVec FrustumMappingIntersection::intersect(const Ray &wsRay, 
                                                   const PTime time) const
 {
+  typedef std::vector<Vector> PointVec;
+
+  // Get the eight corners of the local space bounding box
+  BBox lsBounds = Bounds::zeroOne();
+  PointVec lsCorners = Math::cornerPoints(lsBounds);
+  // Get the world space positions of the eight corners of the frustum
+  PointVec wsCorners(lsCorners.size());
+  for (PointVec::iterator lsP = lsCorners.begin(), wsP = wsCorners.begin(),
+         end = lsCorners.end(); lsP != end; ++lsP, ++wsP) {
+    m_mapping->localToWorld(*lsP, *wsP, time);
+  }
+
+  // Construct plane for each face of frustum
+  Plane planes[6];
+  planes[0] = Plane(wsCorners[4], wsCorners[0], wsCorners[6]);
+  planes[1] = Plane(wsCorners[1], wsCorners[5], wsCorners[3]);
+  planes[2] = Plane(wsCorners[4], wsCorners[5], wsCorners[0]);
+  planes[3] = Plane(wsCorners[2], wsCorners[3], wsCorners[6]);
+  planes[4] = Plane(wsCorners[0], wsCorners[1], wsCorners[2]);
+  planes[5] = Plane(wsCorners[5], wsCorners[4], wsCorners[7]);
+
+  // Intersect ray against planes
   double t0 = -std::numeric_limits<double>::max();
   double t1 = std::numeric_limits<double>::max();
   for (int i = 0; i < 6; ++i) {
     double t;
-    const Plane &p = m_planes[i];
+    const Plane &p = planes[i];
     if (p.intersectT(wsRay, t)) {
       if (wsRay.dir.dot(p.normal) > 0.0) {
         // Non-opposing plane
@@ -220,7 +227,7 @@ SparseUniformOptimizer::optimize(const RayState &state,
 
   // Find start voxel
   Vector wsStart = wsRay(intervals[0].t0), vsStart;
-  m_sparse->mapping()->worldToVoxel(wsStart, vsStart);
+  m_sparse->mapping()->worldToVoxel(wsStart, vsStart, time);
   V3i in = Imath::clip(V3i(vsStart), m_sparse->extents());
 
   // Find start block
@@ -299,6 +306,7 @@ SparseUniformOptimizer::intervalForRun(const Ray &wsRay, const PTime time,
 
 //----------------------------------------------------------------------------//
 
+//! \note worldToLocalDir does not yet take a time argument.
 void
 SparseUniformOptimizer::intersect(const Ray &wsRay, const PTime time, 
                                   const Imath::V3i block,
@@ -306,7 +314,7 @@ SparseUniformOptimizer::intersect(const Ray &wsRay, const PTime time,
 {
   // Transform to local space
   Ray lsRay;
-  m_mapping->worldToLocal(wsRay.pos, lsRay.pos);
+  m_mapping->worldToLocal(wsRay.pos, lsRay.pos, time);
   m_mapping->worldToLocalDir(wsRay.dir, lsRay.dir);
   // Intersect in local space
   Imath::Box3i box;
@@ -450,7 +458,7 @@ VolumeSample VoxelVolume::sample(const VolumeSampleState &state,
   // Transform to voxel space for sampling ---
   
   Vector vsP;
-  m_buffer->mapping()->worldToVoxel(state.wsP, vsP);
+  m_buffer->mapping()->worldToVoxel(state.wsP, vsP, state.rayState.time);
 
   if (!Math::isInBounds(vsP, m_buffer->dataWindow())) {
     return VolumeSample(Colors::zero(), m_phaseFunction);
