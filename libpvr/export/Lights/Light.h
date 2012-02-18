@@ -86,34 +86,34 @@ public:
   // Main methods --------------------------------------------------------------
 
   //! Sets the intesity of the light source.
-  void setIntensity(const Color &intensity);
+  void                setIntensity(const Color &intensity);
   //! Returns the intensity
-  const Color& intensity() const;
+  const Color&        intensity() const;
   //! Sets whether falloff is enabled
-  void setFalloffEnabled(const bool enabled);
+  void                setFalloffEnabled(const bool enabled);
   //! Returns whether falloff is enabled
-  bool falloffEnabled() const;
+  bool                falloffEnabled() const;
   //! Sets the Occluder to use for the light. By default, each light has the
   //! NullOccluder assigned.
-  void setOccluder(Occluder::CPtr occluder);
+  void                setOccluder(Occluder::CPtr occluder);
   //! Returns the light's Occluder.
-  Occluder::CPtr occluder() const;
+  Occluder::CPtr      occluder() const;
 
 protected:
 
   // Utility methods -----------------------------------------------------------
 
   //! Computes falloff given a distance
-  float falloffFactor(const Vector &p1, const Vector &p2) const;
+  float               falloffFactor(const Vector &p1, const Vector &p2) const;
   
   // Data members --------------------------------------------------------------
 
   //! Intensity of light source
-  Color m_intensity;
+  Color          m_intensity;
   //! Whether falloff is enabled
-  bool m_falloffEnabled;
+  bool           m_falloffEnabled;
   //! Whether soft rolloff is used close to the light source
-  bool m_softRolloff;
+  bool           m_softRolloff;
   //! Pointer to the light's Occluder
   Occluder::CPtr m_occluder;
 };

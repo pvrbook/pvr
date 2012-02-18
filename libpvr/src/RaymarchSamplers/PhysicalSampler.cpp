@@ -94,7 +94,7 @@ RaymarchSample PhysicalSampler::sample(const VolumeSampleState &state) const
       state.rayState.rayType == RayState::FullRaymarch) {
 
     // Update light and occluder sample states
-    lightState.wsP = state.wsP;
+    lightState.wsP     = state.wsP;
     occlusionState.wsP = state.wsP;
 
     // For each light source
@@ -105,11 +105,11 @@ RaymarchSample PhysicalSampler::sample(const VolumeSampleState &state) const
 
       // Sample the occluder
       occlusionState.wsLightP = lightSample.wsP;
-      Color transmittance = light->occluder()->sample(occlusionState);
+      Color transmittance     = light->occluder()->sample(occlusionState);
 
       // Find the scattering probability
       const Vector wi = (state.wsP - lightSample.wsP).normalized();
-      const float p = scSample.phaseFunction->probability(wi, wo);
+      const float  p  = scSample.phaseFunction->probability(wi, wo);
 
       // Update luminance
       L_sc += sigma_s * p * lightSample.luminance * transmittance;

@@ -48,14 +48,20 @@ class Volume;
 class Scene
 {
 public:
-  // Typedefs
+
+  // Typedefs ------------------------------------------------------------------
+
   PVR_TYPEDEF_SMART_PTRS(Scene);
   typedef Util::SPtr<const Volume>::type VolumePtr;
   typedef Util::SPtr<const Light>::type  LightPtr;
   typedef std::vector<LightPtr>          LightVec;
-  // Cloning
+
+  // Ctor, dtor, cloning -------------------------------------------------------
+
   Ptr clone() const;
-  // Data members
+
+  // Data members --------------------------------------------------------------
+
   VolumePtr volume;
   LightVec  lights;
 };

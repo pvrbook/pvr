@@ -62,9 +62,9 @@ public:
   // Main methods --------------------------------------------------------------
 
   //! Sets the position of the point light
-  void setPosition(const Vector &wsP);
+  void                setPosition(const Vector &wsP);
   //! Returns the position of the point light
-  Vector position() const;
+  Vector              position() const;
 
 private:
 

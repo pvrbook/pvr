@@ -69,49 +69,41 @@ public:
 
   // Constructors and destructor -----------------------------------------------
 
-  //! Default constructor. Initializes the scattering attribute
-  Volume()
-    : m_phaseFunction(new Phase::Isotropic)
-  { }
+  //! Default constructor. Initalizes the phase function to Isotropic
+  Volume();
   //! Virtual destructor
-  ~Volume()
-  { }
+  virtual ~Volume();
   
   // Main methods --------------------------------------------------------------
 
   //! Sets the phase function to use
-  void setPhaseFunction(Phase::PhaseFunction::CPtr phaseFunction);
+  void                       setPhaseFunction(Phase::PhaseFunction::CPtr p);
   //! Returns the phase function
   Phase::PhaseFunction::CPtr phaseFunction() const;
 
   // To be implemented by subclasses -------------------------------------------
 
   //! Returns the names of the attributes that the volume provides.
-  virtual AttrNameVec attributeNames() const = 0;
+  virtual AttrNameVec        attributeNames() const = 0;
   //! Returns the value of the volume node for a given point.
   //! \note The point position is found in state.wsP
-  virtual VolumeSample sample(const VolumeSampleState &state,
-                              const VolumeAttr &attribute) const = 0;
+  virtual VolumeSample       sample(const VolumeSampleState &state,
+                                    const VolumeAttr &attribute) const = 0;
   //! Returns an axis-aligned world space bounding box.
-  virtual BBox wsBounds() const = 0;
+  virtual BBox               wsBounds() const = 0;
   //! Returns a vector of intersection intervals (start/end points) that
   //! intersect the ray.
   //! \note The ray is found in state.wsRay
-  virtual IntervalVec intersect(const RayState &state) const = 0;
+  virtual IntervalVec        intersect(const RayState &state) const = 0;
 
   // Optionally implemented by subclasses --------------------------------------
 
   //! Returns string-formatted information about the volume
-  virtual StringVec info() const;
+  virtual StringVec          info() const;
   //! Returns a vector of other volumes that the volume references
-  virtual CVec inputs() const;
+  virtual CVec               inputs() const;
 
 protected:
-
-  // Utility methods -----------------------------------------------------------
-
-  float computeProbability(const Vector &in, const Vector &out,
-                           const VolumeAttr &attribute) const;
 
   // Data members --------------------------------------------------------------
   

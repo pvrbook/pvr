@@ -60,7 +60,7 @@ VoxelOccluder::VoxelOccluder(Renderer::CPtr renderer,
 {
   Log::print("Building VoxelOccluder");
 
-  BBox wsBounds = renderer->scene()->volume->wsBounds();
+  BBox wsBounds       = renderer->scene()->volume->wsBounds();
   Matrix localToWorld = Math::coordinateSystem(wsBounds);
   MatrixFieldMapping::Ptr mapping(new MatrixFieldMapping);
   mapping->setLocalToWorld(localToWorld);
@@ -72,7 +72,7 @@ VoxelOccluder::VoxelOccluder(Renderer::CPtr renderer,
   Log::print("  Resolution: " + str(bufferRes));
 
   RayState state;
-  state.rayType = RayState::TransmittanceOnly;
+  state.rayType  = RayState::TransmittanceOnly;
   state.rayDepth = 1;
 
   Timer timer;
@@ -88,9 +88,9 @@ VoxelOccluder::VoxelOccluder(Renderer::CPtr renderer,
     // Do work
     Vector wsP;
     m_buffer.mapping()->voxelToWorld(discToCont(V3i(i.x, i.y, i.z)), wsP);
-    state.wsRay.pos = wsP;
-    state.wsRay.dir = (wsLightPos - wsP).normalized();
-    state.tMax = (wsLightPos - wsP).length();
+    state.wsRay.pos          = wsP;
+    state.wsRay.dir          = (wsLightPos - wsP).normalized();
+    state.tMax               = (wsLightPos - wsP).length();
     IntegrationResult result = renderer->trace(state);
     *i = result.transmittance;
   }

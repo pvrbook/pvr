@@ -73,29 +73,29 @@ public:
 
   //! Clones the instance. Will clear all the non-const data members but keeps
   //! pointers to const data members
-  Ptr clone();
+  Ptr        clone();
 
   // Main methods --------------------------------------------------------------
 
   //! Sets the size/resolution of the image
-  void setSize(const size_t width, const size_t height);
+  void       setSize(const size_t width, const size_t height);
 
   //! Sets the value of a given pixel
-  void setPixel(const size_t x, const size_t y, const Color &value);
+  void       setPixel(const size_t x, const size_t y, const Color &value);
   //! Sets the alpha value of a given pixel
-  void setPixelAlpha(const size_t x, const size_t y, const float value);
+  void       setPixelAlpha(const size_t x, const size_t y, const float value);
 
   //! Returns the size of the image
   Imath::V2i size() const;
 
   //! Returns the value of a given pixel.
-  Color pixel(const size_t x, const size_t y) const;
+  Color      pixel(const size_t x, const size_t y) const;
   //! Returns the alpha value of a given pixel
-  float pixelAlpha(const size_t x, const size_t y) const;
+  float      pixelAlpha(const size_t x, const size_t y) const;
 
   //! Writes the image to disk. The filename extension may be any format
   //! supported by OpenImageIO.
-  void write(const std::string &filename, Channels channels) const;
+  void       write(const std::string &filename, Channels channels) const;
 
   // Iteration -----------------------------------------------------------------
 

@@ -66,38 +66,6 @@ public:
 //----------------------------------------------------------------------------//
 
 } // namespace Util
-
-//----------------------------------------------------------------------------//
-
-namespace Model {
-
-//----------------------------------------------------------------------------//
-// Filter
-//----------------------------------------------------------------------------//
-
-//! Base class for geometry filters
-//! \todo Move to Filter.h
-class Filter : public Util::ParamBase
-{
-public:
-  PVR_TYPEDEF_SMART_PTRS(Filter);
-};
-
-//----------------------------------------------------------------------------//
-// VoxelShader
-//----------------------------------------------------------------------------//
-
-//! Base class for voxel shaders used during rasterization
-//! \todo Move to VoxelShader.h
-class VoxelShader : public Util::ParamBase
-{
-public:
-  PVR_TYPEDEF_SMART_PTRS(VoxelShader);
-};
-
-//----------------------------------------------------------------------------//
-
-} // namespace Model
 } // namespace pvr
 
 //----------------------------------------------------------------------------//

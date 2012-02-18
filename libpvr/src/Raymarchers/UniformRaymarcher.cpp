@@ -225,23 +225,22 @@ UniformRaymarcher::integrate(const RayState &state) const
       // Early termination
       if (m_params.doEarlyTermination &&
           Math::max(T_e) < m_params.earlyTerminationThreshold) {
-        T_e = Colors::zero();
+        T_e         = Colors::zero();
+        T_alpha     = Colors::zero();
         doTerminate = true;
       }
 
       // Update transmittance and luminance functions
-      if (tf || lf) {
-        updateDeepFunctions(stepT1, L, T_e, lf, tf);
-      }
+      updateDeepFunctions(stepT1, L, T_e, lf, tf);
+
+      // Set up next raymarch step
+      stepT0 = stepT1;
+      stepT1 = min(tEnd, stepT1 + baseStepLength);
 
       // Terminate if requested
       if (doTerminate) {
         break;
       }
-
-      // Set up next steps
-      stepT0 = stepT1;
-      stepT1 = min(tEnd, stepT1 + baseStepLength);
 
     } // end raymarch of single interval
 

@@ -66,15 +66,15 @@ public:
   //! Returns the name of the attribute
   const std::string& name() const;
   //! Returns the index of the attribute
-  int index() const;
+  int                index() const;
   //! Sets the index of the attribute.
   //! \note This is const, because the value always needs to be set on first
   //! use, and re-setting is prohibited.
   //! \throws SetIndexException if trying to set the index more than once
-  void setIndex(const int index) const;
+  void               setIndex(const int index) const;
   //! Marks the index as invalid. This is set whenever a Volume decides it
   //! can't provide the requested attribute
-  void setIndexInvalid() const;
+  void               setIndexInvalid() const;
 
 private:
 

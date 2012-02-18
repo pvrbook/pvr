@@ -56,11 +56,11 @@ public:
 
   // From Volume ---------------------------------------------------------------
 
-  virtual AttrNameVec attributeNames() const;
-  virtual VolumeSample sample(const VolumeSampleState &state,
-                              const VolumeAttr &attribute) const;
-  virtual BBox wsBounds() const;
-  virtual IntervalVec intersect(const RayState &state) const;
+  virtual AttrNameVec       attributeNames() const;
+  virtual VolumeSample      sample(const VolumeSampleState &state,
+                                   const VolumeAttr &attribute) const;
+  virtual BBox              wsBounds() const;
+  virtual IntervalVec       intersect(const RayState &state) const;
   virtual Volume::StringVec info() const;
 
 protected:
@@ -72,17 +72,17 @@ protected:
   // Data members --------------------------------------------------------------
   
   //! Local to world transform
-  Util::MatrixCurve m_localToWorld;
+  Util::MatrixCurve       m_localToWorld;
   //! World to local transform
-  Util::MatrixCurve m_worldToLocal;
+  Util::MatrixCurve       m_worldToLocal;
   //! World space bounds
-  BBox m_wsBounds;
+  BBox                    m_wsBounds;
   //! Attribute names
-  AttrNameVec m_attrNames;
+  AttrNameVec             m_attrNames;
   //! Attribute scaling values
   std::vector<Imath::V3f> m_attrValues;
   //! Maximum value of all attributes. Used to compute a base 
-  float m_maxAttrValue;
+  float                   m_maxAttrValue;
 
 };
 

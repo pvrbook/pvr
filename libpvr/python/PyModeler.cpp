@@ -102,7 +102,6 @@ void exportModelerInput()
     .def("__init__",           make_constructor(ModelerInput::create))
     .def("setGeometry",        &ModelerInput::setGeometry)
     .def("setVolumePrimitive", &ModelerInput::setVolumePrimitive)
-    .def("addFilter",          &ModelerInput::addFilter)
     ;
 
 }

@@ -73,8 +73,7 @@ public:
   }
 
   //! Specific factory method
-  static Ptr create()
-  { return Ptr(new CompositeVolume); }
+  PVR_DEFINE_CREATE_FUNC(CompositeVolume);
 
   // From ParamBase ------------------------------------------------------------
 
@@ -82,23 +81,23 @@ public:
 
   // From Volume ---------------------------------------------------------------
 
-  virtual AttrNameVec attributeNames() const;
+  virtual AttrNameVec  attributeNames() const;
   virtual VolumeSample sample(const VolumeSampleState &state,
                               const VolumeAttr &attribute) const;
-  virtual BBox wsBounds() const;
-  virtual IntervalVec intersect(const RayState &state) const;
-  virtual CVec inputs() const;
+  virtual BBox         wsBounds() const;
+  virtual IntervalVec  intersect(const RayState &state) const;
+  virtual CVec         inputs() const;
 
   // Main methods --------------------------------------------------------------
 
   //! Adds a new volume to the composite.
-  void add(Volume::CPtr child);
+  void                 add(Volume::CPtr child);
 
 protected:
 
   // Utility methods -----------------------------------------------------------
 
-  void setupAttribute(const VolumeAttr &attribute) const;
+  void                 setupAttribute(const VolumeAttr &attribute) const;
 
   // Protected data members ----------------------------------------------------
 

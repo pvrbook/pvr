@@ -82,43 +82,45 @@ public:
   // Setup ---------------------------------------------------------------------
 
   //! Sets the camera to use for rendering
-  void setCamera(Camera::CPtr camera);
+  void setCamera    (Camera::CPtr camera);
   //! Sets the raymarcher to use for rendering
   void setRaymarcher(Raymarcher::CPtr raymarcher);
+  //! Adds a Volume object to the collection of volumes to be rendered
+  void addVolume    (Volume::CPtr volume);
+  //! Adds a Light to the scene
+  void addLight     (Light::CPtr light);
+
+  // Access --------------------------------------------------------------------
+
   //! Returns a pointer to the raymarcher
   Raymarcher::CPtr raymarcher() const;
-  //! Adds a Volume object to the collection of volumes to be rendered
-  void addVolume(Volume::CPtr volume);
-  //! Adds a Light to the scene
-  void addLight(Light::CPtr light);
-  //! Prints the scene contents
-  void printSceneInfo() const;
   //! Returns a pointer to the Scene instance
-  Scene::Ptr scene() const;
-
+  Scene::Ptr       scene() const;  
+  //! Returns the number of pixel samples to use
+  size_t           numPixelSamples() const;
+  
   // Options -------------------------------------------------------------------
 
   //! Whether to enable primary output. This is true for beauty renders
   //! and false when rendering a secondary pass, such as the transmittance map.
-  void setPrimaryEnabled(const bool enabled);
+  void setPrimaryEnabled         (const bool enabled);
   //! Sets whether to enable computation of the deep transmittance map.
   void setTransmittanceMapEnabled(const bool enabled);
   //! Sets whether to enable computation of the deep luminance map.
-  void setLuminanceMapEnabled(const bool enabled);
-
+  void setLuminanceMapEnabled    (const bool enabled);
   //! Sets whether to randomize pixel samples
   void setDoRandomizePixelSamples(const bool enabled);
   //! Sets the number of pixel samples to use
   //! \note The number of rays fired will be the square of this number
-  void setNumPixelSamples(const size_t numSamples);
-  //! Returns the number of pixel samples to use
-  size_t numPixelSamples() const;
+  void setNumPixelSamples        (const size_t numSamples);
   //! Sets the number of samples to use for deep images (transmittance and
   //! luminance)
-  void setNumDeepSamples(const size_t numSamples);
+  void setNumDeepSamples         (const size_t numSamples);
 
   // Execution -----------------------------------------------------------------
 
+  //! Prints the scene contents
+  void printSceneInfo() const;
   //! Executes the render
   void execute();
 
@@ -135,7 +137,7 @@ public:
   //! Returns a pointer to the luminance map
   DeepImage::Ptr luminanceMap() const;
   //! Saves the rendered image to the given filename
-  void saveImage(const std::string &filename) const;
+  void           saveImage(const std::string &filename) const;
 
 private:
 
@@ -144,6 +146,10 @@ private:
   //! Integrates a single ray and returns the result
   IntegrationResult integrateRay(const float x, const float y, 
                                  const PTime time) const;
+  //! Configures the next pixel sample
+  void setupSample(const float xCenter, const float yCenter,
+                   const size_t xSubpixel, const size_t ySubpixel, 
+                   float &xSample, float &ySample, PTime &pTime) const;
 
   // Structs -------------------------------------------------------------------
 
@@ -159,7 +165,7 @@ private:
   // Private data members ------------------------------------------------------
 
   //! Random number generator
-  Imath::Rand48 m_rng;
+  mutable Imath::Rand48 m_rng;
   //! Renderer parameters
   Params m_params;
   //! Pointer to scene

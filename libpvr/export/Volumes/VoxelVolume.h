@@ -110,9 +110,6 @@ private:
 
   //! Pointer to frustum mapping
   Field3D::FrustumFieldMapping::Ptr m_mapping;
-  //! The six planes that make up the frustum
-  //! \note Order of planes: Left, Right, Bottom, Top, Near, Far
-  Plane m_planes[6];
 };
 
 //----------------------------------------------------------------------------//
@@ -148,7 +145,7 @@ public:
   // Ctor, factory -------------------------------------------------------------
 
   PVR_DEFINE_CREATE_FUNC_2_ARG(SparseUniformOptimizer, SparseBuffer::Ptr,
-                            Field3D::MatrixFieldMapping::Ptr);
+                               Field3D::MatrixFieldMapping::Ptr);
   SparseUniformOptimizer(SparseBuffer::Ptr sparse, 
                          Field3D::MatrixFieldMapping::Ptr mapping);
 
@@ -165,15 +162,19 @@ private:
   // Utility methods -----------------------------------------------------------
 
   //! Constructs an Interval given the start and end blocks along the ray
-  Interval intervalForRun(const Ray &wsRay, const PTime time,
-                          const Imath::V3i &start, const Imath::V3i &end) const;
+  Interval            intervalForRun(const Ray &wsRay, const PTime time,
+                                     const Imath::V3i &start, 
+                                     const Imath::V3i &end) const;
   //! Intersects the ray with the given sparse block
-  void intersect(const Ray &wsRay, const PTime time, const Imath::V3i block,
-                 double &t0, double &t1) const;
+  void                intersect(const Ray &wsRay, const PTime time, 
+                                const Imath::V3i block,
+                                double &t0, double &t1) const;
 
   // Private data members ------------------------------------------------------
 
+  //! Pointer to the sparse buffer
   SparseBuffer::Ptr m_sparse;
+  //! Pointer to the uniform mapping
   Field3D::MatrixFieldMapping::Ptr m_mapping;
 };
 
@@ -208,13 +209,15 @@ private:
 
   // Utility methods -----------------------------------------------------------
 
-  Interval intervalForRun(const Ray &wsRay, const PTime time, 
-                          const Vector &vsFirst, 
-                          const int start, const int end) const;
+  Interval            intervalForRun(const Ray &wsRay, const PTime time, 
+                                     const Vector &vsFirst, 
+                                     const int start, const int end) const;
 
   // Private data members ------------------------------------------------------
-
+  
+  //! Pointer to the sparse buffer
   SparseBuffer::Ptr m_sparse;
+  //! Pointer to the frustum mapping
   Field3D::FrustumFieldMapping::Ptr m_mapping;
 };
 
@@ -257,10 +260,8 @@ public:
 
   //! Default constructor. Initializes interp type.
   VoxelVolume();
-
   //! Specific factory method
-  static Ptr create()
-  { return Ptr(new VoxelVolume); }
+  PVR_DEFINE_CREATE_FUNC(VoxelVolume);
 
   // From ParamBase ------------------------------------------------------------
 
@@ -268,61 +269,74 @@ public:
 
   // From Volume ---------------------------------------------------------------
 
-  virtual AttrNameVec attributeNames() const;
+  virtual AttrNameVec  attributeNames() const;
   virtual VolumeSample sample(const VolumeSampleState &state,
                               const VolumeAttr &attribute) const;
-  virtual BBox wsBounds() const;
-  virtual IntervalVec intersect(const RayState &state) const;
-  virtual StringVec info() const;
+  virtual BBox         wsBounds() const;
+  virtual IntervalVec  intersect(const RayState &state) const;
+  virtual StringVec    info() const;
 
   // Main methods --------------------------------------------------------------
 
   //! Loads a Field3D file from disk. 
-  void load(const std::string &filename);
+  void                 load(const std::string &filename);
   //! Sets the voxel buffer.
-  void setBuffer(VoxelBuffer::Ptr buffer);
+  void                 setBuffer(VoxelBuffer::Ptr buffer);
   //! Adds an attribute to be exposed. The supplied value acts as a scaling
   //! factor on top of the density value sampled from the voxel buffer.
-  void addAttribute(const std::string &attrName, const Imath::V3f &value);
+  void                 addAttribute(const std::string &attrName, 
+                                    const Imath::V3f &value);
   //! Sets the interpolator type to use for lookups.
-  void setInterpolation(const InterpType interpType);
+  void                 setInterpolation(const InterpType interpType);
   //! Sets whether to use empty space optimization.
-  void setUseEmptySpaceOptimization(const bool enabled);
+  void                 setUseEmptySpaceOptimization(const bool enabled);
 
 protected:
 
+  // Typedefs ------------------------------------------------------------------
+
+  typedef Field3D::LinearFieldInterp<Imath::V3f>   LinearInterpType;
+  //! Cubic interpolator
+  typedef Field3D::TriCubicFieldInterp<Imath::V3f> CubicInterpType;
+  //! Monotonic cubic interpolator
+  typedef Field3D::CubicFieldInterp<Imath::V3f>    MonotonicCubicInterpType;
+  //! Gaussian interpolator
+  typedef Field3D::GaussianFieldInterp<Imath::V3f> GaussianInterpType;
+  //! Mitchell-Netravali interpolator
+  typedef Field3D::MitchellFieldInterp<Imath::V3f> MitchellInterpType;
+
   // Utility methods -----------------------------------------------------------
 
-  void updateIntersectionHandler();
+  void                 updateIntersectionHandler();
 
   // Protected data members ----------------------------------------------------
 
   //! Voxel buffer
-  VoxelBuffer::Ptr m_buffer;
+  VoxelBuffer::Ptr          m_buffer;
   //! World space bounds
-  BBox m_wsBounds;
+  BBox                      m_wsBounds;
   //! Attribute names
-  AttrNameVec m_attrNames;
+  AttrNameVec               m_attrNames;
   //! Attribute scaling values
-  std::vector<Imath::V3f> m_attrValues;
+  std::vector<Imath::V3f>   m_attrValues;
   //! Handles ray/buffer intersection tests
-  BufferIntersection::CPtr m_intersectionHandler;
+  BufferIntersection::CPtr  m_intersectionHandler;
   //! Interpolation type to use for lookups
-  InterpType m_interpType;
+  InterpType                m_interpType;
   //! Linear interpolator
-  Field3D::LinearFieldInterp<Imath::V3f> m_linearInterp;
+  LinearInterpType          m_linearInterp;
   //! Cubic interpolator
-  Field3D::TriCubicFieldInterp<Imath::V3f> m_cubicInterp;
+  CubicInterpType           m_cubicInterp;
   //! Monotonic cubic interpolator
-  Field3D::CubicFieldInterp<Imath::V3f> m_monotonicCubicInterp;
+  MonotonicCubicInterpType  m_monotonicCubicInterp;
   //! Gaussian interpolator
-  Field3D::GaussianFieldInterp<Imath::V3f> m_gaussInterp;
+  GaussianInterpType        m_gaussInterp;
   //! Mitchell-Netravali interpolator
-  Field3D::MitchellFieldInterp<Imath::V3f> m_mitchellInterp;
+  MitchellInterpType        m_mitchellInterp;
   //! Empty space optimizer. May be null.
   EmptySpaceOptimizer::CPtr m_eso;
   //! Whether to use empty space optimization
-  bool m_useEmptySpaceOptimization;
+  bool                      m_useEmptySpaceOptimization;
 
 };
 
