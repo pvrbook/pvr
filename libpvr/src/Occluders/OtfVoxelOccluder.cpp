@@ -84,8 +84,14 @@ Color OtfVoxelOccluder::sample(const OcclusionSampleState &state) const
   for (int k = z0; k < z0 + 2; ++k) {
     for (int j = y0; j < y0 + 2; ++j) {
       for (int i = x0; i < x0 + 2; ++i) {
-        if (Math::max(m_buffer.fastValue(i, j, k)) < 0.0) {
-          updateVoxel(i, j, k);
+        int ii = Imath::clamp(i, m_buffer.dataWindow.min.x, 
+                              m_buffer.dataWindow.max.x);
+        int jj = Imath::clamp(j, m_buffer.dataWindow.min.y, 
+                              m_buffer.dataWindow.max.y);
+        int kk = Imath::clamp(k, m_buffer.dataWindow.min.z, 
+                              m_buffer.dataWindow.max.z);
+        if (Math::max(m_buffer.fastValue(ii, jj, kk)) < 0.0) {
+          updateVoxel(ii, jj, kk);
         }
       }
     }
