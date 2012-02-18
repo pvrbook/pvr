@@ -315,11 +315,11 @@ void Renderer::execute()
   const size_t numSamples = m_params.numPixelSamples;
 
   if (m_params.doPrimary) {
-    Log::print("Rendering image " + str(m_primary->size()) + " (" + 
-               str(numSamples) + " x " + str(numSamples) + ")");
+    Log::print("Rendering image " + str(m_primary->size()) + 
+               " (" + str(numSamples) + " x " + str(numSamples) + ")");
   } else {
-    Log::print("Rendering transmittance map " + str(m_primary->size()) + " (" + 
-               str(numSamples) + " x " + str(numSamples) + ")");
+    Log::print("Rendering transmittance map " + str(m_primary->size()) + 
+               " (" + str(numSamples) + " x " + str(numSamples) + ")");
   }
 
   // Initialization ---
@@ -343,22 +343,18 @@ void Renderer::execute()
     Color alpha = Colors::zero();
     // Transmittance functions to be averaged
     std::vector<ColorCurve::CPtr> tf, lf;
-    // For each pixel sample (in each dimension)
+    // For each pixel sample (in x/y)
     for (size_t iX = 0; iX < numSamples; iX++) {
       for (size_t iY = 0; iY < numSamples; iY++) {
-        float xSample = i.rsX();
-        float ySample = i.rsY();
-        if (m_params.doRandomizePixelSamples) {
-          xSample += m_rng.nextf() - 0.5f;
-          ySample += m_rng.nextf() - 0.5f;
-        }
-        PTime pTime((iX + iY * numSamples + m_rng.nextf()) / 
-                    (numSamples * numSamples));
+        // Set up the next sample
+        float xSample, ySample;
+        PTime pTime(0.0);
+        setupSample(i.rsX(), i.rsY(), iX, iY, xSample, ySample, pTime);
         // Render pixel
         IntegrationResult result = integrateRay(xSample, ySample, pTime);
         // Update accumulated result
         luminance += result.luminance;
-        alpha += Colors::one() - result.transmittance;
+        alpha     += Colors::one() - result.transmittance;
         if (result.transmittanceFunction) {
           tf.push_back(result.transmittanceFunction);
         }
@@ -368,8 +364,8 @@ void Renderer::execute()
       }
     }
     // Normalize luminance and transmittance
-    luminance *= 1.0 / m_params.numPixelSamples;
-    alpha *= 1.0 / m_params.numPixelSamples;
+    luminance *= 1.0 / std::pow(m_params.numPixelSamples, 2.0);
+    alpha     *= 1.0 / std::pow(m_params.numPixelSamples, 2.0);
     // Update resulting image and transmittance/luminance maps
     i.setPixel(luminance);
     i.setPixelAlpha((alpha.x + alpha.y + alpha.z) / 3.0f);
@@ -428,8 +424,8 @@ IntegrationResult Renderer::integrateRay(const float x, const float y,
   // defaults
   RayState state;
   // Update the values that are non-default
-  state.wsRay         = setupRay(m_camera, x, y, time);
-  state.time          = time;
+  state.wsRay = setupRay(m_camera, x, y, time);
+  state.time = time;
   if (!m_params.doPrimary) {
     state.rayType = RayState::TransmittanceOnly;
     state.rayDepth = 1;
@@ -438,6 +434,24 @@ IntegrationResult Renderer::integrateRay(const float x, const float y,
   state.doOutputDeepL = m_params.doLuminanceMap;
   // Let the Raymarcher do the integration work
   return m_raymarcher->integrate(state);
+}
+
+//----------------------------------------------------------------------------//
+
+void Renderer::setupSample(const float xCenter, const float yCenter,
+                           const size_t xSubpixel, const size_t ySubpixel, 
+                           float &xSample, float &ySample, PTime &pTime) const
+{
+  const size_t numSamples = m_params.numPixelSamples;
+
+  xSample = xCenter;
+  ySample = yCenter;
+  if (m_params.doRandomizePixelSamples) {
+    xSample += m_rng.nextf() - 0.5f;
+    ySample += m_rng.nextf() - 0.5f;
+  }
+  pTime = PTime((xSubpixel + ySubpixel * numSamples + m_rng.nextf()) / 
+                (numSamples * numSamples));
 }
 
 //----------------------------------------------------------------------------//
