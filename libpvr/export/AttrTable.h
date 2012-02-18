@@ -167,7 +167,7 @@ private:
 
   The class represents an MxN table where each column N represents an 'attribute'
   and each row M is an element in the table. Used to represent point, primitive,
-  and object attributes in classes such as Particles and Triangles.
+  and global attributes in classes such as Particles and Triangles.
   
   Attributes are stored internally as a 'structure of vectors', meaning that
   new attributes can be added without disturbing existing data. It also means

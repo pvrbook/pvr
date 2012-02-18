@@ -97,11 +97,11 @@ public:
   Meshes::Ptr          meshes();
   Meshes::CPtr         meshes() const;
 
-  //! Access to object attributes
-  AttrTable&           objectAttrs();
+  //! Access to global attributes
+  AttrTable&           globalAttrs();
 
-  //! Const access to object attributes
-  const AttrTable&     objectAttrs() const;
+  //! Const access to global attributes
+  const AttrTable&     globalAttrs() const;
 
   //! \}
 
@@ -116,8 +116,8 @@ protected:
   //! Pointer to mesh data
   Meshes::Ptr m_meshes;
 
-  //! Primitive attributes. This should always have size 1.
-  AttrTable m_objectAttrs;
+  //! Global attributes. This should always have size 1.
+  AttrTable m_globalAttrs;
 
 };
 

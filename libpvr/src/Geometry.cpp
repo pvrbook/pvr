@@ -237,7 +237,7 @@ namespace pvr {
 
 Geometry::Geometry()
 {
-  m_objectAttrs.resize(1);
+  m_globalAttrs.resize(1);
 }
   
 //----------------------------------------------------------------------------//
@@ -553,16 +553,16 @@ Meshes::CPtr Geometry::meshes() const
 
 //----------------------------------------------------------------------------//
 
-AttrTable& Geometry::objectAttrs()
+AttrTable& Geometry::globalAttrs()
 { 
-  return m_objectAttrs; 
+  return m_globalAttrs; 
 }
   
 //----------------------------------------------------------------------------//
 
-const AttrTable& Geometry::objectAttrs() const
+const AttrTable& Geometry::globalAttrs() const
 { 
-  return m_objectAttrs; 
+  return m_globalAttrs; 
 }
 
 //----------------------------------------------------------------------------//

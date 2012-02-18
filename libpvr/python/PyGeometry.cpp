@@ -54,9 +54,9 @@ Meshes::Ptr meshesHelper(Geometry &self)
 
 //----------------------------------------------------------------------------//
 
-AttrTable& objectAttrHelper(Geometry &self)
+AttrTable& globalAttrHelper(Geometry &self)
 {
-  return self.objectAttrs();
+  return self.globalAttrs();
 }
 
 //----------------------------------------------------------------------------//
@@ -76,7 +76,7 @@ void exportGeometry()
     .def("particles",    &particlesHelper)
     .def("polygons",     &polygonsHelper)
     .def("meshes",       &meshesHelper)
-    .def("objectAttrs",  &objectAttrHelper,
+    .def("globalAttrs",  &globalAttrHelper,
          return_value_policy<reference_existing_object>())
     ;
   
