@@ -79,6 +79,8 @@ void exportGeometry()
     .def("objectAttrs",  &objectAttrHelper,
          return_value_policy<reference_existing_object>())
     ;
+  
+  implicitly_convertible<Geometry::Ptr, Geometry::CPtr>();
 }
 
 //----------------------------------------------------------------------------//

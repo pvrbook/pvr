@@ -15,6 +15,7 @@
 // Library includes
 
 #include <pvr/RaymarchSamplers/RaymarchSampler.h>
+#include <pvr/RaymarchSamplers/DensitySampler.h>
 #include <pvr/RaymarchSamplers/PhysicalSampler.h>
 
 #include "Common.h"
@@ -47,6 +48,15 @@ void exportRaymarchSamplers()
     ;
   
   implicitly_convertible<RaymarchSampler::Ptr, RaymarchSampler::CPtr>();
+
+  // DensitySampler ---
+
+  class_<DensitySampler, bases<RaymarchSampler>, DensitySampler::Ptr>
+    ("DensitySampler", no_init)
+    .def("__init__", make_constructor(DensitySampler::create))
+    ;
+  
+  implicitly_convertible<DensitySampler::Ptr, DensitySampler::CPtr>();
 
   // PhysicalSampler ---
 
