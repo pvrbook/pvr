@@ -31,129 +31,109 @@ namespace pvr {
 namespace Noise {
  
 //----------------------------------------------------------------------------//
+// NoiseFunction
+//----------------------------------------------------------------------------//
 
 //! Base class for noise functions
 class NoiseFunction
 {
 public:
+  
+  // Typedefs ------------------------------------------------------------------
+
   PVR_TYPEDEF_SMART_PTRS(NoiseFunction);
   typedef std::pair<float, float> Range;
-  virtual float eval(const float x) const = 0;
-  virtual float eval(const float x, const float y) const = 0;
-  virtual float eval(const float x, const float y, const float z) const = 0;
+
+  // To be implemented by subclasses -------------------------------------------
+
+  //! Returns a scalar noise value
+  virtual float      eval(const float x) const = 0;
+  virtual float      eval(const float x, const float y) const = 0;
+  virtual float      eval(const float x, const float y, 
+                          const float z) const = 0;
+  //! Returns a vector noise value
   virtual Imath::V3f evalVec(const float x) const = 0;
   virtual Imath::V3f evalVec(const float x, const float y) const = 0;
-  virtual Imath::V3f evalVec(const float x, const float y, const float z) const = 0;
-  float eval(const Imath::V3f &p) const
-  {
-    return eval(p.x, p.y, p.z);
-  }
-  Imath::V3f evalVec(const Imath::V3f &p) const
-  {
-    return evalVec(p.x, p.y, p.z);
-  }
-  virtual Range range() const = 0;
+  virtual Imath::V3f evalVec(const float x, const float y, 
+                             const float z) const = 0;
+  //! Returns the range (min and max) of the noise function.
+  virtual Range      range() const = 0;
+  
+  // Utility member functions --------------------------------------------------
+
+  //! Evaluates scalar noise for a vector coordinate
+  float              eval(const Imath::V3f &p) const;
+  //! Evaluates vector noise for a vector coordinate
+  Imath::V3f         evalVec(const Imath::V3f &p) const;
+
 };
 
+//----------------------------------------------------------------------------//
+// PerlinNoise
 //----------------------------------------------------------------------------//
 
 class PerlinNoise : public NoiseFunction
 {
 public:
+
+  // Typedefs ------------------------------------------------------------------
+
   PVR_TYPEDEF_SMART_PTRS(PerlinNoise);
+
+  // Ctor, factory function ----------------------------------------------------
+
   PVR_DEFINE_CREATE_FUNC(PerlinNoise);
-  virtual float eval(const float x) const
-  {
-    float result;
-    m_noise(result, x);
-    return result;
-  }
-  virtual float eval(const float x, const float y) const
-  {
-    float result;
-    m_noise(result, x, y);
-    return result;
-  }
-  virtual float eval(const float x, const float y, const float z) const
-  {
-    float result;
-    m_noise(result, Imath::V3f(x, y, z));
-    return result;
-  }
-  virtual Imath::V3f evalVec(const float x) const
-  {
-    Imath::V3f result;
-    m_noise(result, x);
-    return result;
-  }
-  virtual Imath::V3f evalVec(const float x, const float y) const
-  {
-    Imath::V3f result;
-    m_noise(result, x, y);
-    return result;
-  }
-  virtual Imath::V3f evalVec(const float x, const float y, const float z) const
-  {
-    Imath::V3f result;
-    m_noise(result, Imath::V3f(x, y, z));
-    return result;
-  }
-  virtual Range range() const
-  {
-    return std::make_pair(-1.0f, 1.0f);
-  }
+
+  // From NoiseFunction --------------------------------------------------------
+
+  virtual float      eval(const float x) const;
+  virtual float      eval(const float x, const float y) const;
+  virtual float      eval(const float x, const float y, const float z) const;
+  virtual Imath::V3f evalVec(const float x) const;
+  virtual Imath::V3f evalVec(const float x, const float y) const;
+  virtual Imath::V3f evalVec(const float x, const float y, const float z) const;
+  virtual Range      range() const;
+
 private:
+
+  // Private data members ------------------------------------------------------
+
+  //! SNoise instance to use for sampling noise.
   SNoise m_noise;
+
 };
 
+//----------------------------------------------------------------------------//
+// AbsPerlinNoise
 //----------------------------------------------------------------------------//
 
 class AbsPerlinNoise : public NoiseFunction
 {
 public:
+
+  // Typedefs ------------------------------------------------------------------
+
   PVR_TYPEDEF_SMART_PTRS(AbsPerlinNoise);
+
+  // Ctor, factory function ----------------------------------------------------
+
   PVR_DEFINE_CREATE_FUNC(AbsPerlinNoise);
-  virtual float eval(const float x) const
-  {
-    float result;
-    m_noise(result, x);
-    return std::abs(result);
-  }
-  virtual float eval(const float x, const float y) const
-  {
-    float result;
-    m_noise(result, x, y);
-    return std::abs(result);
-  }
-  virtual float eval(const float x, const float y, const float z) const
-  {
-    float result;
-    m_noise(result, Imath::V3f(x, y, z));
-    return std::abs(result);
-  }
-  virtual Imath::V3f evalVec(const float x) const
-  {
-    Imath::V3f result;
-    m_noise(result, x);
-    return Math::abs(result);
-  }
-  virtual Imath::V3f evalVec(const float x, const float y) const
-  {
-    Imath::V3f result;
-    m_noise(result, x, y);
-    return Math::abs(result);
-  }
-  virtual Imath::V3f evalVec(const float x, const float y, const float z) const
-  {
-    Imath::V3f result;
-    m_noise(result, Imath::V3f(x, y, z));
-    return Math::abs(result);
-  }
-  virtual Range range() const
-  {
-    return std::make_pair(0.0f, 1.0f);
-  }
+
+  // From NoiseFunction --------------------------------------------------------
+
+  virtual float      eval(const float x) const;
+  virtual float      eval(const float x, const float y) const;
+  virtual float      eval(const float x, const float y, const float z) const;
+  virtual Imath::V3f evalVec(const float x) const;
+  virtual Imath::V3f evalVec(const float x, const float y) const;
+  virtual Imath::V3f evalVec(const float x, const float y, const float z) const;
+  virtual Range      range() const;
+
 private:
+
+  // Private data members ------------------------------------------------------
+
+  //! SNoise instance to use for sampling noise.
   SNoise m_noise;
 };
 
@@ -164,46 +144,65 @@ private:
 class Fractal
 {
 public:
+
+  // Typedefs ------------------------------------------------------------------
+
   PVR_TYPEDEF_SMART_PTRS(Fractal);
   typedef std::pair<float, float> Range;
-  float eval(const float x) const
-  { return eval(Imath::V3f(x, 0.0, 0.0)); }
-  float eval(const float x, const float y) const
-  { return eval(Imath::V3f(x, y, 0.0)); }
-  float eval(const float x, const float y, const float z) const
-  { return eval(Imath::V3f(x, y, z)); }
-  Imath::V3f evalVec(const float x) const
-  { return evalVec(Imath::V3f(x, 0.0, 0.0)); }
-  Imath::V3f evalVec(const float x, const float y) const
-  { return evalVec(Imath::V3f(x, y, 0.0)); }
-  Imath::V3f evalVec(const float x, const float y, const float z) const
-  { return evalVec(Imath::V3f(x, y, z)); }
-  virtual float eval(const Imath::V3f &p) const = 0;
+
+  // To be implemented by subclasses -------------------------------------------
+
+  virtual float      eval(const Imath::V3f &p) const = 0;
   virtual Imath::V3f evalVec(const Imath::V3f &p) const = 0;
-  virtual Range range() const = 0;
+  virtual Range      range() const = 0;
+
+  // Utility member functions --------------------------------------------------
+
+  float      eval(const float x) const;
+  float      eval(const float x, const float y) const;
+  float      eval(const float x, const float y, const float z) const;
+  Imath::V3f evalVec(const float x) const;
+  Imath::V3f evalVec(const float x, const float y) const;
+  Imath::V3f evalVec(const float x, const float y, const float z) const;
+
 };
 
+//----------------------------------------------------------------------------//
+// fBm
 //----------------------------------------------------------------------------//
 
 //! \todo Change scale to V3f
 class fBm : public Fractal
 {
 public:
+
+  // Typedefs ------------------------------------------------------------------
+
   PVR_TYPEDEF_SMART_PTRS(fBm);
-  fBm(NoiseFunction::CPtr noise,
-      float scale, float octaves, float octaveGain, float lacunarity);
-  static Ptr create(NoiseFunction::CPtr noise,
-                    float scale, float octaves, float octaveGain,
-                    float lacunarity);
-  virtual float eval(const Imath::V3f &p) const;
+
+  // Ctor, factory function ----------------------------------------------------
+
+  fBm(NoiseFunction::CPtr noise, float scale, float octaves, 
+      float octaveGain, float lacunarity);
+  static Ptr create(NoiseFunction::CPtr noise, float scale, float octaves, 
+                    float octaveGain, float lacunarity);
+
+  // From Fractal --------------------------------------------------------------
+
+  virtual float      eval(const Imath::V3f &p) const;
   virtual Imath::V3f evalVec(const Imath::V3f &p) const;
-  virtual Range range() const;
+  virtual Range      range() const;
+
 private:
+
+  // Private data members ------------------------------------------------------
+
   NoiseFunction::CPtr m_noise;
-  float m_scale;
-  float m_octaves;
-  float m_octaveGain;
-  float m_lacunarity;
+  float               m_scale;
+  float               m_octaves;
+  float               m_octaveGain;
+  float               m_lacunarity;
+
 };
 
 //----------------------------------------------------------------------------//

@@ -24,11 +24,196 @@ namespace pvr {
 namespace Noise {
 
 //----------------------------------------------------------------------------//
+// NoiseFunction
+//----------------------------------------------------------------------------//
+
+float NoiseFunction::eval(const Imath::V3f &p) const
+{
+  return eval(p.x, p.y, p.z);
+}
+
+Imath::V3f NoiseFunction::evalVec(const Imath::V3f &p) const
+{
+  return evalVec(p.x, p.y, p.z);
+}
+
+//----------------------------------------------------------------------------//
+// PerlinNoise
+//----------------------------------------------------------------------------//
+  
+float PerlinNoise::eval(const float x) const
+{
+  float result;
+  m_noise(result, x);
+  return result;
+}
+
+//----------------------------------------------------------------------------//
+  
+float PerlinNoise::eval(const float x, const float y) const
+{
+  float result;
+  m_noise(result, x, y);
+  return result;
+}
+
+//----------------------------------------------------------------------------//
+  
+float PerlinNoise::eval(const float x, const float y, const float z) const
+{
+  float result;
+  m_noise(result, Imath::V3f(x, y, z));
+  return result;
+}
+
+//----------------------------------------------------------------------------//
+  
+Imath::V3f PerlinNoise::evalVec(const float x) const
+{
+  Imath::V3f result;
+  m_noise(result, x);
+  return result;
+}
+
+//----------------------------------------------------------------------------//
+  
+Imath::V3f PerlinNoise::evalVec(const float x, const float y) const
+{
+  Imath::V3f result;
+  m_noise(result, x, y);
+  return result;
+}
+
+//----------------------------------------------------------------------------//
+  
+Imath::V3f PerlinNoise::evalVec(const float x, const float y, 
+                                const float z) const
+{
+  Imath::V3f result;
+  m_noise(result, Imath::V3f(x, y, z));
+  return result;
+}
+
+//----------------------------------------------------------------------------//
+  
+NoiseFunction::Range PerlinNoise::range() const
+{
+  return std::make_pair(-1.0, 1.0f);
+}
+
+//----------------------------------------------------------------------------//
+// AbsPerlinNoise
+//----------------------------------------------------------------------------//
+
+float AbsPerlinNoise::eval(const float x) const
+{
+  float result;
+  m_noise(result, x);
+  return std::abs(result);
+}
+
+//----------------------------------------------------------------------------//
+
+float AbsPerlinNoise::eval(const float x, const float y) const
+{
+  float result;
+  m_noise(result, x, y);
+  return std::abs(result);
+}
+
+//----------------------------------------------------------------------------//
+
+float AbsPerlinNoise::eval(const float x, const float y, const float z) const
+{
+  float result;
+  m_noise(result, Imath::V3f(x, y, z));
+  return std::abs(result);
+}
+
+//----------------------------------------------------------------------------//
+
+Imath::V3f AbsPerlinNoise::evalVec(const float x) const
+{
+  Imath::V3f result;
+  m_noise(result, x);
+  return Math::abs(result);
+}
+
+//----------------------------------------------------------------------------//
+
+Imath::V3f AbsPerlinNoise::evalVec(const float x, const float y) const
+{
+  Imath::V3f result;
+  m_noise(result, x, y);
+  return Math::abs(result);
+}
+
+//----------------------------------------------------------------------------//
+
+Imath::V3f AbsPerlinNoise::evalVec(const float x, const float y, const float z) const
+{
+  Imath::V3f result;
+  m_noise(result, Imath::V3f(x, y, z));
+  return Math::abs(result);
+}
+
+//----------------------------------------------------------------------------//
+
+NoiseFunction::Range AbsPerlinNoise::range() const
+{
+  return std::make_pair(0.0f, 1.0f);
+}
+
+//----------------------------------------------------------------------------//
+// Fractal
+//----------------------------------------------------------------------------//
+
+float Fractal::eval(const float x) const
+{ 
+  return eval(Imath::V3f(x, 0.0, 0.0)); 
+}
+
+//----------------------------------------------------------------------------//
+
+float Fractal::eval(const float x, const float y) const
+{ 
+  return eval(Imath::V3f(x, y, 0.0)); 
+}
+
+//----------------------------------------------------------------------------//
+
+float Fractal::eval(const float x, const float y, const float z) const
+{ 
+  return eval(Imath::V3f(x, y, z)); 
+}
+
+//----------------------------------------------------------------------------//
+
+Imath::V3f Fractal::evalVec(const float x) const
+{ 
+  return evalVec(Imath::V3f(x, 0.0, 0.0)); 
+}
+
+//----------------------------------------------------------------------------//
+
+Imath::V3f Fractal::evalVec(const float x, const float y) const
+{ 
+  return evalVec(Imath::V3f(x, y, 0.0)); 
+}
+
+//----------------------------------------------------------------------------//
+
+Imath::V3f Fractal::evalVec(const float x, const float y, const float z) const
+{ 
+  return evalVec(Imath::V3f(x, y, z)); 
+}
+
+//----------------------------------------------------------------------------//
 // fBm
 //----------------------------------------------------------------------------//
 
-fBm::fBm(NoiseFunction::CPtr noise,
-         float scale, float octaves, float octaveGain, float lacunarity)
+fBm::fBm(NoiseFunction::CPtr noise, float scale, float octaves, 
+         float octaveGain, float lacunarity)
   : m_noise(noise), m_scale(scale), m_octaves(octaves), 
     m_octaveGain(octaveGain), m_lacunarity(lacunarity)
 {
@@ -37,9 +222,8 @@ fBm::fBm(NoiseFunction::CPtr noise,
 
 //----------------------------------------------------------------------------//
 
-fBm::Ptr fBm::create(NoiseFunction::CPtr noise,
-                     float scale, float octaves, float octaveGain,
-                     float lacunarity)
+fBm::Ptr fBm::create(NoiseFunction::CPtr noise, float scale, float octaves, 
+                     float octaveGain, float lacunarity)
 { 
   return Ptr(new fBm(noise, scale, octaves, octaveGain, lacunarity)); 
 }
