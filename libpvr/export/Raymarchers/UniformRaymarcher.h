@@ -74,11 +74,11 @@ protected:
     //! Global step length. Used when doStepLengthFromVolume is false.
     double stepLength;
     //! Whether to use a global step length or what the scene volumes suggest
-    int useVolumeStepLength;
+    int    useVolumeStepLength;
     //! Step length multiplier. Used when doStepLengthFromVolume is true.
     double volumeStepLengthMult;
     //! Whether to terminate rays early.
-    int doEarlyTermination;
+    int    doEarlyTermination;
     //! Threshold at which transparency is considered to be zero. 
     //! Used when doEarlyTermination is true.
     double earlyTerminationThreshold;
