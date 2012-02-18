@@ -120,6 +120,8 @@ public:
   //! Adds the given ModelerInput to the list of inputs that will be processed
   //! by the next updateBounds() and execute() commands.
   void addInput(ModelerInput::Ptr modelerInput);
+  //! Clears the list of inputs
+  void clearInputs();
   //! Updates the FieldMapping (i.e. transform) of the voxel buffer that will
   //! be created by the execute() call. This is separate so that the bounds
   //! can be set prior to calling execute, allowing more ModelerInput objects

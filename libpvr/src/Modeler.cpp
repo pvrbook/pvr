@@ -129,6 +129,13 @@ void Modeler::addInput(ModelerInput::Ptr modelerInput)
   
 //----------------------------------------------------------------------------//
 
+void Modeler::clearInputs()
+{
+  m_inputs.clear();
+}
+
+//----------------------------------------------------------------------------//
+
 void Modeler::updateBounds()
 {
   BBox wsBounds;
@@ -317,14 +324,13 @@ void Modeler::execute()
       // Handle instantiation primitives
       ModelerInput::Ptr newInput;
       Modeler::Ptr modeler = clone();
+      modeler->clearInputs();
       while (newInput = instPrim->execute(i->geometry())) {
-        newInput->applyFilters();
         modeler->addInput(newInput);
         modeler->execute();
       }
     } else if (rastPrim) {
       // Handle rasterization primitives
-      i->applyFilters();
       rastPrim->execute(i->geometry(), m_buffer);
     } else {
       throw InvalidPrimitiveException(prim->typeName());
