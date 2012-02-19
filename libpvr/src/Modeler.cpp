@@ -322,13 +322,11 @@ void Modeler::execute()
 
     if (instPrim) {
       // Handle instantiation primitives
-      ModelerInput::Ptr newInput;
+      ModelerInput::Ptr newInput = instPrim->execute(i->geometry());
       Modeler::Ptr modeler = clone();
       modeler->clearInputs();
-      while (newInput = instPrim->execute(i->geometry())) {
-        modeler->addInput(newInput);
-        modeler->execute();
-      }
+      modeler->addInput(newInput);
+      modeler->execute();
     } else if (rastPrim) {
       // Handle rasterization primitives
       rastPrim->execute(i->geometry(), m_buffer);

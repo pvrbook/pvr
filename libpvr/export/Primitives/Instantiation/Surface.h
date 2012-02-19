@@ -161,13 +161,6 @@ protected:
     Geo::Attr<Imath::V3f> density;
   };
 
-  //! Contains information about the current batch state. 
-  struct BatchState
-  {
-    Geo::Geometry::CPtr geo;
-    size_t lastPointIdx;
-  };
-
   // Utility functions ---------------------------------------------------------
 
   //! Returns the index of the point for the given parametric coordinates
@@ -205,8 +198,6 @@ protected:
   //! Holds the Attr instances that describe each point on the surface prim
   mutable std::vector<PointAttrState> m_pointAttrs;
 
-  //! Holds the current batch state
-  mutable BatchState m_batch;
 };
 
 //----------------------------------------------------------------------------//

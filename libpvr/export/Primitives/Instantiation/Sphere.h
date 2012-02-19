@@ -133,13 +133,6 @@ protected:
     Noise::Fractal::CPtr  dispFractal;
   };
 
-  //! Contains information about the current batch state. 
-  struct BatchState
-  {
-    Geo::Geometry::CPtr geo;
-    size_t lastPointIdx;
-  };
-
   // Utility functions ---------------------------------------------------------
 
   //! Counts the number of points that will be created for the given 
@@ -152,8 +145,6 @@ protected:
   //! Gets set up in execute() and is used in getSample().
   mutable AttrState m_attrs;
 
-  //! Holds the current batch state
-  mutable BatchState m_batch;
 };
 
 //----------------------------------------------------------------------------//

@@ -66,12 +66,6 @@ ModelerInput::Ptr Sphere::execute(const Geo::Geometry::CPtr geo) const
     return ModelerInput::Ptr();
   }
 
-  // Handle batches ---
-
-  if (geo == m_batch.geo) {
-    return ModelerInput::Ptr();
-  }
-
   // Set up output geometry ---
 
   size_t numPoints = numOutputPoints(geo);
@@ -153,9 +147,6 @@ ModelerInput::Ptr Sphere::execute(const Geo::Geometry::CPtr geo) const
       points.setFloatAttr(radius, idx, 0, m_attrs.instanceRadius);
     }
   }
-
-  // Update state
-  m_batch.geo = geo;
 
   return result;
 }

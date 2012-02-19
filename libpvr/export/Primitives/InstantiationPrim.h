@@ -59,7 +59,6 @@ public:
   // Main methods --------------------------------------------------------------
 
   //! Executes the instantiation primitive
-  //! \param geo Geometry 
   virtual ModelerInput::Ptr execute(const Geo::Geometry::CPtr geo) const = 0;
 
 };

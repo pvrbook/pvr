@@ -158,13 +158,6 @@ protected:
     Geo::Attr<Imath::V3f> density;
   };
 
-  //! Contains information about the current batch state. 
-  struct BatchState
-  {
-    Geo::Geometry::CPtr geo;
-    size_t lastPointIdx;
-  };
-
   // Utility functions ---------------------------------------------------------
 
   //! Counts the number of points that will be created for the given 
@@ -184,8 +177,6 @@ protected:
   //! Holds the Attr instances that describe each point on the line prim
   mutable std::vector<PointAttrState> m_pointAttrs;
 
-  //! Holds the current batch state
-  mutable BatchState m_batch;
 };
 
 //----------------------------------------------------------------------------//
