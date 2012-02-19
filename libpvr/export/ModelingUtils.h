@@ -41,7 +41,7 @@ namespace Model {
 
 inline double sphereVolume(const double radius)
 {
-  return (4.0 / 3.0) * 3.1416 * radius * radius * radius;
+  return (4.0 / 3.0) * M_PI * radius * radius * radius;
 }
 
 //----------------------------------------------------------------------------//
@@ -79,24 +79,24 @@ inline void writeAntialiasedPoint(const Vector &vsP, const Imath::V3f &value,
              static_cast<int>(floor(p.y)), 
              static_cast<int>(floor(p.z)));
   // Calculate P's fractional distance between voxels
-  // We start out with (1.0 - fraction) since each step of the loop
-  // will invert the value
-  Vector fraction(Vector(1.0f) - (static_cast<Vector>(corner + V3i(1)) - p));
+  // We start out with weight = fraction, then each step in the loop
+  // inverts the value.
+  Vector fraction(static_cast<Vector>(corner + V3i(1)) - p);
   // Loop over the 8 voxels and distribute the value
   for (int k = 0; k < 2; k++) {
-    fraction[2] = 1.0 - fraction[2];
     for (int j = 0; j < 2; j++) {
-      fraction[1] = 1.0 - fraction[1];
       for (int i = 0; i < 2; i++) {
-        fraction[0] = 1.0 - fraction[0];
         double weight = fraction[0] * fraction[1] * fraction[2];
         if (buffer->isInBounds(corner.x + i, corner.y + j, corner.z + k)) {
           buffer->lvalue(corner.x + i, 
                          corner.y + j, 
                          corner.z + k) += value * weight;
         }
+        fraction[0] = 1.0 - fraction[0];
       }
+      fraction[1] = 1.0 - fraction[1];
     }
+    fraction[2] = 1.0 - fraction[2];
   }
 }
 
@@ -110,15 +110,20 @@ inline void writeLine(const Vector &vsStart, const Vector &vsEnd,
   using namespace Imath;
   using namespace Field3D;
   
+  // Construct a line in voxel space
   Vector vsLine = (vsEnd - vsStart);
+  // Determine number of splats based on length in voxel space
   size_t numSamples = static_cast<size_t>(std::ceil(vsLine.length()));
   numSamples = max(static_cast<size_t>(2), numSamples);
 
+  // Splat each sample
+  Imath::V3f sampleValue = value / static_cast<double>(numSamples);
   for (size_t i = 0; i < numSamples; ++i) {
+    // Find current point on line
     double fraction = static_cast<double>(i) / 
       static_cast<double>(numSamples - 1);
-    Imath::V3f sampleValue = value / static_cast<double>(numSamples);
     Vector vsP = Imath::lerp(vsStart, vsEnd, fraction);
+    // Write antialiased or non-antialiased point based on template argument
     if (Antialiased_T) {
       writeAntialiasedPoint(vsP, sampleValue, buffer);
     } else {
@@ -133,13 +138,17 @@ inline BBox vsSphereBounds(Field3D::FieldMapping::Ptr mapping,
                            const Vector &wsCenter, const float wsRadius) 
 {
   BBox vsBounds;
+  // Construct world space bounds from center and radius
   BBox wsBounds(wsCenter - Vector(wsRadius), wsCenter + Vector(wsRadius));
+  // Get the corner points of the bounding box
   std::vector<Vector> wsCornerPoints = Math::cornerPoints(wsBounds);
+  // Transform each corner point to voxel space
   BOOST_FOREACH (const Vector &wsP, wsCornerPoints) {
     Vector vsP;
     mapping->worldToVoxel(wsP, vsP);
     vsBounds.extendBy(vsP);
   }
+  // Return the constructed voxel space bounds
   return vsBounds;
 }
 
