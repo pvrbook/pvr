@@ -71,20 +71,20 @@ ModelerInput::Ptr Line::execute(const Geo::Geometry::CPtr geo) const
 
   // Set up output geometry ---
 
-  size_t numInstancePoints = numOutputPoints(geo);
+  size_t numInstancePoints         = numOutputPoints(geo);
 
   Prim::Rast::Point::Ptr pointPrim = Prim::Rast::Point::create();
-  ModelerInput::Ptr result = ModelerInput::create();
-  Geometry::Ptr outGeo = Geometry::create();
-  Particles::Ptr particles = Particles::create();
+  ModelerInput::Ptr      result    = ModelerInput::create();
+  Geometry::Ptr          outGeo    = Geometry::create();
+  Particles::Ptr         particles = Particles::create();
 
   AttrTable &points = particles->pointAttrs();
   particles->add(numInstancePoints);
 
   std::vector<float> oneDefault(1, 1.0);
 
-  AttrRef vRef = points.addVectorAttr("v", Vector(0.0));
-  AttrRef radiusRef = points.addFloatAttr("radius", 1, oneDefault);
+  AttrRef vRef       = points.addVectorAttr("v", Vector(0.0));
+  AttrRef radiusRef  = points.addFloatAttr("radius", 1, oneDefault);
   AttrRef densityRef = points.addVectorAttr("density", Vector(1.0));
 
   outGeo->setParticles(particles);

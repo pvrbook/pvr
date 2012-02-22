@@ -68,11 +68,11 @@ ModelerInput::Ptr Sphere::execute(const Geo::Geometry::CPtr geo) const
 
   // Set up output geometry ---
 
-  size_t numPoints = numOutputPoints(geo);
+  size_t numPoints                 = numOutputPoints(geo);
 
-  Geometry::Ptr outGeo = Geometry::create();
-  Particles::Ptr particles = Particles::create();
-  ModelerInput::Ptr result = ModelerInput::create();
+  Geometry::Ptr          outGeo    = Geometry::create();
+  Particles::Ptr         particles = Particles::create();
+  ModelerInput::Ptr      result    = ModelerInput::create();
   Prim::Rast::Point::Ptr pointPrim = Prim::Rast::Point::create();
   
   particles->add(numPoints);
@@ -80,10 +80,10 @@ ModelerInput::Ptr Sphere::execute(const Geo::Geometry::CPtr geo) const
   result->setGeometry(outGeo);
   result->setVolumePrimitive(pointPrim);
 
-  AttrTable &points = particles->pointAttrs();
-  AttrRef wsV = points.addVectorAttr("v", Vector(0.0));
-  AttrRef radius = points.addFloatAttr("radius", 1, vector<float>(1, 1.0));
-  AttrRef density = points.addVectorAttr("density", Vector(1.0));
+  AttrTable &points  = particles->pointAttrs();
+  AttrRef    wsV     = points.addVectorAttr("v", Vector(0.0));
+  AttrRef    radius  = points.addFloatAttr("radius", 1, vector<float>(1, 1.0));
+  AttrRef    density = points.addVectorAttr("density", Vector(1.0));
 
   // Loop over input points ---
 
@@ -142,7 +142,7 @@ ModelerInput::Ptr Sphere::execute(const Geo::Geometry::CPtr geo) const
       }
       // Set instance attributes
       particles->setPosition(idx, instanceWsP);
-      points.setVectorAttr(wsV, idx, Vector(0.0));
+      points.setVectorAttr(wsV, idx, m_attrs.wsVelocity.value());
       points.setVectorAttr(density, idx, instanceDensity);
       points.setFloatAttr(radius, idx, 0, m_attrs.instanceRadius);
     }

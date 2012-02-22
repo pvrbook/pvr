@@ -160,11 +160,13 @@ void PyroclasticPoint::getSample(const RasterizationState &state,
 
   // Calculate sample value
   if (isPyroclastic) {
+    // Pyroclastic mode
     double sphereFunc   = lsP.length() - 1.0;
     float  filterWidth  = state.wsVoxelSize.length() / wsRadius;
     float  pyro         = pyroclastic(sphereFunc, fractalVal, filterWidth);
     sample.value        = density * pyro;
   } else {
+    // Non-pyroclastic mode
     double distanceFunc = 1.0 - lsP.length();
     float  noise        = std::max(0.0, distanceFunc + fractalVal);
     sample.value        = density * noise;

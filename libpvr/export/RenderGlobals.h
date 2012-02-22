@@ -59,11 +59,11 @@ public:
   //! \param fps Frames per second. Should be 24 for film
   //! \param shutter Fraction of frame length that shutter is open. A value 
   //! of 0.5 corresponsonds to a 180 degree shutter angle.
-  static void setupMotionBlur(const float fps, const float shutter);
+  static void       setupMotionBlur(const float fps, const float shutter);
   //! Sets the current Scene instance
-  static void setScene(SceneCPtr scene);
+  static void       setScene(SceneCPtr scene);
   //! Sets the current Camera
-  static void setCamera(CameraCPtr camera);
+  static void       setCamera(CameraCPtr camera);
 
   // Accessors -----------------------------------------------------------------
 
