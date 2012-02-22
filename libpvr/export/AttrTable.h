@@ -303,10 +303,10 @@ public:
   
   //! Read access to int attributes
   int        intAttr   (const AttrRef &ref, const size_t elem, 
-                        size_t arrayIdx) const;
+                        const size_t arrayIdx) const;
   //! Read access to float attributes
   float      floatAttr (const AttrRef &ref, const size_t elem, 
-                        size_t arrayIdx) const;
+                        const size_t arrayIdx) const;
   //! Read access to vector attributes
   Imath::V3f vectorAttr(const AttrRef &ref, const size_t elem) const;
 
