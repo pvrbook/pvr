@@ -195,7 +195,7 @@ void LineBase::updateAccelStruct() const
     float displ = std::max(displacementBounds(i), displacementBounds(i + 1));
     float radius = std::max(m_basePointAttrs[i].radius.value(),
                             m_basePointAttrs[i + 1].radius.value());
-    m_gridAccel.addLine(p0, p1, radius * (1.0 + displ), i);
+    m_gridAccel.addLine(p0, p1, radius * (1.0 + displ) + cellSize, i);
   }
 }
 
