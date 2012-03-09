@@ -159,12 +159,21 @@ Imath::Vec3<T> barycentricCoords(const Imath::Vec3<T> p1,
 //----------------------------------------------------------------------------//
 
 //! Closest point on line segment.
-//! \param t Parametric coordinate for closest point. Note, if the closest point
-//! is outside the cylinder defined by the line segment, the coordinate will
-//! assume values outside the [0,1] range.
+//! \param t Parametric coordinate for closest point. 
 template <class Vec_T>
 Vec_T closestPointOnLineSegment(const Vec_T &p0, const Vec_T &p1, 
                                 const Vec_T &p, typename Vec_T::BaseType &t);
+
+//----------------------------------------------------------------------------//
+
+//! Closest point on line segment.
+//! \param t Parametric coordinate for closest point. 
+//! \param tExtend If the closest point is outside the cylinder defined by the 
+//! line segment, the coordinate will assume values outside the [0,1] range.
+template <class Vec_T>
+Vec_T closestPointOnLineSegment(const Vec_T &p0, const Vec_T &p1, 
+                                const Vec_T &p, typename Vec_T::BaseType &t,
+                                typename Vec_T::BaseType &tExtend);
 
 //----------------------------------------------------------------------------//
 
@@ -401,7 +410,8 @@ Imath::Vec3<T> barycentricCoords(const Imath::Vec3<T> p0,
 
 template <class Vec_T>
 Vec_T closestPointOnLineSegment(const Vec_T &p0, const Vec_T &p1, 
-                                const Vec_T &p, typename Vec_T::BaseType &t) 
+                                const Vec_T &p, 
+                                typename Vec_T::BaseType &t) 
 {
   typedef typename Vec_T::BaseType T;
 
@@ -413,9 +423,31 @@ Vec_T closestPointOnLineSegment(const Vec_T &p0, const Vec_T &p1,
     return p0;
   }
 
-  // t = Imath::clamp((p - p0).dot(d) / l2, static_cast<T>(0), static_cast<T>(1));
-  t = (p - p0).dot(d) / l2;
-  return p0 + d * Imath::clamp(t, static_cast<T>(0), static_cast<T>(1));
+  t = Imath::clamp((p - p0).dot(d) / l2, static_cast<T>(0), static_cast<T>(1));
+  return p0 + d * t;
+}
+
+//----------------------------------------------------------------------------//
+
+template <class Vec_T>
+Vec_T closestPointOnLineSegment(const Vec_T &p0, const Vec_T &p1, 
+                                const Vec_T &p, 
+                                typename Vec_T::BaseType &t,
+                                typename Vec_T::BaseType &tExtend) 
+{
+  typedef typename Vec_T::BaseType T;
+
+  Vec_T d = p1 - p0;
+  T l2 = d.length2();
+
+  if (l2 == 0) {
+    t = static_cast<T>(0);
+    return p0;
+  }
+
+  t = Imath::clamp((p - p0).dot(d) / l2, static_cast<T>(0), static_cast<T>(1));
+  tExtend = (p - p0).dot(d) / l2;
+  return p0 + d * t;
 }
 
 //----------------------------------------------------------------------------//

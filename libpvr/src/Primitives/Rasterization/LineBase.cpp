@@ -208,6 +208,7 @@ bool LineBase::findClosestSegment(const RasterizationState &state,
 
   double minRelDist   = std::numeric_limits<double>::max();
   double t            = 0.0;
+  double tExtend      = 0.0;
   double displacement = 0.0;
   const HashVec &vec  = m_gridAccel.get(state.wsP);
 
@@ -224,7 +225,8 @@ bool LineBase::findClosestSegment(const RasterizationState &state,
     // Find closest point on Line
     Vector p0(m_basePointAttrs[i].wsCenter.value());
     Vector p1(m_basePointAttrs[i + 1].wsCenter.value());
-    Vector pOnLine = Math::closestPointOnLineSegment(p0, p1, state.wsP, t);
+    Vector pOnLine = Math::closestPointOnLineSegment(p0, p1, state.wsP, 
+                                                     t, tExtend);
     // Compare distance to radius
     double radius = Math::fit01(t, m_basePointAttrs[i].radius.value(), 
                                 m_basePointAttrs[i + 1].radius.value());
@@ -238,9 +240,9 @@ bool LineBase::findClosestSegment(const RasterizationState &state,
       info.distance = dist;
       info.index = i;
       if (i == 0 && t < 0.0 || i == (m_basePointAttrs.size() - 2) && t > 1.0) {
-        info.t = t;
+        info.t = tExtend;
       } else {
-        info.t = Imath::clamp(t, 0.0, 1.0);
+        info.t = t;
       }
     }
   }
