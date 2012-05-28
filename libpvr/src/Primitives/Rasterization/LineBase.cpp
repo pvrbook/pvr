@@ -216,8 +216,6 @@ bool LineBase::findClosestSegment(const RasterizationState &state,
     return false;
   }
 
-  // cout << "findClosestSegment()" << endl;
-
   for (HashVec::const_iterator iIdx = vec.begin(), end = vec.end();
        iIdx != end; ++iIdx) {
     // Segment index
@@ -239,7 +237,7 @@ bool LineBase::findClosestSegment(const RasterizationState &state,
       info.radius = radius;
       info.distance = dist;
       info.index = i;
-      if (i == 0 && t < 0.0 || i == (m_basePointAttrs.size() - 2) && t > 1.0) {
+      if (i == 0 && t == 0.0 || i == (m_basePointAttrs.size() - 2) && t == 1.0) {
         info.t = tExtend;
       } else {
         info.t = t;
