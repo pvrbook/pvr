@@ -142,6 +142,8 @@ protected:
     PointAttrState()
       : wsP           ("P"), 
         wsNormal      ("N"),
+        wsDPds        ("dPds"),
+        wsDPdt        ("dPdt"),
         wsVelocity    ("v"), 
         thickness     ("thickness", 1.0f), 
         density       ("density",   Imath::V3f(1.0f))
@@ -156,6 +158,8 @@ protected:
 
     Geo::Attr<Imath::V3f> wsP;
     Geo::Attr<Imath::V3f> wsNormal;
+    Geo::Attr<Imath::V3f> wsDPds;
+    Geo::Attr<Imath::V3f> wsDPdt;
     Geo::Attr<Imath::V3f> wsVelocity;
     Geo::Attr<float>      thickness;
     Geo::Attr<Imath::V3f> density;

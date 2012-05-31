@@ -68,9 +68,14 @@ ModelerInput::Ptr Surface::execute(const Geo::Geometry::CPtr geo) const
     return ModelerInput::Ptr();
   }
 
+  Log::print("Surface processing " + str(geo->meshes()->size()) +
+             " input meshes");
+
   // Set up output geometry ---
 
-  size_t numInstancePoints         = numOutputPoints(geo);
+  size_t numInstancePoints = numOutputPoints(geo);
+
+  Log::print("  Output: " + str(numInstancePoints) + " points");
 
   Prim::Rast::Point::Ptr pointPrim = Prim::Rast::Point::create();
   ModelerInput::Ptr      result    = ModelerInput::create();
@@ -94,10 +99,6 @@ ModelerInput::Ptr Surface::execute(const Geo::Geometry::CPtr geo) const
 
   size_t idx = 0;
   ProgressReporter progress(2.5f, "  ");
-
-  Log::print("Surface processing " + str(geo->meshes()->size()) +
-             " input meshes");
-  Log::print("  Output: " + str(numInstancePoints) + " points");
 
   // Iteration variables
   Meshes::CPtr meshes      (geo->meshes());
@@ -135,6 +136,8 @@ ModelerInput::Ptr Surface::execute(const Geo::Geometry::CPtr geo) const
       V3f instanceWsP     = SURFACE_INST_INTERP(wsP, s, t);
       V3f instanceWsV     = SURFACE_INST_INTERP(wsVelocity, s, t);
       V3f wsN             = SURFACE_INST_INTERP(wsNormal, s, t).normalized();
+      V3f wsDPds          = SURFACE_INST_INTERP(wsDPds, s, t).normalized();
+      V3f wsDPdt          = SURFACE_INST_INTERP(wsDPdt, s, t).normalized();
       float thickness     = SURFACE_INST_INTERP(thickness, s, t);
       // Offset along normal
       instanceWsP += Math::fit01(lsP.z, -1.0f, 1.0f) * wsN * thickness;
@@ -149,9 +152,9 @@ ModelerInput::Ptr Surface::execute(const Geo::Geometry::CPtr geo) const
       if (m_surfAttrs.doDispNoise) {
         V3f nsLookupP = nsP / m_surfAttrs.dispScale.value();
         V3f disp = m_surfAttrs.dispFractal->evalVec(nsLookupP);
-        instanceWsP += disp.x * V3f(0.0) * thickness * 
+        instanceWsP += disp.x * wsDPds * thickness * 
           m_surfAttrs.dispAmplitude.value();
-        instanceWsP += disp.y * V3f(0.0) * thickness * 
+        instanceWsP += disp.y * wsDPdt * thickness * 
           m_surfAttrs.dispAmplitude.value();
         instanceWsP += disp.z * wsN * thickness * 
           m_surfAttrs.dispAmplitude.value();
@@ -350,6 +353,8 @@ void Surface::PointAttrState::update(const Geo::AttrVisitor::const_iterator &i)
 {
   i.update(wsP);
   i.update(wsNormal);
+  i.update(wsDPds);
+  i.update(wsDPdt);
   i.update(wsVelocity);
   i.update(thickness);
   i.update(density);

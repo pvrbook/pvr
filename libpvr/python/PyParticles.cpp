@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------//
 
-/*! \file PyPartices.cpp
+/*! \file PyParticles.cpp
   Contains the interface definition for the Particles class
  */
 

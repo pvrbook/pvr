@@ -38,6 +38,7 @@ namespace {
 
 using namespace boost;
 using namespace std;
+using namespace Imath;
 
 //----------------------------------------------------------------------------//
 
@@ -130,6 +131,67 @@ AttrTable& Meshes::meshAttrs()
 const AttrTable& Meshes::meshAttrs() const
 {
   return m_meshAttrs;
+}
+
+//----------------------------------------------------------------------------//
+
+void Meshes::computeDerivatives() 
+{
+  AttrRef dPdsRef = m_pointAttrs.addVectorAttr("dPds", Imath::V3f(0.0f));
+  AttrRef dPdtRef = m_pointAttrs.addVectorAttr("dPdt", Imath::V3f(0.0f));
+  for (size_t iMesh = 0, endMesh = m_meshAttrs.size(); 
+       iMesh < endMesh; ++iMesh) {
+    for (size_t row = 0, endRow = numRows(iMesh); row < endRow; ++row) {
+      for (size_t col = 0, endCol = numCols(iMesh); col < endCol; ++col) {
+        // Variables to compute
+        V3f dPds(0.0f), dPdt(0.0f);
+        // Center point
+        size_t pointIdx = pointForVertex(iMesh, row, col);
+        V3f P = m_pointAttrs.vectorAttr(m_pRef, pointIdx);
+        // Compute dPds
+        if (col == 0) {
+          // One-sided
+          size_t Pp1Idx = pointForVertex(iMesh, row, col + 1);
+          V3f Pp1 = m_pointAttrs.vectorAttr(m_pRef, Pp1Idx);
+          dPds = Pp1 - P;
+        } else if (col == endCol - 1) {
+          // One-sided
+          size_t Pm1Idx = pointForVertex(iMesh, row, col - 1);
+          V3f Pm1 = m_pointAttrs.vectorAttr(m_pRef, Pm1Idx);
+          dPds = P - Pm1;
+        } else {
+          // Central difference
+          size_t Pp1Idx = pointForVertex(iMesh, row, col + 1);
+          size_t Pm1Idx = pointForVertex(iMesh, row, col - 1);
+          V3f Pp1 = m_pointAttrs.vectorAttr(m_pRef, Pp1Idx);
+          V3f Pm1 = m_pointAttrs.vectorAttr(m_pRef, Pm1Idx);
+          dPds = (Pp1 - Pm1) * 0.5;
+        }
+        // Compute dPdt
+        if (row == 0) {
+          // One-sided
+          size_t Pp1Idx = pointForVertex(iMesh, row + 1, col);
+          V3f Pp1 = m_pointAttrs.vectorAttr(m_pRef, Pp1Idx);
+          dPdt = Pp1 - P;
+        } else if (row == endRow - 1) {
+          // One-sided
+          size_t Pm1Idx = pointForVertex(iMesh, row - 1, col);
+          V3f Pm1 = m_pointAttrs.vectorAttr(m_pRef, Pm1Idx);
+          dPdt = P - Pm1;
+        } else {
+          // Central difference
+          size_t Pp1Idx = pointForVertex(iMesh, row + 1, col);
+          size_t Pm1Idx = pointForVertex(iMesh, row - 1, col);
+          V3f Pp1 = m_pointAttrs.vectorAttr(m_pRef, Pp1Idx);
+          V3f Pm1 = m_pointAttrs.vectorAttr(m_pRef, Pm1Idx);
+          dPdt = (Pp1 - Pm1) * 0.5;
+        }
+        // Update attributes
+        m_pointAttrs.setVectorAttr(dPdsRef, pointIdx, dPds);
+        m_pointAttrs.setVectorAttr(dPdtRef, pointIdx, dPdt);
+      }
+    }
+  }
 }
 
 //----------------------------------------------------------------------------//

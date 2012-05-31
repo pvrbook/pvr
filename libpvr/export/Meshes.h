@@ -87,6 +87,8 @@ public:
   AttrTable&       meshAttrs();
   //! Const access to primitive data
   const AttrTable& meshAttrs() const;
+  //! Computes dPds and dPdt derivatives
+  void             computeDerivatives();
 
   // Debugging -----------------------------------------------------------------
 

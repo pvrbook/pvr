@@ -89,18 +89,19 @@ void exportPolygons()
   implicitly_convertible<Polygons::Ptr, Polygons::CPtr>();
 
   class_<Meshes, Meshes::Ptr>("Meshes", no_init)
-    .def("__init__",       make_constructor(Meshes::create))
-    .def("size",           &Meshes::size)
-    .def("addMesh",        &Meshes::addMesh)
-    .def("numRows",        &Meshes::numRows)
-    .def("numCols",        &Meshes::numCols)
-    .def("startPoint",     &Meshes::startPoint)
-    .def("pointForVertex", &Meshes::pointForVertex)
-    .def("meshAttrs",      &meshAttrsHelper, 
+    .def("__init__",           make_constructor(Meshes::create))
+    .def("size",               &Meshes::size)
+    .def("addMesh",            &Meshes::addMesh)
+    .def("numRows",            &Meshes::numRows)
+    .def("numCols",            &Meshes::numCols)
+    .def("startPoint",         &Meshes::startPoint)
+    .def("pointForVertex",     &Meshes::pointForVertex)
+    .def("meshAttrs",          &meshAttrsHelper, 
          return_value_policy<reference_existing_object>())
-    .def("pointAttrs",     &meshPointAttrsHelper, 
+    .def("pointAttrs",         &meshPointAttrsHelper, 
          return_value_policy<reference_existing_object>())
-    .def("debugPrint",     &Meshes::print)
+    .def("computeDerivatives", &Meshes::computeDerivatives)
+    .def("debugPrint",         &Meshes::print)
     ;
 
   implicitly_convertible<Meshes::Ptr, Meshes::CPtr>();
