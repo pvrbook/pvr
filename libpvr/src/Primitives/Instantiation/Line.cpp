@@ -114,7 +114,7 @@ ModelerInput::Ptr Line::execute(const Geo::Geometry::CPtr geo) const
     size_t numPoints = polys->numVertices(iPoly.index());
     updatePointAttrs(pointVisitor.begin(first), numPoints);
     // Seed random number generator
-    Imath::Rand48 rng(1);
+    Imath::Rand48 rng(m_polyAttrs.seed);
     // For each instance
     for (int i = 0; i < m_polyAttrs.numPoints; ++i, ++idx) {
       // Check if user terminated
@@ -268,6 +268,7 @@ void Line::updatePointAttrs(Geo::AttrVisitor::const_iterator iPoint,
 
 void Line::PolyAttrState::update(const Geo::AttrVisitor::const_iterator &i)
 {
+  i.update(seed);
   i.update(instanceRadius);
   i.update(numPoints);
   i.update(doFill);

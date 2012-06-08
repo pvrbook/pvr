@@ -95,7 +95,8 @@ protected:
   struct SurfAttrState
   {
     SurfAttrState()
-      : instanceRadius("instance_radius",                0.01f), 
+      : seed          ("seed",                           1),
+        instanceRadius("instance_radius",                0.01f), 
         numPoints     ("num_points",                     1000), 
         doFill        ("fill",                           1), 
         densScale     ("density_noise_scale",            Imath::V3f(1.0f)), 
@@ -114,6 +115,7 @@ protected:
     
     void update(const Geo::AttrVisitor::const_iterator &i);
 
+    Geo::Attr<int>        seed;
     Geo::Attr<float>      instanceRadius;
     Geo::Attr<int>        numPoints;
     Geo::Attr<int>        doFill;    

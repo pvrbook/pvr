@@ -116,7 +116,7 @@ ModelerInput::Ptr Surface::execute(const Geo::Geometry::CPtr geo) const
     size_t numPoints = numCols * numRows;
     updatePointAttrs(pointVisitor.begin(first), numPoints);
     // Seed random number generator
-    Imath::Rand48 rng(1);
+    Imath::Rand48 rng(m_surfAttrs.seed);
     // For each instance
     for (int i = 0; i < m_surfAttrs.numPoints; ++i, ++idx) {
       // Check if user terminated
@@ -321,6 +321,7 @@ void Surface::updatePointAttrs(Geo::AttrVisitor::const_iterator iPoint,
 
 void Surface::SurfAttrState::update(const Geo::AttrVisitor::const_iterator &i)
 {
+  i.update(seed);
   i.update(instanceRadius);
   i.update(numPoints);
   i.update(doFill);
