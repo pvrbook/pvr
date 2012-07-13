@@ -34,7 +34,7 @@
 
 // Library includes
 
-#include <OpenImageIO/colortransfer.h>
+#include <OpenImageIO/color.h>
 
 // Project includes
 
@@ -136,12 +136,6 @@ void Image::write(const std::string &filename, Channels channels) const
     spec.attribute("oiio:ColorSpace", "sRGB");
 
     ImageBuf buf("", spec);
-
-    ColorTransfer *lin2sRGB = ColorTransfer::create("linear_to_sRGB");
-    if (!lin2sRGB) {
-      Log::print("  Badness!");
-      return;
-    }
     
     for (int j = 0, ymax = buf.ymax(); j <= ymax; ++j) {
       int invertedJ = buf.ymax() - j;
@@ -149,7 +143,7 @@ void Image::write(const std::string &filename, Channels channels) const
         float pixel[4];
         m_buf.getpixel(i, j, pixel, 4);
         for (int c = 0; c < 3; c++) {
-          pixel[c] = lin2sRGB->operator()(pixel[c]);
+          pixel[c] = linear_to_sRGB(pixel[c]);
         }
         pixel[3] = 1.0f;
         buf.setpixel(i, invertedJ, pixel);
