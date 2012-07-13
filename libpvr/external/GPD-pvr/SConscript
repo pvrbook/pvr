@@ -14,6 +14,8 @@ libEnv.Append(CPPPATH = ["export"])
 # Disable warnings because GPD is a warning fest.
 libEnv.Append(CPPFLAGS = ["-w"])
 
+libEnv.Append(CPPFLAGS = ["-fPIC"])
+
 build = buildDir(libEnv)
 install = join(installDir(libEnv))
 
