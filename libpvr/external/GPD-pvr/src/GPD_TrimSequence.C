@@ -30,7 +30,7 @@
  */
 
 
-#include <iostream.h>
+#include <iostream>
 
 #include "GPD_TrimSequence.h"
 #include "GPD_PrimType.h"

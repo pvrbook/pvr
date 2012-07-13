@@ -32,7 +32,7 @@
 
 #include "GPD_PrimMetaSQuad.h"
 #include "GPD_Detail.h"
-#include <iostream.h>
+#include <iostream>
 
 GPD_PrimMetaSQuad::~GPD_PrimMetaSQuad() {}
 

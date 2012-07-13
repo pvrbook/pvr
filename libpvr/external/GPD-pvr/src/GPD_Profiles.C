@@ -35,7 +35,7 @@
 #include <string.h>
 #include <limits.h>
 #include <stdlib.h>
-#include <iostream.h>
+#include <iostream>
 #include <strstream>
 using namespace std;
 

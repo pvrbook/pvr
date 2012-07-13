@@ -34,7 +34,7 @@
 #define __GEO_Primitive_H__
 
 #include "GPD_Attribute.h"
-#include <iostream.h>
+#include <iostream>
 
 #include "GPD_Point.h"
 class	GPD_Detail;

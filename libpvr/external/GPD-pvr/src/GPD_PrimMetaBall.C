@@ -32,7 +32,7 @@
 
 #include "GPD_PrimMetaBall.h"
 #include "GPD_Detail.h"
-#include <iostream.h>
+#include <iostream>
 
 GPD_PrimMetaBall::~GPD_PrimMetaBall() {}
 

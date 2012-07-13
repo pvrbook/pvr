@@ -33,7 +33,7 @@
 #ifndef __GPD_2DPoint__
 #define __GPD_2DPoint__
 
-#include <iostream.h>
+#include <iostream>
 #include "GPD_StreamUtil.h"
 
 class GPD_2DPoint

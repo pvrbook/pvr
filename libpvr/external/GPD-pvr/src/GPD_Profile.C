@@ -31,7 +31,7 @@
 
 
 
-#include <iostream.h>
+#include <iostream>
 
 #include "GPD_Profiles.h"
 #include "GPD_Profile.h"

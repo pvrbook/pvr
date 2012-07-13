@@ -33,7 +33,7 @@
 #include "GPD_Detail.h"
 #include "GPD_Face.h"
 #include "GPD_PrimType.h"
-#include <new.h> 
+//#include <new.h> 
 
 GPD_Face::GPD_Face(GPD_Detail *d) 
 : GPD_Primitive(d)

@@ -33,7 +33,7 @@
 #ifndef __GPD_LinkList__
 #define __GPD_LinkList__
 
-#include <iostream.h>
+#include <iostream>
 
 
 class GPD_LinkNode {

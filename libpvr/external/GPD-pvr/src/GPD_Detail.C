@@ -35,8 +35,8 @@
 #include <string.h>
 #include <limits.h>
 #include <stdlib.h>
-#include <iostream.h>
-#include <fstream.h>
+#include <iostream>
+#include <fstream>
 #include <strstream>
 using namespace std;
 
@@ -171,7 +171,7 @@ GPD_Detail::save(const char *name) const
     }
     else if (name)
     {
-	char		*ext = name ? strrchr(name, '.') : 0;
+	char		*ext = name ? (char *)strrchr(name, '.') : 0;
 	int		 rcode;
 
 	me->ascii(!strcmp(ext,".geo") ? 1 : 0);

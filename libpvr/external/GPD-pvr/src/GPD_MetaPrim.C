@@ -30,7 +30,7 @@
  */
 
 
-#include <iostream.h>
+#include <iostream>
 #include "GPD_MetaPrim.h"
 #include "GPD_StreamUtil.h"
 

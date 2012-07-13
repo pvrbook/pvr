@@ -31,7 +31,7 @@
 
 
 
-#include <iostream.h>
+#include <iostream>
 #include "GPD_Attribute.h"
 //#include <stdio.h> // defines BUFSIZ
 #include <string.h>

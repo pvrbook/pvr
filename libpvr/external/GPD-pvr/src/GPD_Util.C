@@ -31,8 +31,8 @@
 
 
 
-#include <iomanip.h>
-#include <iostream.h>
+#include <iomanip>
+#include <iostream>
 
 #include "GPD_Util.h"
 #include "GPD_Detail.h"

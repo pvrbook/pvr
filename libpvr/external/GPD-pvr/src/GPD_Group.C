@@ -209,7 +209,7 @@ GPD_Group::save(ostream &os, int binary) const
     return 0;
 }
 
-#include <iomanip.h>	// needed for setw function
+#include <iomanip>	// needed for setw function
 
 
 int
