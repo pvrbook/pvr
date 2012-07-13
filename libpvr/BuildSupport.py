@@ -86,10 +86,10 @@ systemPyLibPaths = {
                           ["/opt/local/Library/Frameworks/Python.framework/Versions/2.6"],
                           python26apple : 
                           ["/System/Library/Frameworks/Python.framework/Versions/2.6"] } },
-    linux2 : { arch32 : 
-               [ ],
-               arch64 : 
-               [ ] }
+    linux2 : { arch32 : { python26 :
+                          ["/usr/lib/python2.6"] },
+               arch64 : { python26 :
+                          ["/usr/lib/python2.6"] } }
 }
 
 systemLibs = {
@@ -308,7 +308,10 @@ def numCPUs():
 def setupHeaderInstall(env):
     targets = []
     for (path, dirs, files) in os.walk(export):
-        dirs.remove(".svn")
+        try:
+            dirs.remove(".svn")
+        except:
+	        pass
         currentDir = "/".join(path.split("/")[1:])
         headerDir = join(installDir(env), include, pvrName)
         if len(currentDir) > 0:
