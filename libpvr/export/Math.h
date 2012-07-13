@@ -198,7 +198,7 @@ Vec_T closestPointOnLineSegment(const Vec_T &p0, const Vec_T &p1,
 
 //! Closest point on triangle.
 template <class Vec_T>
-Vec_T closestPointOnTriangle(const Vec_T &p0, const Vec_T &p1, const Vec_T &p1, 
+Vec_T closestPointOnTriangle(const Vec_T &p0, const Vec_T &p1, const Vec_T &p2, 
                              const Vec_T &p, Vec_T &bary, 
                              typename Vec_T::BaseType &distance);
 
