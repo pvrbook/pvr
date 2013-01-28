@@ -77,9 +77,9 @@ Data_T filter2D(const float x, const float y,
 {
   Data_T yVals[Filt_T::width];
   for (int i = 0; i < Filt_T::width; i++) {
-    yVals[i] = filter1D(y, values[i], filter);
+    yVals[i] = filter1D<Data_T,Filt_T>(y, values[i], filter);
   }
-  return filter1D(x, yVals, filter);
+  return filter1D<Data_T,Filt_T>(x, yVals, filter);
 }
 
 //----------------------------------------------------------------------------//
@@ -91,9 +91,9 @@ Data_T filter3D(const float x, const float y, const float z,
 {
   Data_T yzVals[Filt_T::width];
   for (int i = 0; i < Filt_T::width; i++) {
-    yzVals[i] = filter2D(y, z, values[i], filter);
+    yzVals[i] = filter2D<Data_T,Filt_T>(y, z, values[i], filter);
   }
-  return filter1D(x, yzVals, filter);
+  return filter1D<Data_T,Filt_T>(x, yzVals, filter);
 }
 
 //----------------------------------------------------------------------------//

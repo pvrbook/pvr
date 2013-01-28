@@ -40,6 +40,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Renderer.h"
 #include "pvr/VoxelBuffer.h"
 #include "pvr/Occluders/Occluder.h"
@@ -61,7 +62,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class OtfVoxelOccluder : public Occluder
+class LIBPVR_PUBLIC OtfVoxelOccluder : public Occluder
 {
 public:
 

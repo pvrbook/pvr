@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/AttrTable.h"
 #include "pvr/Exception.h"
 #include "pvr/Types.h"
@@ -61,7 +62,7 @@ namespace Geo {
 
 //----------------------------------------------------------------------------//
 
-class Meshes
+class LIBPVR_PUBLIC Meshes
 {
 public:
   

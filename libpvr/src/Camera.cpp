@@ -130,7 +130,7 @@ const Imath::V2i& Camera::resolution() const
 
 //----------------------------------------------------------------------------//
 
-void Camera::setNumTimeSamples(const uint numSamples)
+void Camera::setNumTimeSamples(const unsigned int numSamples)
 {
   if (numSamples == 0) {
     throw TimeSamplesException("Zero");
@@ -143,7 +143,7 @@ void Camera::setNumTimeSamples(const uint numSamples)
 
 //----------------------------------------------------------------------------//
 
-uint Camera::numTimeSamples() const
+unsigned int Camera::numTimeSamples() const
 {
   return m_numSamples;
 }
@@ -183,7 +183,7 @@ void Camera::recomputeTransforms()
   m_cameraToWorld.resize(m_numSamples);
   m_worldToCamera.resize(m_numSamples);
 
-  for (uint i = 0; i < m_numSamples; ++i) {
+  for (unsigned int i = 0; i < m_numSamples; ++i) {
     // Compute position in open/close parametric shutter time
     PTime time(Math::parametric(i, m_numSamples));
     // Compute transformation matrix at given time
@@ -201,8 +201,8 @@ Vector Camera::transformPoint(const Vector &p,
   // Calculate which interval to interpolate in
   double stepSize   = 1.0 / static_cast<float>(m_numSamples - 1);
   double t          = time / stepSize;
-  uint   first      = static_cast<uint>(std::floor(t));
-  uint   second     = first + 1;
+  unsigned int   first      = static_cast<unsigned int>(std::floor(t));
+  unsigned int   second     = first + 1;
   second            = std::min(second, m_numSamples - 1);
   double lerpFactor = t - static_cast<double>(first);
   // Transform point twice
@@ -321,7 +321,7 @@ void PerspectiveCamera::recomputeTransforms()
 
   Matrix cameraToScreen, screenToRaster;
 
-  for (uint i = 0; i < m_numSamples; ++i) {
+  for (unsigned int i = 0; i < m_numSamples; ++i) {
     // Compute position in open/close parametric shutter time
     PTime time(Math::parametric(i, m_numSamples));
     // Compute matrices

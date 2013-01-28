@@ -43,6 +43,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Primitives/Rasterization/LineBase.h"
 
 #include "pvr/Noise/Noise.h"
@@ -74,7 +75,7 @@ Vector lineWsToNs(const Vector &wsP, const Vector &wsE1, const Vector &wsE2,
 
 //----------------------------------------------------------------------------//
 
-class PyroclasticLine : public LineBase
+class LIBPVR_PUBLIC PyroclasticLine : public LineBase
 {
 public:
   

@@ -40,6 +40,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Volumes/Volume.h"
 #include "pvr/Noise/Noise.h"
 
@@ -60,7 +61,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class FractalCloud : public Volume
+class LIBPVR_PUBLIC FractalCloud : public Volume
 {
 public:
 

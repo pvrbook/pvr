@@ -42,6 +42,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Camera.h"
 #include "pvr/Geometry.h"
 #include "pvr/ModelerInput.h"
@@ -67,7 +68,7 @@ namespace Model {
 
 //----------------------------------------------------------------------------//
 
-class Modeler
+class LIBPVR_PUBLIC Modeler
 {
 public:
   

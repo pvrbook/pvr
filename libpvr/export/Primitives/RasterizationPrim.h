@@ -40,6 +40,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/AttrUtil.h"
 #include "pvr/Geometry.h"
 #include "pvr/Math.h"
@@ -152,7 +153,7 @@ protected:
 
 //----------------------------------------------------------------------------//
 
-class PointBase : public RasterizationPrim
+class LIBPVR_PUBLIC PointBase : public RasterizationPrim
 {
 public:
   

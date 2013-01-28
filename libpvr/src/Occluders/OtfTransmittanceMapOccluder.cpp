@@ -127,10 +127,10 @@ OtfTransmittanceMapOccluder::updateCoordinate(const Vector &rsP) const
 {
   size_t x = static_cast<size_t>(std::floor(rsP.x));
   size_t y = static_cast<size_t>(std::floor(rsP.y));
-  for (uint j = y; j < y + 2; j++) {
-    for (uint i = x; i < x + 2; i++) {
-      uint iC = Imath::clamp(i, 0u, static_cast<uint>(m_intRasterBounds.x));
-      uint jC = Imath::clamp(j, 0u, static_cast<uint>(m_intRasterBounds.y));
+  for (unsigned int j = y; j < y + 2; j++) {
+    for (unsigned int i = x; i < x + 2; i++) {
+      unsigned int iC = Imath::clamp(i, 0u, static_cast<unsigned int>(m_intRasterBounds.x));
+      unsigned int jC = Imath::clamp(j, 0u, static_cast<unsigned int>(m_intRasterBounds.y));
       if (!m_computed[offset(iC, jC)]) {
         updatePixel(iC, jC);
       }

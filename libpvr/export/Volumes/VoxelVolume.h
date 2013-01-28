@@ -44,6 +44,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/CubicInterp.h"
 #include "pvr/GaussianInterp.h"
 #include "pvr/MitchellInterp.h"
@@ -250,7 +251,7 @@ private:
 
 //----------------------------------------------------------------------------//
 
-class VoxelVolume : public Volume
+class LIBPVR_PUBLIC VoxelVolume : public Volume
 {
 public:
 

@@ -28,7 +28,6 @@
 //----------------------------------------------------------------------------//
 
 using namespace std;
-using namespace Imath;
 using namespace Field3D;
 using namespace pvr;
 using namespace pvr::Model;

@@ -100,10 +100,10 @@ class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
     
     pvr::Filter::Gaussian filter;
 
-    Data_T values[4][4][4];
-    for (int k = c.z, ki = 0; k < c.z + 4; k++, ki++) {
-      for (int j = c.y, ji = 0; j < c.y + 4; j++, ji++) {
-        for (int i = c.x, ii = 0; i < c.x + 4; i++, ii++) {
+    Data_T values[pvr::Filter::Gaussian::width][pvr::Filter::Gaussian::width][pvr::Filter::Gaussian::width];
+    for (int k = c.z, ki = 0; k < c.z + pvr::Filter::Gaussian::width; k++, ki++) {
+      for (int j = c.y, ji = 0; j < c.y + pvr::Filter::Gaussian::width; j++, ji++) {
+        for (int i = c.x, ii = 0; i < c.x + pvr::Filter::Gaussian::width; i++, ii++) {
           int iIdx = std::min(std::max(i, dw.min.x), dw.max.x);
           int jIdx = std::min(std::max(j, dw.min.y), dw.max.y);
           int kIdx = std::min(std::max(k, dw.min.z), dw.max.z);
@@ -111,7 +111,7 @@ class GaussianFieldInterp : public Field3D::FieldInterp<Data_T>
         }
       }
     }
-    return pvr::Filter::filter3D(x.x, x.y, x.z, values, filter);
+    return pvr::Filter::filter3D<Data_T,pvr::Filter::Gaussian>(x.x, x.y, x.z, values, filter);
   }
 
 private:

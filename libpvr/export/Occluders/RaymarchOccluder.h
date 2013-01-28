@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Occluders/Occluder.h"
 #include "pvr/Renderer.h"
 
@@ -58,7 +59,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class RaymarchOccluder : public Occluder
+class LIBPVR_PUBLIC RaymarchOccluder : public Occluder
 {
 public:
 

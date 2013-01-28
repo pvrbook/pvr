@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Math.h"
 #include "pvr/Types.h"
 #include "pvr/Noise/NoiseImpl.h"
@@ -54,7 +55,7 @@ namespace Noise {
 //----------------------------------------------------------------------------//
 
 //! Base class for noise functions
-class NoiseFunction
+class LIBPVR_PUBLIC NoiseFunction
 {
 public:
   
@@ -91,7 +92,7 @@ public:
 // PerlinNoise
 //----------------------------------------------------------------------------//
 
-class PerlinNoise : public NoiseFunction
+class LIBPVR_PUBLIC PerlinNoise : public NoiseFunction
 {
 public:
 
@@ -126,7 +127,7 @@ private:
 // AbsPerlinNoise
 //----------------------------------------------------------------------------//
 
-class AbsPerlinNoise : public NoiseFunction
+class LIBPVR_PUBLIC AbsPerlinNoise : public NoiseFunction
 {
 public:
 
@@ -160,7 +161,7 @@ private:
 // Fractal
 //----------------------------------------------------------------------------//
 
-class Fractal
+class LIBPVR_PUBLIC Fractal
 {
 public:
 
@@ -191,7 +192,7 @@ public:
 //----------------------------------------------------------------------------//
 
 //! \todo Change scale to V3f
-class fBm : public Fractal
+class LIBPVR_PUBLIC fBm : public Fractal
 {
 public:
 

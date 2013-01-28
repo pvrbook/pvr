@@ -51,6 +51,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Curve.h"
 #include "pvr/Exception.h"
 #include "pvr/Time.h"
@@ -96,7 +97,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class Camera
+class LIBPVR_PUBLIC Camera
 {
 public:
   
@@ -144,9 +145,9 @@ public:
   // Motion blur settings ------------------------------------------------------
 
   //! Sets the number of time samples
-  void setNumTimeSamples(const uint numSamples);
+  void setNumTimeSamples(const unsigned int numSamples);
   //! Returns the number of time samples
-  uint numTimeSamples() const ;
+  unsigned int numTimeSamples() const ;
 
   // Transforms ----------------------------------------------------------------
 
@@ -209,7 +210,7 @@ protected:
   Imath::V2i m_resolution;
 
   //! Number of time samples to use.
-  uint m_numSamples;
+  unsigned int m_numSamples;
 
   //! Transformation matrices representing camera to world transform
   //! for the [0,dt] time interval
@@ -230,7 +231,7 @@ protected:
 
 //----------------------------------------------------------------------------//
 
-class PerspectiveCamera : public Camera
+class LIBPVR_PUBLIC PerspectiveCamera : public Camera
 {
 public:
   
@@ -359,7 +360,7 @@ struct SphericalCoords
 
 //----------------------------------------------------------------------------//
 
-class SphericalCamera : public Camera
+class LIBPVR_PUBLIC SphericalCamera : public Camera
 {
 public:
   
@@ -425,7 +426,7 @@ private:
 //! on a normal Super35 setup.
 //! \param resolution Image resolution, used to calculate aspect ratio of the
 //! frame.
-double calculateVerticalFOV(const double focalLength, const double hAperture,
+double LIBPVR_EXPORT calculateVerticalFOV(const double focalLength, const double hAperture,
                             const Imath::V2i &resolution);
 
 //----------------------------------------------------------------------------//

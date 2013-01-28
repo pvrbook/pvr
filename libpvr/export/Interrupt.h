@@ -32,6 +32,7 @@
 // Includes
 //----------------------------------------------------------------------------//
 
+#include "pvr/export.h"
 #include "Exception.h"
 #include "Types.h"
 
@@ -52,7 +53,7 @@ DECLARE_PVR_RT_EXC(UserInterruptException, "User interrupt from python");
 // Interrupt base class
 //----------------------------------------------------------------------------//
 
-class Interrupt
+class LIBPVR_PUBLIC Interrupt
 {
 public:
   

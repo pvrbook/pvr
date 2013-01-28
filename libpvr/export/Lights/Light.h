@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Constants.h"
 #include "pvr/ParamBase.h"
 #include "pvr/RenderState.h"
@@ -80,7 +81,7 @@ struct LightSample
 
 //----------------------------------------------------------------------------//
 
-class Light : public Util::ParamBase
+class LIBPVR_PUBLIC Light : public Util::ParamBase
 {
 public:
 
