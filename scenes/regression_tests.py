@@ -42,9 +42,9 @@ def runTest(dir):
     print ""
     scriptPath = os.path.join(dir, "render.py")
     if os.path.exists(scriptPath):
-        cmd = "cd " + dir + ";"
-        cmd += "./render.py"
-        result = os.system(cmd)
+        cmd = "cd " + dir
+        os.system(cmd)
+        result = os.system("render.py")
         if result != 0:
             raise TestFail(dir, "Bad return code")
 
