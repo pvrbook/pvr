@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/RenderState.h"
 #include "pvr/Types.h"
 #include "pvr/VolumeAttr.h"
@@ -60,7 +61,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class PhysicalSampler : public RaymarchSampler
+class LIBPVR_PUBLIC PhysicalSampler : public RaymarchSampler
 {
 public:
   

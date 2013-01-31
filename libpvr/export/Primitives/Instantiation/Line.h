@@ -40,6 +40,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/AttrUtil.h"
 #include "pvr/ModelerInput.h"
 #include "pvr/Primitives/InstantiationPrim.h"
@@ -79,7 +80,7 @@ namespace Inst {
 
 //----------------------------------------------------------------------------//
 
-class Line : public InstantiationPrim
+class LIBPVR_PUBLIC Line : public InstantiationPrim
 {
 public:
   

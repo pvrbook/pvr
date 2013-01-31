@@ -40,6 +40,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Geometry.h"
 #include "pvr/ParamBase.h"
 #include "pvr/Types.h"
@@ -63,7 +64,7 @@ namespace Model {
 
 //----------------------------------------------------------------------------//
 
-class ModelerInput
+class LIBPVR_PUBLIC ModelerInput
 {
 public:
   

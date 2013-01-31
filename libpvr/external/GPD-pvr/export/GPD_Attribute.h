@@ -160,7 +160,11 @@ private:
 // --------- GEO_AttributeDict ----------
 // Attribute Dictionary class:
 //
-class GPD_AttributeDict : public GPD_LinkList {
+class 
+#ifdef GPD_EXPORTS
+__declspec(dllexport)
+#endif
+GPD_AttributeDict : public GPD_LinkList {
 public:
 //
 // Constructor and destructor:

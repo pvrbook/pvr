@@ -43,6 +43,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Primitives/Rasterization/LineBase.h"
 
 //----------------------------------------------------------------------------//
@@ -66,7 +67,7 @@ namespace Rast {
 
 //----------------------------------------------------------------------------//
 
-class Line : public LineBase
+class LIBPVR_PUBLIC Line : public LineBase
 {
 public:
   

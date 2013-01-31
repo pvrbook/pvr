@@ -41,11 +41,10 @@ typedef int UT_EnumType;
 #include <iosfwd>
 using namespace std;
 
+#include <strstream>
 #ifdef WIN32
-    #include <strstrea.h>
     #define NTBinaryMode ios::binary
 #else
-    #include <strstream>
     using namespace std;
     #define NTBinaryMode 0
 #endif

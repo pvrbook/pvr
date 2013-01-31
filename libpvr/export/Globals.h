@@ -36,6 +36,7 @@
 
 // Library includes
 
+#include "pvr/export.h"
 #include "pvr/Exception.h"
 
 //----------------------------------------------------------------------------//
@@ -49,7 +50,7 @@ namespace Sys {
 // Globals
 //----------------------------------------------------------------------------//
 
-class Globals 
+class LIBPVR_PUBLIC Globals 
 {
 public:
   

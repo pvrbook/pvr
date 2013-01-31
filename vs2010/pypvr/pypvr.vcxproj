@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CC884979-4E5F-4334-8F16-E06506DE9CE1}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>pypvr</RootNamespace>
+    <ProjectName>Python binding</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>_pvr</TargetName>
+    <TargetExt>.pyd</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PYPVR_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\libpvr;c:\python26\include;C:\Program Files\boost\boost_1_44;$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\include;$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\include\OpenEXR;$(THIRD_PARTY_TOOLS_HOME)\Field3D\include;$(THIRD_PARTY_TOOLS_HOME)\hdf5-1.8.9\include;$(THIRD_PARTY_TOOLS_HOME)\OpenImageIO\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PYPVR_EXPORTS;BOOST_ALL_NO_LIB;BOOST_DYN_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\libpvr;c:\python26\include;C:\Program Files\boost\boost_1_44;$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\include;$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\include\OpenEXR;$(THIRD_PARTY_TOOLS_HOME)\Field3D\include;$(THIRD_PARTY_TOOLS_HOME)\hdf5-1.8.9\include;$(THIRD_PARTY_TOOLS_HOME)\OpenImageIO\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>c:\python26\libs;C:\Program Files\boost\boost_1_44\lib;$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\lib;$(THIRD_PARTY_TOOLS_HOME)\hdf5-1.8.9\lib;$(THIRD_PARTY_TOOLS_HOME)\field3d\lib;$(THIRD_PARTY_TOOLS_HOME)\OpenImageIO\lib;$(SolutionDir)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libpvr.lib;boost_python-vc100-mt-1_44.lib;IlmThread.lib;Imath.lib;half.lib;Iex.lib;field3D.lib;OpenImageIO.lib;gpd.lib;hdf5dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libpvr\python\Common.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyAttrTable.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyCamera.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyDeepImage.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyField3D.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyGeometry.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyGlobals.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyImage.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyLights.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyLog.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyMath.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyModeler.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyNoise.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyOccluders.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyParticles.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyPhaseFunction.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyPolygons.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyPrimitive.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyPvr.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyRaymarchers.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyRaymarchSamplers.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyRenderer.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyTypes.cpp" />
+    <ClCompile Include="..\..\libpvr\python\PyVolumes.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libpvr\python\Common.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

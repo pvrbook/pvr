@@ -291,7 +291,7 @@ void Curve<T>::removeDuplicates()
 
 template <typename T>
 typename Curve<T>::CPtr 
-Curve<T>::average(const std::vector<Curve<T>::CPtr> &curves)
+Curve<T>::average(const std::vector<typename Curve<T>::CPtr> &curves)
 {
   typename Curve<T>::Ptr result(new Curve<T>);
 

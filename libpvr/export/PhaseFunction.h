@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/ParamBase.h"
 #include "pvr/Types.h"
 
@@ -119,7 +120,7 @@ private:
 // Isotropic
 //----------------------------------------------------------------------------//
 
-class Isotropic : public PhaseFunction
+class LIBPVR_PUBLIC Isotropic : public PhaseFunction
 {
 public:
   
@@ -147,7 +148,7 @@ public:
 // HenyeyGreenstein
 //----------------------------------------------------------------------------//
 
-class HenyeyGreenstein : public PhaseFunction
+class LIBPVR_PUBLIC HenyeyGreenstein : public PhaseFunction
 {
 public:
   
@@ -184,7 +185,7 @@ private:
 // DoubleHenyeyGreenstein
 //----------------------------------------------------------------------------//
 
-class DoubleHenyeyGreenstein : public PhaseFunction
+class LIBPVR_PUBLIC DoubleHenyeyGreenstein : public PhaseFunction
 {
 public:
   

@@ -36,6 +36,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Curve.h"
 #include "pvr/Volumes/Volume.h"
 
@@ -50,7 +51,7 @@ namespace Render {
 // ConstantVolume
 //----------------------------------------------------------------------------//
 
-class ConstantVolume : public Volume
+class LIBPVR_PUBLIC ConstantVolume : public Volume
 {
 public:
   

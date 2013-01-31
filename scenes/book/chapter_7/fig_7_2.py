@@ -57,7 +57,7 @@ geo = Geometry()
 geo.setParticles(particles)
 
 # Create the volumetric primitive
-prim = Prim.Rast.Point
+prim = Prim.Rast.Point()
 prim.setParams(primParams)
 
 # Create the Modeler

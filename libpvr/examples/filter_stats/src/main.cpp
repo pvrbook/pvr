@@ -28,7 +28,6 @@
 //----------------------------------------------------------------------------//
 
 using namespace std;
-using namespace Imath;
 using namespace Field3D;
 using namespace pvr::Filter;
 
@@ -45,7 +44,7 @@ int main()
 
   {
     boost::timer timer;
-    Rand32 rng;
+    Imath::Rand32 rng;
     V3f vsP;
     float floatBufSize = bufSize;
     float val = 0.0;
@@ -60,7 +59,7 @@ int main()
   }
   {
     boost::timer timer;
-    Rand32 rng;
+    Imath::Rand32 rng;
     V3f vsP;
     float floatBufSize = bufSize;
     float val = 0.0;
@@ -75,7 +74,7 @@ int main()
   }
   {
     boost::timer timer;
-    Rand32 rng;
+    Imath::Rand32 rng;
     V3f vsP;
     float floatBufSize = bufSize;
     float val = 0.0;
@@ -90,7 +89,7 @@ int main()
   }
   {
     boost::timer timer;
-    Rand32 rng;
+    Imath::Rand32 rng;
     V3f vsP;
     float floatBufSize = bufSize;
     float val = 0.0;
@@ -105,7 +104,7 @@ int main()
   }
   {
     boost::timer timer;
-    Rand32 rng;
+    Imath::Rand32 rng;
     V3f vsP;
     float floatBufSize = bufSize;
     float val = 0.0;
@@ -120,7 +119,7 @@ int main()
   }
   {
     boost::timer timer;
-    Rand32 rng;
+    Imath::Rand32 rng;
     V3f vsP;
     float floatBufSize = bufSize;
     float val = 0.0;

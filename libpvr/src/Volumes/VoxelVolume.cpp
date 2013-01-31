@@ -54,12 +54,26 @@ namespace {
 
 //----------------------------------------------------------------------------//
 
-int sign(int x) { return (x > 0) - (x < 0); }
+int sign(float x) { return (x > 0) - (x < 0); }
 
 //----------------------------------------------------------------------------//
 
 void handleNaN(pvr::Vector &v) 
 {
+#ifdef WIN32
+  if (_isnan(v.x)) 
+    v.x = std::numeric_limits<double>::max();
+  if (_isnan(v.y)) 
+    v.y = std::numeric_limits<double>::max();
+  if (_isnan(v.z)) 
+    v.z = std::numeric_limits<double>::max();
+  if (!_finite(v.x)) 
+    v.x = std::numeric_limits<double>::max();
+  if (!_finite(v.y)) 
+    v.y = std::numeric_limits<double>::max();
+  if (!_finite(v.z)) 
+    v.z = std::numeric_limits<double>::max();
+#else
   if (std::isnan(v.x)) 
     v.x = std::numeric_limits<double>::max();
   if (std::isnan(v.y)) 
@@ -72,6 +86,7 @@ void handleNaN(pvr::Vector &v)
     v.y = std::numeric_limits<double>::max();
   if (std::isinf(v.z)) 
     v.z = std::numeric_limits<double>::max();
+#endif
 }
 
 //----------------------------------------------------------------------------//
@@ -115,7 +130,6 @@ using namespace boost;
 using namespace std;
 
 using namespace Field3D;
-using namespace Imath;
 
 using namespace pvr::Util; 
 

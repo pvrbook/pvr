@@ -60,7 +60,11 @@ public:
 			wrapv:1;
 };
 
-class GPD_Hull : public GPD_Primitive {
+class 
+#ifdef GPD_EXPORTS
+__declspec(dllexport)
+#endif
+GPD_Hull : public GPD_Primitive {
 public:
     GPD_Hull(GPD_Detail *d);
     virtual ~GPD_Hull();

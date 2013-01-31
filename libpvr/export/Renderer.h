@@ -40,6 +40,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Camera.h"
 #include "pvr/Image.h"
 #include "pvr/Exception.h"
@@ -71,7 +72,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class Renderer
+class LIBPVR_PUBLIC Renderer
 {
 public:
   

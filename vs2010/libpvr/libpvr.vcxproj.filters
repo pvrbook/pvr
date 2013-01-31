@@ -1,0 +1,444 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Lights">
+      <UniqueIdentifier>{623f213c-b996-43cc-8ecd-090126b15dd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Noise">
+      <UniqueIdentifier>{7b4365af-ff4c-48a6-9041-e36cbaf3fc0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Occluders">
+      <UniqueIdentifier>{c803a4af-16e0-4eb7-9400-0c3233a3a286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Primitives">
+      <UniqueIdentifier>{ed0a393c-001c-4b4a-b832-fa06097a353f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Raymarchers">
+      <UniqueIdentifier>{b6e7da6f-080a-4dfd-abee-39a4b96c1d0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RaymarchSamplers">
+      <UniqueIdentifier>{0d0e7ac1-1ce4-493c-99d8-9e613744a7ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Volumes">
+      <UniqueIdentifier>{4389a205-7aaa-4172-a1c7-aa96c293b877}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Primitives\Instantiation">
+      <UniqueIdentifier>{9cd6c70b-e1b9-463c-9a50-c605d1fc0d3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Primitives\Rasterization">
+      <UniqueIdentifier>{ef3019ee-8184-4f8e-a2bc-1521688fb252}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lights">
+      <UniqueIdentifier>{82c11123-f3b2-43ed-9cff-3a7f1f015d5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Noise">
+      <UniqueIdentifier>{00970872-2274-4672-909a-180d2456475a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Occluders">
+      <UniqueIdentifier>{7e5070dd-269a-49aa-ae10-80938fa95de5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Primitives">
+      <UniqueIdentifier>{197eeb94-162d-4c6e-a754-75a61090546f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Raymarchers">
+      <UniqueIdentifier>{15bf1f56-6a3d-481f-8795-f12c33d458b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\RaymarchSamplers">
+      <UniqueIdentifier>{1bf29c29-e19c-4e1b-bca6-e2164423019b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Volumes">
+      <UniqueIdentifier>{381d6aa2-e519-4a75-b8f4-d901966cfaca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Primitives\Instantiation">
+      <UniqueIdentifier>{0d7db621-7304-40a3-9423-0ae67e4bcfb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Primitives\Rasterization">
+      <UniqueIdentifier>{b0564040-7bd5-4a63-b67f-4e9be62a5081}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libpvr\src\AttrTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\AttrUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\DeepImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Geometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Interrupt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Meshes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Modeler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\ModelerInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Particles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\PhaseFunction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Polygons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\RenderGlobals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Strings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\VolumeAttr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Lights\Light.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Lights\PointLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Lights\SpotLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Volumes\CompositeVolume.cpp">
+      <Filter>Source Files\Volumes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Volumes\ConstantVolume.cpp">
+      <Filter>Source Files\Volumes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Volumes\FractalCloud.cpp">
+      <Filter>Source Files\Volumes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Volumes\Volume.cpp">
+      <Filter>Source Files\Volumes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Volumes\VoxelVolume.cpp">
+      <Filter>Source Files\Volumes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\RaymarchSamplers\DensitySampler.cpp">
+      <Filter>Source Files\RaymarchSamplers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\RaymarchSamplers\PhysicalSampler.cpp">
+      <Filter>Source Files\RaymarchSamplers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Raymarchers\AdaptiveRaymarcher.cpp">
+      <Filter>Source Files\Raymarchers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Raymarchers\Raymarcher.cpp">
+      <Filter>Source Files\Raymarchers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Raymarchers\UniformRaymarcher.cpp">
+      <Filter>Source Files\Raymarchers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\RasterizationPrim.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Occluders\OtfTransmittanceMapOccluder.cpp">
+      <Filter>Source Files\Occluders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Occluders\OtfVoxelOccluder.cpp">
+      <Filter>Source Files\Occluders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Occluders\RaymarchOccluder.cpp">
+      <Filter>Source Files\Occluders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Occluders\TransmittanceMapOccluder.cpp">
+      <Filter>Source Files\Occluders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Occluders\VoxelOccluder.cpp">
+      <Filter>Source Files\Occluders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Noise\Noise.cpp">
+      <Filter>Source Files\Noise</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\Instantiation\Line.cpp">
+      <Filter>Source Files\Primitives\Instantiation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\Instantiation\Sphere.cpp">
+      <Filter>Source Files\Primitives\Instantiation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\Instantiation\Surface.cpp">
+      <Filter>Source Files\Primitives\Instantiation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\Line.cpp">
+      <Filter>Source Files\Primitives\Rasterization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\LineBase.cpp">
+      <Filter>Source Files\Primitives\Rasterization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\Point.cpp">
+      <Filter>Source Files\Primitives\Rasterization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\PyroclasticLine.cpp">
+      <Filter>Source Files\Primitives\Rasterization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\PyroclasticPoint.cpp">
+      <Filter>Source Files\Primitives\Rasterization</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libpvr\pvr\DeepImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Modeler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\AttrTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\export.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Curve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\GaussianInterp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\MitchellInterp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Filter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\VoxelBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\VolumeAttr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Strings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\StlUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\RenderState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\RenderGlobals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\pvr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Polygons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\PhaseFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Particles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\ParamMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\ParamBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\ModelingUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\ModelerInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Meshes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\LinearInterp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Interrupt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Interpolation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Geometry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Derivatives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\CubicInterp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\AttrUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Acceleration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Lights\Light.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Lights\SpotLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Lights\PointLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Noise\NoiseImpl.h">
+      <Filter>Header Files\Noise</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Noise\Noise.h">
+      <Filter>Header Files\Noise</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\Occluder.h">
+      <Filter>Header Files\Occluders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\VoxelOccluder.h">
+      <Filter>Header Files\Occluders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\TransmittanceMapOccluder.h">
+      <Filter>Header Files\Occluders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\RaymarchOccluder.h">
+      <Filter>Header Files\Occluders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\OtfVoxelOccluder.h">
+      <Filter>Header Files\Occluders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\OtfTransmittanceMapOccluder.h">
+      <Filter>Header Files\Occluders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Instantiation\Line.h">
+      <Filter>Header Files\Primitives\Instantiation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Instantiation\Surface.h">
+      <Filter>Header Files\Primitives\Instantiation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Instantiation\Sphere.h">
+      <Filter>Header Files\Primitives\Instantiation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\Line.h">
+      <Filter>Header Files\Primitives\Rasterization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\PyroclasticPoint.h">
+      <Filter>Header Files\Primitives\Rasterization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\PyroclasticLine.h">
+      <Filter>Header Files\Primitives\Rasterization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\Point.h">
+      <Filter>Header Files\Primitives\Rasterization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\LineBase.h">
+      <Filter>Header Files\Primitives\Rasterization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\InstantiationPrim.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\RasterizationPrim.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Primitive.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Raymarchers\AdaptiveRaymarcher.h">
+      <Filter>Header Files\Raymarchers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Raymarchers\UniformRaymarcher.h">
+      <Filter>Header Files\Raymarchers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Raymarchers\Raymarcher.h">
+      <Filter>Header Files\Raymarchers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\RaymarchSamplers\DensitySampler.h">
+      <Filter>Header Files\RaymarchSamplers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\RaymarchSamplers\RaymarchSampler.h">
+      <Filter>Header Files\RaymarchSamplers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\RaymarchSamplers\PhysicalSampler.h">
+      <Filter>Header Files\RaymarchSamplers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\CompositeVolume.h">
+      <Filter>Header Files\Volumes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\VoxelVolume.h">
+      <Filter>Header Files\Volumes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\Volume.h">
+      <Filter>Header Files\Volumes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\FractalCloud.h">
+      <Filter>Header Files\Volumes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\ConstantVolume.h">
+      <Filter>Header Files\Volumes</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

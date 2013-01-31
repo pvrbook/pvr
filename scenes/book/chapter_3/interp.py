@@ -54,6 +54,7 @@ RenderGlobals.setupMotionBlur(24.0, 0.5)
 
 # Default camera
 camera = pvr.cameras.standard(camResMult)
+camera.setResolution(V2i(320, 240))
 
 # ------------------------------------------------------------------------------
 # Modeler
@@ -68,12 +69,12 @@ geo = Geometry()
 geo.setParticles(particles)
 
 # Create the volumetric primitive
-prim = createRasterizationPrim("PyroclasticPoint")
+prim = Prim.Rast.PyroclasticPoint()
 prim.setParams(primParams)
 
 # Create the Modeler
 modeler = Modeler()
-modeler.setMapping(Mapping.MatrixMappingType)
+modeler.setMapping(Mapping.UniformMappingType)
 modeler.setDataStructure(DataStructure.SparseBufferType)
 modeler.setSparseBlockSize(SparseBlockSize.Size16)
 modeler.setCamera(camera)
@@ -134,19 +135,6 @@ for light in lights:
 renderer.execute()
 renderer.saveImage("linear_interp.exr")
 renderer.saveImage("linear_interp.png")
-
-# TriLinear interp
-volume.setInterpolation(InterpType.TriLinearInterp)
-renderer = pvr.renderers.standard(raymarcherParams)
-renderer.setCamera(camera)
-renderer.addVolume(volume)
-lights = pvr.lights.standardThreePoint(renderer, lightResMult,
-                                       raymarcherParams)
-for light in lights:
-    renderer.addLight(light)
-renderer.execute()
-renderer.saveImage("trilinear_interp.exr")
-renderer.saveImage("trilinear_interp.png")
 
 # Cubic interp
 volume.setInterpolation(InterpType.CubicInterp)

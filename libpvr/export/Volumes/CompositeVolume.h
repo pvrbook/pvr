@@ -42,6 +42,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Volumes/Volume.h"
 
 //----------------------------------------------------------------------------//
@@ -62,7 +63,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class CompositeVolume : public Volume
+class LIBPVR_PUBLIC CompositeVolume : public Volume
 {
 public:
 

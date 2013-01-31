@@ -39,7 +39,7 @@ int main()
     cout << "wsP " << wsP << endl
          << "  csP " << cam->worldToCamera(wsP, time) << endl
          << "  ssP " << cam->worldToScreen(wsP, time) << endl
-         << "  rsP " << cam->worldToCamera(rsP, time) << endl;
+         << "  rsP " << cam->worldToRaster(wsP, time) << endl;
   }
   ssP.setValue(0.0, 0.0, 1.0);
   cout << "ssP " << ssP << endl
