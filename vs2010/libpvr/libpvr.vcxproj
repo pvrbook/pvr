@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{29EE64E0-FE4F-4E1E-B62A-09EF2EF51FAF}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libpvr</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBPVR_EXPORTS;BOOST_DYN_LIB;BOOST_ALL_NO_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\libpvr;C:\Program Files\boost\boost_1_44;$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\include;$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\include\OpenEXR;$(THIRD_PARTY_TOOLS_HOME)\Field3D\include;$(THIRD_PARTY_TOOLS_HOME)\hdf5-1.8.9\include;$(THIRD_PARTY_TOOLS_HOME)\OpenImageIO\include</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\lib;$(THIRD_PARTY_TOOLS_HOME)\hdf5-1.8.9\lib;$(THIRD_PARTY_TOOLS_HOME)\field3d\lib;$(THIRD_PARTY_TOOLS_HOME)\OpenImageIO\lib;$(SolutionDir)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>IlmThread.lib;Imath.lib;half.lib;Iex.lib;field3D.lib;OpenImageIO.lib;gpd.lib;hdf5dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>
+      </ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBPVR_EXPORTS;BOOST_DYN_LIB;BOOST_ALL_NO_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\libpvr;C:\Program Files\boost\boost_1_44;$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\include;$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\include\OpenEXR;$(THIRD_PARTY_TOOLS_HOME)\Field3D\include;$(THIRD_PARTY_TOOLS_HOME)\hdf5-1.8.9\include;$(THIRD_PARTY_TOOLS_HOME)\OpenImageIO\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(THIRD_PARTY_TOOLS_HOME)\ilmbase-1.0.1\lib;$(THIRD_PARTY_TOOLS_HOME)\hdf5-1.8.9\lib;$(THIRD_PARTY_TOOLS_HOME)\field3d\lib;$(THIRD_PARTY_TOOLS_HOME)\OpenImageIO\lib;$(SolutionDir)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>IlmThread.lib;Imath.lib;half.lib;Iex.lib;field3D.lib;OpenImageIO.lib;gpd.lib;hdf5dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libpvr\src\AttrTable.cpp" />
+    <ClCompile Include="..\..\libpvr\src\AttrUtil.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Camera.cpp" />
+    <ClCompile Include="..\..\libpvr\src\DeepImage.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Geometry.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\..\libpvr\external\GPD-pvr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\..\libpvr\external\GPD-pvr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Globals.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Image.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Interrupt.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Lights\Light.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Lights\PointLight.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Lights\SpotLight.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Log.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Math.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Meshes.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Modeler.cpp" />
+    <ClCompile Include="..\..\libpvr\src\ModelerInput.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Noise\Noise.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Occluders\OtfTransmittanceMapOccluder.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Occluders\OtfVoxelOccluder.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Occluders\RaymarchOccluder.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Occluders\TransmittanceMapOccluder.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Occluders\VoxelOccluder.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Particles.cpp" />
+    <ClCompile Include="..\..\libpvr\src\PhaseFunction.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Polygons.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Primitives\Instantiation\Line.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Primitives\Instantiation\Sphere.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Primitives\Instantiation\Surface.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Primitives\RasterizationPrim.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\Line.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)\LineRaster.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)\LineRaster.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\LineBase.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\Point.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\PyroclasticLine.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Primitives\Rasterization\PyroclasticPoint.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Raymarchers\AdaptiveRaymarcher.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Raymarchers\Raymarcher.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Raymarchers\UniformRaymarcher.cpp" />
+    <ClCompile Include="..\..\libpvr\src\RaymarchSamplers\DensitySampler.cpp" />
+    <ClCompile Include="..\..\libpvr\src\RaymarchSamplers\PhysicalSampler.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Renderer.cpp" />
+    <ClCompile Include="..\..\libpvr\src\RenderGlobals.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Strings.cpp" />
+    <ClCompile Include="..\..\libpvr\src\VolumeAttr.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Volumes\CompositeVolume.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Volumes\ConstantVolume.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Volumes\FractalCloud.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Volumes\Volume.cpp" />
+    <ClCompile Include="..\..\libpvr\src\Volumes\VoxelVolume.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libpvr\pvr\Acceleration.h" />
+    <ClInclude Include="..\..\libpvr\pvr\AttrTable.h" />
+    <ClInclude Include="..\..\libpvr\pvr\AttrUtil.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Camera.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Constants.h" />
+    <ClInclude Include="..\..\libpvr\pvr\CubicInterp.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Curve.h" />
+    <ClInclude Include="..\..\libpvr\pvr\DeepImage.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Derivatives.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Exception.h" />
+    <ClInclude Include="..\..\libpvr\pvr\export.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Filter.h" />
+    <ClInclude Include="..\..\libpvr\pvr\GaussianInterp.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Geometry.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Globals.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Image.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Interpolation.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Interrupt.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Lights\Light.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Lights\PointLight.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Lights\SpotLight.h" />
+    <ClInclude Include="..\..\libpvr\pvr\LinearInterp.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Log.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Math.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Meshes.h" />
+    <ClInclude Include="..\..\libpvr\pvr\MitchellInterp.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Modeler.h" />
+    <ClInclude Include="..\..\libpvr\pvr\ModelerInput.h" />
+    <ClInclude Include="..\..\libpvr\pvr\ModelingUtils.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Noise\Noise.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Noise\NoiseImpl.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\Occluder.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\OtfTransmittanceMapOccluder.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\OtfVoxelOccluder.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\RaymarchOccluder.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\TransmittanceMapOccluder.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Occluders\VoxelOccluder.h" />
+    <ClInclude Include="..\..\libpvr\pvr\ParamBase.h" />
+    <ClInclude Include="..\..\libpvr\pvr\ParamMap.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Particles.h" />
+    <ClInclude Include="..\..\libpvr\pvr\PhaseFunction.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Polygons.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\InstantiationPrim.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Instantiation\Line.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Instantiation\Sphere.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Instantiation\Surface.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Primitive.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\RasterizationPrim.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\Line.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\LineBase.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\Point.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\PyroclasticLine.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Primitives\Rasterization\PyroclasticPoint.h" />
+    <ClInclude Include="..\..\libpvr\pvr\pvr.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Raymarchers\AdaptiveRaymarcher.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Raymarchers\Raymarcher.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Raymarchers\UniformRaymarcher.h" />
+    <ClInclude Include="..\..\libpvr\pvr\RaymarchSamplers\DensitySampler.h" />
+    <ClInclude Include="..\..\libpvr\pvr\RaymarchSamplers\PhysicalSampler.h" />
+    <ClInclude Include="..\..\libpvr\pvr\RaymarchSamplers\RaymarchSampler.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Renderer.h" />
+    <ClInclude Include="..\..\libpvr\pvr\RenderGlobals.h" />
+    <ClInclude Include="..\..\libpvr\pvr\RenderState.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Scene.h" />
+    <ClInclude Include="..\..\libpvr\pvr\StlUtil.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Strings.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Time.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Types.h" />
+    <ClInclude Include="..\..\libpvr\pvr\VolumeAttr.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\CompositeVolume.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\ConstantVolume.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\FractalCloud.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\Volume.h" />
+    <ClInclude Include="..\..\libpvr\pvr\Volumes\VoxelVolume.h" />
+    <ClInclude Include="..\..\libpvr\pvr\VoxelBuffer.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
