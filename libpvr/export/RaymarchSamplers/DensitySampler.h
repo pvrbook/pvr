@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/RaymarchSamplers/RaymarchSampler.h"
 #include "pvr/VolumeAttr.h"
 
@@ -58,7 +59,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class DensitySampler : public RaymarchSampler
+class LIBPVR_PUBLIC DensitySampler : public RaymarchSampler
 {
 public:
   // Typedefs ---

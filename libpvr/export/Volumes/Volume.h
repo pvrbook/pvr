@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/ParamBase.h"
 #include "pvr/PhaseFunction.h"
 #include "pvr/RenderState.h"
@@ -75,7 +76,7 @@ struct VolumeSample
 //----------------------------------------------------------------------------//
 
 //! Base class for volumes that are used in the rendering/raymarching.
-class Volume : public Util::ParamBase
+class LIBPVR_PUBLIC Volume : public Util::ParamBase
 {
 public:
   

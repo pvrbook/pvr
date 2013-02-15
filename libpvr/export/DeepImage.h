@@ -40,6 +40,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Curve.h"
 #include "pvr/Interpolation.h"
 #include "pvr/Log.h"
@@ -63,7 +64,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class DeepImage
+class LIBPVR_PUBLIC DeepImage
 {
 public:
 

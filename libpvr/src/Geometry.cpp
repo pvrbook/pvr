@@ -360,7 +360,7 @@ Geometry::Ptr Geometry::read(const std::string &filename)
       AttrTable &points = polys->pointAttrs();
 
       size_t numVerts = polyPrim->nVtx;
-      bool isClosed = polyPrim->isClosed();
+      bool isClosed = polyPrim->isClosed() != 0;
 
       size_t polyIdx = polys->addPolygon(numVerts);
       polys->setIsClosed(polyIdx, isClosed);

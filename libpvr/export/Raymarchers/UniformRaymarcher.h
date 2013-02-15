@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Raymarchers/Raymarcher.h"
 #include "pvr/Volumes/Volume.h"
 
@@ -58,7 +59,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class UniformRaymarcher : public Raymarcher
+class LIBPVR_PUBLIC UniformRaymarcher : public Raymarcher
 {
 public:
   

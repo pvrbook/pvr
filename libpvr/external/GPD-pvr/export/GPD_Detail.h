@@ -53,7 +53,11 @@ class GPD_Vertex;
 #include <iosfwd>
 using namespace std;
 
-class GPD_Detail {
+class 
+#ifdef GPD_EXPORTS
+__declspec(dllexport)
+#endif
+GPD_Detail {
 public:
     GPD_Detail();
     virtual ~GPD_Detail();

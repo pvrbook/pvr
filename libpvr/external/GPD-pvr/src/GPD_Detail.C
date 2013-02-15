@@ -374,7 +374,7 @@ GPD_Detail::load(const char *name)
     }
     else
     {
-	ifstream is(name);
+	ifstream is(name,ios::binary);
 	if (!is) return -1;
 	int rcode = load(is);
 	is.close();

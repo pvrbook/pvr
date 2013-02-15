@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_2DPrimNURBCurve.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Vertex.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Util.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_TrimSequence.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_TriMesh.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_TPSurf.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_StreamUtil.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Quadric.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Profiles.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Profile.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimTube.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimTriStrip.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimTriFan.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimTriBezier.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimSphere.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimRBezSurf.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimRBezCurve.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimPoly.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimPart.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimNURBSurf.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimNURBCurve.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimMetaSQuad.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimMetaBall.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimMesh.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Primitive.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimCircle.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Point.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_MetaPrim.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_LinkList.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Hull.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Group.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Face.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Detail.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Attribute.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_2DPrimRBezCurve.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_2DPrimPoly.C">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DPoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_StreamUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_TrimSequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_TriMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_TPSurf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Quadric.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Profiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Profile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimTube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimTriStrip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimTriFan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimTriBezier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimSphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimRBezSurf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimRBezCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimPoly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimPart.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimNURBSurf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimNURBCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimMetaSQuad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimMetaBall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Primitive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimCircle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_MetaPrim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_LinkList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Hull.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Group.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Face.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Detail.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Attribute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DVertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DPrimRBezCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DPrimPoly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DPrimNURBCurve.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9F643E6A-8B4E-4312-8634-33C50D2140BD}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>gpd</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IgnoreImportLibrary>false</IgnoreImportLibrary>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;GPD_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\libpvr\external\GPD-pvr\export</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>$(SolutionDir)\$(Configuration)\gpd.lib</ImportLibrary>
+      <ShowProgress>NotSet</ShowProgress>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;GPD_EXPORTS;SESI_LITTLE_ENDIAN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\libpvr\external\GPD-pvr\export</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_2DPrimNURBCurve.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_2DPrimPoly.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_2DPrimRBezCurve.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Attribute.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Detail.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Face.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Group.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Hull.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_LinkList.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_MetaPrim.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Point.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimCircle.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Primitive.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimMesh.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimMetaBall.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimMetaSQuad.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimNURBCurve.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimNURBSurf.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimPart.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimPoly.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimRBezCurve.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimRBezSurf.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimSphere.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimTriBezier.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimTriFan.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimTriStrip.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_PrimTube.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Profile.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Profiles.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Quadric.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_StreamUtil.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_TPSurf.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_TriMesh.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_TrimSequence.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Util.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\..\libpvr\external\GPD-pvr\src\GPD_Vertex.C">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DPoint.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DPrimNURBCurve.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DPrimPoly.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DPrimRBezCurve.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_2DVertex.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Attribute.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Detail.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Face.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Group.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Hull.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_LinkList.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_MetaPrim.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Point.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimCircle.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Primitive.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimMesh.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimMetaBall.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimMetaSQuad.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimNURBCurve.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimNURBSurf.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimPart.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimPoly.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimRBezCurve.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimRBezSurf.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimSphere.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimTriBezier.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimTriFan.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimTriStrip.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimTube.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_PrimType.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Profile.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Profiles.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Quadric.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_StreamUtil.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_TPSurf.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_TriMesh.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_TrimSequence.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Util.h" />
+    <ClInclude Include="..\..\libpvr\external\GPD-pvr\GPD-pvr\GPD_Vertex.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

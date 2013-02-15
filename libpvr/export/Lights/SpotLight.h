@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Camera.h"
 #include "pvr/Lights/Light.h"
 
@@ -59,7 +60,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class SpotLight : public Light
+class LIBPVR_PUBLIC SpotLight : public Light
 {
 public:
 

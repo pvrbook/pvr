@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Camera.h"
 #include "pvr/DeepImage.h"
 #include "pvr/Renderer.h"
@@ -60,7 +61,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class OtfTransmittanceMapOccluder : public Occluder
+class LIBPVR_PUBLIC OtfTransmittanceMapOccluder : public Occluder
 {
 public:
 

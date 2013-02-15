@@ -41,6 +41,8 @@
 
 #include <Field3D/Log.h>
 
+#include "pvr/export.h"
+
 //----------------------------------------------------------------------------//
 // Namespaces
 //----------------------------------------------------------------------------//
@@ -118,13 +120,13 @@ namespace Log {
   };
   
   //! Prints a log message with severity level
-  void print(const Severity severity, const std::string &msg);
+  void LIBPVR_EXPORT print(const Severity severity, const std::string &msg);
   
   //! Prints a log message at SevMessage level
-  void print(const std::string &msg);
+  void LIBPVR_EXPORT print(const std::string &msg);
   
   //! Prints a log message SevWarning level
-  void warning(const std::string &msg);
+  void LIBPVR_EXPORT warning(const std::string &msg);
   
 }
 

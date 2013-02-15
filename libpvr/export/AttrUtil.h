@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/AttrTable.h"
 #include "pvr/ParamMap.h"
 #include "pvr/Types.h"
@@ -263,7 +264,7 @@ private:
 
 //----------------------------------------------------------------------------//
 
-class AttrVisitor
+class LIBPVR_PUBLIC AttrVisitor
 {
 public:
   
@@ -351,7 +352,7 @@ private:
 //----------------------------------------------------------------------------//
 
 //! No implementation. Specializations only.
-template <typename T>
+template <typename T> 
 void initialize(const AttrTable &points, const Util::ParamMap &globals,
                 Attr<T> &attr);
 

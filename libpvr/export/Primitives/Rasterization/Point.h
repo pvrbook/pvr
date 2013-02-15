@@ -38,6 +38,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/AttrUtil.h"
 #include "pvr/Strings.h"
 #include "pvr/Types.h"
@@ -65,7 +66,7 @@ namespace Rast {
 
 //----------------------------------------------------------------------------//
 
-class Point : public PointBase
+class LIBPVR_PUBLIC Point : public PointBase
 {
 public:
   

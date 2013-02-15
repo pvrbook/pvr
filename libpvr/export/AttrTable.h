@@ -42,6 +42,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Exception.h"
 #include "pvr/Types.h"
 
@@ -134,7 +135,7 @@ private:
 
 //----------------------------------------------------------------------------//
 
-class AttrRef
+class LIBPVR_PUBLIC AttrRef
 {
 public:
 
@@ -195,7 +196,7 @@ private:
 
 //----------------------------------------------------------------------------//
 
-class AttrTable
+class LIBPVR_PUBLIC AttrTable
 {
 public:
   

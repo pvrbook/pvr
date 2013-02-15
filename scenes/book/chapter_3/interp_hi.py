@@ -68,12 +68,12 @@ geo = Geometry()
 geo.setParticles(particles)
 
 # Create the volumetric primitive
-prim = createRasterizationPrim("PyroclasticPoint")
+prim = Prim.Rast.PyroclasticPoint()
 prim.setParams(primParams)
 
 # Create the Modeler
 modeler = Modeler()
-modeler.setMapping(Mapping.MatrixMappingType)
+modeler.setMapping(Mapping.UniformMappingType)
 modeler.setDataStructure(DataStructure.SparseBufferType)
 modeler.setSparseBlockSize(SparseBlockSize.Size16)
 modeler.setCamera(camera)

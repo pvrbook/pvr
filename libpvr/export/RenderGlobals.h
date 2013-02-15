@@ -36,6 +36,7 @@
 
 // Library includes
 
+#include "pvr/AttrTable.h"
 #include "pvr/Exception.h"
 #include "pvr/Types.h"
 
@@ -58,7 +59,7 @@ namespace pvr {
 // RenderGlobals
 //----------------------------------------------------------------------------//
 
-class RenderGlobals 
+class LIBPVR_PUBLIC RenderGlobals 
 {
 public:
   

@@ -111,7 +111,7 @@ AttrVisitor::end(const size_t idx) const
 //----------------------------------------------------------------------------//
 
 //! Specialization for <int>
-template <>
+template <> LIBPVR_EXPORT
 void initialize(const AttrTable &points, const Util::ParamMap &globals,
                 Attr<int> &attr)
 {
@@ -138,7 +138,7 @@ void initialize(const AttrTable &points, const Util::ParamMap &globals,
 //----------------------------------------------------------------------------//
 
 //! Specialization for <float>
-template <>
+template <> LIBPVR_EXPORT
 void initialize(const AttrTable &points, const Util::ParamMap &globals,
                 Attr<float> &attr)
 {
@@ -165,7 +165,7 @@ void initialize(const AttrTable &points, const Util::ParamMap &globals,
 //----------------------------------------------------------------------------//
 
 //! Specialization for <V3f>
-template <>
+template <> LIBPVR_EXPORT
 void initialize(const AttrTable &points, const Util::ParamMap &globals,
                 Attr<Imath::V3f> &attr)
 {

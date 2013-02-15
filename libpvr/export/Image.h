@@ -40,6 +40,7 @@
 
 // Project headers
 
+#include "pvr/export.h"
 #include "pvr/Types.h"
 
 //----------------------------------------------------------------------------//
@@ -64,7 +65,7 @@ namespace Render {
 
 //----------------------------------------------------------------------------//
 
-class Image
+class LIBPVR_PUBLIC Image
 {
 public:
   
@@ -136,7 +137,7 @@ private:
 
 //! Used to conveniently iterate over all the pixels in an image
 //! \note Not a proper STL iterator
-struct Image::pixel_iterator
+struct LIBPVR_PUBLIC Image::pixel_iterator
 {
   // Public methods
   pixel_iterator(Image &image, const size_t xPos, const size_t yPos);

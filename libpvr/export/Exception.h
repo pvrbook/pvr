@@ -68,7 +68,7 @@ public:
   {                                                             \
   public:                                                       \
     explicit name(const std::string &what = "") throw()         \
-      : Exception(std::string(baseErr) + " " + what)            \
+      : Exception(std::string(baseErr).append(" ").append(what))\
     { }                                                         \
     ~name() throw()                                             \
       { }                                                       \
