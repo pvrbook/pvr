@@ -50,6 +50,10 @@ SET_TARGET_PROPERTIES( _pvr PROPERTIES
                         PREFIX ""
                         LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/libpvr/pvr)
 
+IF( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    SET_TARGET_PROPERTIES( _pvr PROPERTIES SUFFIX ".so")
+ENDIF()
+
 TARGET_LINK_LIBRARIES( _pvr pvr
                             ${FIELD3D_LIBRARIES}
                             ${OPENIMAGEIO_LIBRARIES}
