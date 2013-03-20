@@ -36,10 +36,9 @@
 
 // Library headers
 
-#include <boost/shared_ptr.hpp>
-
 #include <Python.h>
 
+#include <boost/shared_ptr.hpp>
 #include <boost/python.hpp>
 #include <boost/python/dict.hpp>
 #include <boost/python/list.hpp>
