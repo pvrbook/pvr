@@ -1,0 +1,28 @@
+# - Find OpenImageIO
+# Find OPENIMAGEIO headers and libraries.
+#
+#  OPENIMAGEIO_INCLUDE_DIRS - where to find OpenImageIO uncludes.
+#  OPENIMAGEIO_LIBRARIES    - List of libraries when using OpenImageIO.
+#  OPENIMAGEIO_FOUND        - True if OpenImageIO found.
+
+# Look for the header file.
+FIND_PATH( OPENIMAGEIO_INCLUDE_DIR NAMES OpenImageIO/imageio.h)
+
+# Look for the library.
+FIND_LIBRARY( OPENIMAGEIO_LIBRARY NAMES OpenImageIO)
+
+# handle the QUIETLY and REQUIRED arguments and set OPENIMAGEIO_FOUND to TRUE if
+# all listed variables are TRUE
+INCLUDE( FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS( OPENIMAGEIO DEFAULT_MSG OPENIMAGEIO_LIBRARY OPENIMAGEIO_INCLUDE_DIR)
+
+# Copy the results to the output variables.
+IF( OPENIMAGEIO_FOUND)
+  SET( OPENIMAGEIO_LIBRARIES ${OPENIMAGEIO_LIBRARY})
+  SET( OPENIMAGEIO_INCLUDE_DIRS ${OPENIMAGEIO_INCLUDE_DIR})
+ELSE()
+  SET( OPENIMAGEIO_LIBRARIES)
+  SET( OPENIMAGEIO_INCLUDE_DIRS)
+ENDIF()
+
+MARK_AS_ADVANCED( OPENIMAGEIO_INCLUDE_DIR OPENIMAGEIO_LIBRARY)

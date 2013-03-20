@@ -27,6 +27,9 @@
 // Includes
 //----------------------------------------------------------------------------//
 
+// Needs to be first, to avoid macro "tolower" passed 2 arguments, on OSX, python 2.7
+#include <Python.h>
+
 // System includes
 
 #include <boost/python.hpp>
