@@ -1,2 +1,11 @@
 
 libpvr/examples/noise_range/noise_range
+
+# Temporary Files
+*.swp
+
+# MacOs Filesystem
+.DS_Store
+
+# Render Products
+*.png 
