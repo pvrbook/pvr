@@ -345,6 +345,7 @@ def defineBoostPythonModule(name, files, env):
 
 def installPyLib(env, lib, files):
     setupBuildOutput(env)
+    os.environ['PVR_PYTHON_PATH'] = "/opt/local/lib/python2.7"
     if "PVR_PYTHON_PATH" not in os.environ.keys():
         print "$PVR_PYTHON_PATH was not set. Can't install."
     installDir = os.environ["PVR_PYTHON_PATH"]
@@ -356,13 +357,15 @@ def installPyLib(env, lib, files):
 
 # ------------------------------------------------------------------------------
 
+# @TODO: no RecursiveLDD.py in the distribution
 def makePyPackage(target, source, env):
     srcName = str(source[0])
-    srcDir = os.path.dirname(srcName)
-    tgtDir = os.path.dirname(str(target[0]))
-    pyFiles = Glob(os.path.join(srcDir, "*.py"))
-    cmd = "RecursiveLdd.py "
-    cmd += srcName + " " + tgtDir
+    # srcDir = os.path.dirname(srcName)
+    # tgtDir = os.path.dirname(str(target[0]))
+    # pyFiles = Glob(os.path.join(srcDir, "*.py"))
+    cmd = "touch %s" % srcName
+    # cmd = "RecursiveLdd.py "
+    # cmd += srcName + " " + tgtDir
     os.system(cmd)
 
 # ------------------------------------------------------------------------------
