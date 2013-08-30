@@ -32,14 +32,13 @@
 
 // System includes
 
-#include <boost/python.hpp>
+#include "Common.h"
 
 // Library includes
 
 #include <pvr/Math.h>
 
-#include "Common.h"
-
+#include <boost/python.hpp>
 //----------------------------------------------------------------------------//
 // Namespaces
 //----------------------------------------------------------------------------//

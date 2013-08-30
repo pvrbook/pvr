@@ -31,6 +31,8 @@
 #include <Python.h>
 
 // System includes
+#include "Common.h"
+
 
 #include <map>
 
@@ -40,8 +42,6 @@
 #include <pvr/Volumes/CompositeVolume.h>
 #include <pvr/Volumes/ConstantVolume.h>
 #include <pvr/Volumes/VoxelVolume.h>
-
-#include "Common.h"
 
 //----------------------------------------------------------------------------//
 // Helper functions

@@ -31,11 +31,11 @@
 //----------------------------------------------------------------------------//
 // Includes
 //----------------------------------------------------------------------------//
+#include <Python.h>
 
 // System headers
 
 // Library headers
-
 #include <Python.h>
 
 #include <boost/shared_ptr.hpp>

@@ -32,14 +32,14 @@
 
 // System includes
 
+#include "Common.h"
+
 #include <map>
 
 // Library includes
 
 #include <pvr/Raymarchers/Raymarcher.h>
 #include <pvr/Raymarchers/UniformRaymarcher.h>
-
-#include "Common.h"
 
 //----------------------------------------------------------------------------//
 // Helper functions

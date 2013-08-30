@@ -32,6 +32,8 @@
 
 // System includes
 
+#include "Common.h"
+
 #include <boost/python.hpp>
 #include <boost/python/reference_existing_object.hpp>
 #include <boost/python/copy_const_reference.hpp>
@@ -43,7 +45,6 @@
 
 #include <pvr/AttrTable.h>
 
-#include "Common.h"
 
 //----------------------------------------------------------------------------//
 // Namespaces

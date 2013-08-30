@@ -32,13 +32,13 @@
 
 // System includes
 
+#include "Common.h"
+
 #include <map>
 
 // Library includes
 
 #include <pvr/VoxelBuffer.h>
-
-#include "Common.h"
 
 //----------------------------------------------------------------------------//
 // Helper functions
