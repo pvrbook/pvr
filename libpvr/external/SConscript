@@ -1,16 +1,18 @@
-import sys
+import sys, os
 sys.path.append("..")
 
-from BuildSupport import *
+from SCons import Script
+
+import BuildSupport
 
 # First, build libs
-SConscript("GPD-pvr/SConscript")
+Script.SConscript("GPD-pvr/SConscript")
 
 # Second, create libs and include dirs
-env = Environment()
+env = Script.Environment()
 
-GPDpath = join("GPD-pvr", installDir(env), "*.a")
-GPDlibs = Glob(GPDpath)
-env.Install(join("libs", variantDir(env)), GPDlibs)
+GPDpath = os.path.join("GPD-pvr", BuildSupport.installDir(env), "*.a")
+GPDlibs = Script.Glob(GPDpath)
+env.Install(os.path.join("libs", BuildSupport.variantDir(env)), GPDlibs)
 
 env.Install("include", "GPD-pvr/install/include/GPD-pvr")

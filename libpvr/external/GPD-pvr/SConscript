@@ -1,12 +1,14 @@
-import sys
+import sys, os
 sys.path.append("../..")
 
-from BuildSupport import *
+from SCons import Script 
+
+import BuildSupport
 
 # ------------------------------------------------------------------------------
 
-libEnv = Environment()
-setupLibBuildEnv(libEnv)
+libEnv = Script.Environment()
+BuildSupport.setupLibBuildEnv(libEnv)
 
 libEnv.Append(CPPDEFINES = ["SESI_LITTLE_ENDIAN"])
 libEnv.Append(CPPPATH = ["export"])
@@ -16,14 +18,14 @@ libEnv.Append(CPPFLAGS = ["-w"])
 
 libEnv.Append(CPPFLAGS = ["-fPIC"])
 
-build = buildDir(libEnv)
-install = join(installDir(libEnv))
+build = BuildSupport.buildDir(libEnv)
+install = os.path.join(BuildSupport.installDir(libEnv))
 
 # Files to build
-files = Glob(join(build, "*.C"))
+files = Script.Glob(os.path.join(build, "*.C"))
 
 # Make lib
-libEnv.Library(join(install, "GPD-pvr"), files)
+libEnv.Library(os.path.join(install, "GPD-pvr"), files)
 
 # Install headers
-libEnv.Install(join("install", "include", "GPD-pvr"), Glob(join("export/*.h")))
+libEnv.Install(os.path.join("install", "include", "GPD-pvr"), Script.Glob(os.path.join("export/*.h")))

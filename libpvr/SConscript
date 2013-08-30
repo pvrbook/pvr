@@ -2,65 +2,71 @@
 # libpvr SConscript
 # ------------------------------------------------------------------------------
 
-from BuildSupport import *
+from SCons import Script
+
+import BuildSupport
+
+import os, sys
 
 # ------------------------------------------------------------------------------
 
-Import("env")
+# scons loads data into the "env" variable
+env = None
+Script.Import("env")
 
 # ------------------------------------------------------------------------------
 # Build libpvr
 # ------------------------------------------------------------------------------
 
 libEnv = env.Clone()
-setupLibBuildEnv(libEnv)
+BuildSupport.setupLibBuildEnv(libEnv)
 
-files = Glob(join(buildDir(libEnv), "*.cpp"))
-files += Glob(join(buildDir(libEnv), "Lights", "*.cpp"))
-files += Glob(join(buildDir(libEnv), "Noise", "*.cpp"))
-files += Glob(join(buildDir(libEnv), "Occluders", "*.cpp"))
-files += Glob(join(buildDir(libEnv), "Primitives", "*.cpp"))
-files += Glob(join(buildDir(libEnv), "Primitives/Rasterization", "*.cpp"))
-files += Glob(join(buildDir(libEnv), "Primitives/Instantiation", "*.cpp"))
-files += Glob(join(buildDir(libEnv), "Raymarchers", "*.cpp"))
-files += Glob(join(buildDir(libEnv), "RaymarchSamplers", "*.cpp"))
-files += Glob(join(buildDir(libEnv), "Volumes", "*.cpp"))
+files = Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "*.cpp"))
+files += Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "Lights", "*.cpp"))
+files += Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "Noise", "*.cpp"))
+files += Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "Occluders", "*.cpp"))
+files += Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "Primitives", "*.cpp"))
+files += Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "Primitives/Rasterization", "*.cpp"))
+files += Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "Primitives/Instantiation", "*.cpp"))
+files += Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "Raymarchers", "*.cpp"))
+files += Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "RaymarchSamplers", "*.cpp"))
+files += Script.Glob(os.path.join(BuildSupport.buildDir(libEnv), "Volumes", "*.cpp"))
 
 # Declare library
-sharedLibPath = join(buildDir(libEnv), pvrName)
+sharedLibPath = os.path.join(BuildSupport.buildDir(libEnv), BuildSupport.pvrName)
 dyLib = libEnv.SharedLibrary(sharedLibPath, files)
 # stLib = libEnv.Library(sharedLibPath, files)
 
 # Set up install area
-headerInstall = setupHeaderInstall(libEnv)
-# stLibInstall = libEnv.Install(join(installDir(), "lib"), [stLib])
+headerInstall = BuildSupport.setupHeaderInstall(libEnv)
+# stLibInstall = libEnv.Install(os.path.join(BuildSupport.installDir(), "lib"), [stLib])
 
 # Set up the dynamic library properly on OSX
 dylibInstall = None
 if sys.platform == "darwin":
     dylibName = os.path.basename(str(dyLib[0]))
-    dylibInstallPath = os.path.abspath(join(installDir(libEnv), "lib", dylibName))
+    dylibInstallPath = os.path.abspath(os.path.join(BuildSupport.installDir(libEnv), "lib", dylibName))
     # Create the builder
     dylibEnv = env.Clone()
-    dylibBuilder = Builder(action = setDylibInternalPath,
+    dylibBuilder = Script.Builder(action = BuildSupport.setDylibInternalPath,
                            suffix = ".dylib", src_suffix = ".dylib")
     dylibEnv.Append(BUILDERS = {"SetDylibPath" : dylibBuilder})
     # Call builder
     dyLibInstall = dylibEnv.SetDylibPath(dylibInstallPath, dyLib)
 else:
-    dyLibInstall = libEnv.Install(join(installDir(libEnv), "lib"), [dyLib])
+    dyLibInstall = libEnv.Install(os.path.join(BuildSupport.installDir(libEnv), "lib"), [dyLib])
 
 # ------------------------------------------------------------------------------
 # Set up python library
 # ------------------------------------------------------------------------------
 
 pyEnv = env.Clone()
-setupPyEnv(pyEnv)
-pyFiles = Glob(join(buildDir(pyEnv), pythonVer(), "*.cpp"))
-pyLib = defineBoostPythonModule(pvrName, pyFiles, pyEnv)
-pyFiles = Glob(join(python, pvrName, "*.py"))
-pyLibInstall = env.Install(join(installDir(pyEnv), pythonVer(), pvrName), pyLib)
-pyFilesInstall = env.Install(join(installDir(pyEnv), pythonVer(), pvrName), pyFiles)
+BuildSupport.setupPyEnv(pyEnv)
+pyFiles = Script.Glob(os.path.join(BuildSupport.buildDir(pyEnv), BuildSupport.pythonVer(), "*.cpp"))
+pyLib = BuildSupport.defineBoostPythonModule(BuildSupport.pvrName, pyFiles, pyEnv)
+pyFiles = Script.Glob(os.path.join(BuildSupport.python, BuildSupport.pvrName, "*.py"))
+pyLibInstall = env.Install(os.path.join(BuildSupport.installDir(pyEnv), BuildSupport.pythonVer(), BuildSupport.pvrName), pyLib)
+pyFilesInstall = env.Install(os.path.join(BuildSupport.installDir(pyEnv), BuildSupport.pythonVer(), BuildSupport.pvrName), pyFiles)
 env.Depends(pyLib, dyLibInstall)
 env.Depends(pyLib, headerInstall)
 
@@ -68,25 +74,26 @@ env.Depends(pyLib, headerInstall)
 # Install
 # ------------------------------------------------------------------------------
 
-pyInstall = installPyLib(env, pyLib, pyFiles)
-Depends(pyInstall, pyLibInstall)
-Depends(pyInstall, pyFilesInstall)
+pyInstall = BuildSupport.installPyLib(env, pyLib, pyFiles)
+Script.Depends(pyInstall, pyLibInstall)
+Script.Depends(pyInstall, pyFilesInstall)
 
 # ------------------------------------------------------------------------------
 # Py package
 # ------------------------------------------------------------------------------
 
+# @TODO: looks kind of broken?
 pkgEnv = env.Clone()
-pkgDir = join(installDir(pkgEnv), pythonVer() + "_package")
-pkgFile = join(pkgDir, pvrName, "_" + pvrName + ".so")
-pkgBuilder = Builder(action = makePyPackage,
+pkgDir = os.path.join(BuildSupport.installDir(pkgEnv), BuildSupport.pythonVer() + "_package")
+pkgFile = os.path.join(pkgDir, BuildSupport.pvrName, "_" + BuildSupport.pvrName + ".so")
+pkgBuilder = Script.Builder(action = BuildSupport.makePyPackage,
                      suffix = "", src_suffix = ".so")
 pkgEnv.Append(BUILDERS = {"MakePyPackage" : pkgBuilder})
 pyPackage = pkgEnv.MakePyPackage(pkgFile, pyLibInstall)
-pyFilesPackageInstall = pkgEnv.Install(join(pkgDir, pvrName), pyFiles)
-Depends(pyPackage, pyLibInstall)
-Depends(pyPackage, pyFilesInstall)
-Depends(pyPackage, pyFilesPackageInstall)
+pyFilesPackageInstall = pkgEnv.Install(os.path.join(pkgDir, BuildSupport.pvrName), pyFiles)
+Script.Depends(pyPackage, pyLibInstall)
+Script.Depends(pyPackage, pyFilesInstall)
+Script.Depends(pyPackage, pyFilesPackageInstall)
 
 # ------------------------------------------------------------------------------
 # Default targets
