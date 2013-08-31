@@ -2,7 +2,7 @@
 # renderers.py
 # ------------------------------------------------------------------------------
 
-from pvr import *
+import pvr
 
 # ------------------------------------------------------------------------------
 
@@ -20,9 +20,9 @@ def standard(params):
     p = __stdRaymarcherParams.copy()
     p.update(params)
     # Set up Renderer
-    renderer = Renderer()
-    sampler = PhysicalSampler()
-    raymarcher = UniformRaymarcher()
+    renderer = pvr.Renderer()
+    sampler = pvr.PhysicalSampler()
+    raymarcher = pvr.UniformRaymarcher()
     raymarcher.setRaymarchSampler(sampler)
     raymarcher.setParams(p)
     renderer.setRaymarcher(raymarcher)

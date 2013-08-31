@@ -2,61 +2,61 @@
 # lights.py
 # ------------------------------------------------------------------------------
 
-from math import radians, degrees
+from math import radians
 
-from pvr import *
+import pvr, imath
 
 # ------------------------------------------------------------------------------
 
 __stdKeyLight = {
-    "position" : V3f(-10, 10, 10),
-    "rotation" : V3f(-35.0, -45.0, 0.0),
+    "position" : imath.V3f(-10, 10, 10),
+    "rotation" : imath.V3f(-35.0, -45.0, 0.0),
     "fov" : 20.0, 
-    "intensity" : Color(0.5)
+    "intensity" : pvr.Color(0.5)
     }
 
 __stdFillLight = {
-    "position" : V3f(10, 5, 10),
-    "rotation" : V3f(-19, 45.0, 0.0),
+    "position" : imath.V3f(10, 5, 10),
+    "rotation" : imath.V3f(-19, 45.0, 0.0),
     "fov" : 20.0, 
-    "intensity" : Color(0.06)
+    "intensity" : pvr.Color(0.06)
     }
 
 __stdRimLight = {
-    "position" : V3f(10, 10, -10),
-    "rotation" : V3f(-35, 135, 0.0),
+    "position" : imath.V3f(10, 10, -10),
+    "rotation" : imath.V3f(-35, 135, 0.0),
     "fov" : 20.0, 
-    "intensity" : Color(0.125)
+    "intensity" : pvr.Color(0.125)
     }
 
 __stdBehindLight = {
-    "position" : V3f(0, 0, -20),
-    "rotation" : V3f(0, 180, 0.0),
+    "position" : imath.V3f(0, 0, -20),
+    "rotation" : imath.V3f(0, 180, 0.0),
     "fov" : 20.0, 
-    "intensity" : Color(1.0)
+    "intensity" : pvr.Color(1.0)
     }
 
 __stdRightLight = {
-    "position" : V3f(10, 0, 0),
-    "rotation" : V3f(0.0, 90.0, 0.0),
+    "position" : imath.V3f(10, 0, 0),
+    "rotation" : imath.V3f(0.0, 90.0, 0.0),
     "fov" : 20.0, 
-    "intensity" : Color(1.0)
+    "intensity" : pvr.Color(1.0)
     }
 
-__defaultOccluder = OtfTransmittanceMapOccluder
+__defaultOccluder = pvr.OtfTransmittanceMapOccluder
 
-__defaultLight = SpotLight
+__defaultLight = pvr.SpotLight
 
 # ------------------------------------------------------------------------------
 
 def makePointLight(renderer, parms, resMult, occlType):
-    light = PointLight()
-    cam = SphericalCamera()
+    light = pvr.PointLight()
+    cam = pvr.SphericalCamera()
     # Position
     light.setPosition(parms["position"])
     cam.setPosition(parms["position"])
     # Resolution
-    resolution = V2i(int(2048 * resMult), int(1024 * resMult))
+    resolution = imath.V2i(int(2048 * resMult), int(1024 * resMult))
     cam.setResolution(resolution)
     # Intensity
     light.setIntensity(parms["intensity"])
@@ -66,38 +66,38 @@ def makePointLight(renderer, parms, resMult, occlType):
         numSamples = parms["num_samples"]
     # Occluder
     occluder = None
-    if occlType == TransmittanceMapOccluder:
-        occluder = TransmittanceMapOccluder(renderer, cam, numSamples)
-    elif occlType == OtfTransmittanceMapOccluder:
-        occluder = OtfTransmittanceMapOccluder(renderer, cam, numSamples)
-    elif occlType == VoxelOccluder:
-        occluder = VoxelOccluder(renderer, parms["position"], 
+    if occlType == pvr.TransmittanceMapOccluder:
+        occluder = pvr.TransmittanceMapOccluder(renderer, cam, numSamples)
+    elif occlType == pvr.OtfTransmittanceMapOccluder:
+        occluder = pvr.OtfTransmittanceMapOccluder(renderer, cam, numSamples)
+    elif occlType == pvr.VoxelOccluder:
+        occluder = pvr.VoxelOccluder(renderer, parms["position"], 
                                  int(256 * resMult))
-    elif occlType == OtfVoxelOccluder:
-        occluder = OtfVoxelOccluder(renderer, parms["position"], 
+    elif occlType == pvr.OtfVoxelOccluder:
+        occluder = pvr.OtfVoxelOccluder(renderer, parms["position"], 
                                     int(256 * resMult))
-    elif occlType == RaymarchOccluder:
-        occluder = RaymarchOccluder(renderer)
+    elif occlType == pvr.RaymarchOccluder:
+        occluder = pvr.RaymarchOccluder(renderer)
     else:
-        occluder = NullOccluder()
+        occluder = pvr.NullOccluder()
     light.setOccluder(occluder)
     return light
 
 # ------------------------------------------------------------------------------
 
 def makeSpotLight(renderer, parms, resMult, occlType):
-    light = SpotLight()
-    cam = PerspectiveCamera()
+    light = pvr.SpotLight()
+    cam = pvr.PerspectiveCamera()
     # Position
     cam.setPosition(parms["position"])
     # Orientation
     angles = parms["rotation"]
-    euler = Euler(radians(angles.x), radians(angles.y), radians(angles.z))
-    cam.setOrientation(euler.toQuat())
+    pvr.euler = pvr.Euler(radians(angles.x), radians(angles.y), radians(angles.z))
+    cam.setOrientation(pvr.euler.toQuat())
     # FOV
     cam.setVerticalFOV(parms["fov"])
     # Resolution
-    resolution = V2i(int(1024 * resMult), int(1024 * resMult))
+    resolution = imath.V2i(int(1024 * resMult), int(1024 * resMult))
     cam.setResolution(resolution)
     # Intensity
     light.setIntensity(parms["intensity"])
@@ -109,29 +109,29 @@ def makeSpotLight(renderer, parms, resMult, occlType):
         numSamples = parms["num_samples"]
     # Occluder
     occluder = None
-    if occlType == TransmittanceMapOccluder:
-        occluder = TransmittanceMapOccluder(renderer, cam, numSamples)
-    elif occlType == OtfTransmittanceMapOccluder:
-        occluder = OtfTransmittanceMapOccluder(renderer, cam, numSamples)
-    elif occlType == VoxelOccluder:
-        occluder = VoxelOccluder(renderer, parms["position"], 
+    if occlType == pvr.TransmittanceMapOccluder:
+        occluder = pvr.TransmittanceMapOccluder(renderer, cam, numSamples)
+    elif occlType == pvr.OtfTransmittanceMapOccluder:
+        occluder = pvr.OtfTransmittanceMapOccluder(renderer, cam, numSamples)
+    elif occlType == pvr.VoxelOccluder:
+        occluder = pvr.VoxelOccluder(renderer, parms["position"], 
                                  int(256 * resMult))
-    elif occlType == OtfVoxelOccluder:
-        occluder = OtfVoxelOccluder(renderer, parms["position"], 
+    elif occlType == pvr.OtfVoxelOccluder:
+        occluder = pvr.OtfVoxelOccluder(renderer, parms["position"], 
                                     int(256 * resMult))
-    elif occlType == RaymarchOccluder:
-        occluder = RaymarchOccluder(renderer)
+    elif occlType == pvr.RaymarchOccluder:
+        occluder = pvr.RaymarchOccluder(renderer)
     else:
-        occluder = NullOccluder()
+        occluder = pvr.NullOccluder()
     light.setOccluder(occluder)
     return light
 
 # ------------------------------------------------------------------------------
 
 def makeLight(renderer, parms, resMult, occlType, lightType):
-    if lightType == SpotLight:
+    if lightType == pvr.SpotLight:
         return makeSpotLight(renderer, parms, resMult, occlType)
-    elif lightType == PointLight:
+    elif lightType == pvr.PointLight:
         return makePointLight(renderer, parms, resMult, occlType)
     else:
         print "Unrecognized light type in makeLight()"
