@@ -49,6 +49,17 @@ __defaultLight = pvr.SpotLight
 
 # ------------------------------------------------------------------------------
 
+OCCLUDER_MAP = {
+    pvr.TransmittanceMapOccluder : lambda renderer, cam, numSamples, _, __: 
+        pvr.TransmittanceMapOccluder(renderer, cam, numSamples),
+    pvr.OtfTransmittanceMapOccluder : lambda renderer, cam, numSamples, _, __:
+        pvr.OtfTransmittanceMapOccluder(renderer, cam, numSamples),
+    pvr.VoxelOccluder: lambda renderer, _, __, parms, resMult:
+        pvr.VoxelOccluder(renderer, parms['position'], int(256* resMult)),
+    pvr.RaymarchOccluder : lambda renderer, _, __, ___, ____:
+        pvr.RaymarchOccluder(renderer),
+}
+
 def makePointLight(renderer, parms, resMult, occlType):
     light = pvr.PointLight()
     cam = pvr.SphericalCamera()
@@ -60,26 +71,14 @@ def makePointLight(renderer, parms, resMult, occlType):
     cam.setResolution(resolution)
     # Intensity
     light.setIntensity(parms["intensity"])
+
     # Number of samples
-    numSamples = 32
-    if "num_samples" in parms.keys():
-        numSamples = parms["num_samples"]
+    numSamples = parms.get("num_samples", 32)
+
     # Occluder
-    occluder = None
-    if occlType == pvr.TransmittanceMapOccluder:
-        occluder = pvr.TransmittanceMapOccluder(renderer, cam, numSamples)
-    elif occlType == pvr.OtfTransmittanceMapOccluder:
-        occluder = pvr.OtfTransmittanceMapOccluder(renderer, cam, numSamples)
-    elif occlType == pvr.VoxelOccluder:
-        occluder = pvr.VoxelOccluder(renderer, parms["position"], 
-                                 int(256 * resMult))
-    elif occlType == pvr.OtfVoxelOccluder:
-        occluder = pvr.OtfVoxelOccluder(renderer, parms["position"], 
-                                    int(256 * resMult))
-    elif occlType == pvr.RaymarchOccluder:
-        occluder = pvr.RaymarchOccluder(renderer)
-    else:
-        occluder = pvr.NullOccluder()
+    occluder = OCCLUDER_MAP.get(occlType, lambda *args: pvr.NullOccluder())(
+            renderer, cam, numSamples, parms, resMult)
+
     light.setOccluder(occluder)
     return light
 
@@ -104,37 +103,26 @@ def makeSpotLight(renderer, parms, resMult, occlType):
     # Camera
     light.setCamera(cam)
     # Number of samples
-    numSamples = 32
-    if "num_samples" in parms.keys():
-        numSamples = parms["num_samples"]
+    numSamples = parms.get("num_samples", 32)
+
     # Occluder
-    occluder = None
-    if occlType == pvr.TransmittanceMapOccluder:
-        occluder = pvr.TransmittanceMapOccluder(renderer, cam, numSamples)
-    elif occlType == pvr.OtfTransmittanceMapOccluder:
-        occluder = pvr.OtfTransmittanceMapOccluder(renderer, cam, numSamples)
-    elif occlType == pvr.VoxelOccluder:
-        occluder = pvr.VoxelOccluder(renderer, parms["position"], 
-                                 int(256 * resMult))
-    elif occlType == pvr.OtfVoxelOccluder:
-        occluder = pvr.OtfVoxelOccluder(renderer, parms["position"], 
-                                    int(256 * resMult))
-    elif occlType == pvr.RaymarchOccluder:
-        occluder = pvr.RaymarchOccluder(renderer)
-    else:
-        occluder = pvr.NullOccluder()
+    occluder = OCCLUDER_MAP.get(occlType, lambda *args: pvr.NullOccluder())(
+            renderer, cam, numSamples, parms, resMult)
+
     light.setOccluder(occluder)
     return light
 
 # ------------------------------------------------------------------------------
+LIGHT_MAP = {
+    pvr.SpotLight : makeSpotLight,
+    pvr.PointLight: makePointLight,
+}
 
 def makeLight(renderer, parms, resMult, occlType, lightType):
-    if lightType == pvr.SpotLight:
-        return makeSpotLight(renderer, parms, resMult, occlType)
-    elif lightType == pvr.PointLight:
-        return makePointLight(renderer, parms, resMult, occlType)
-    else:
-        print "Unrecognized light type in makeLight()"
+    try:
+        LIGHT_MAP[lightType](renderer, parms, resMult, occlType)
+    except KeyError:
+        print "Unrecognized light type (%s) in makeLight()" % lightType
 
 # ------------------------------------------------------------------------------
 
