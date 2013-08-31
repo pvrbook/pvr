@@ -8,7 +8,9 @@ pathToRoot = "../.."
 
 import sys
 sys.path.append(pathToRoot)
-from BuildSupport import *
+import BuildSupport
 
-env = Environment()
-makeSimpleProgram(env, pathToRoot, program, srcDir)
+from SCons import Script
+
+env = BuildSupport.Environment()
+Script.makeSimpleProgram(env, pathToRoot, program, srcDir)

@@ -5,10 +5,11 @@ srcDir     = "src"
 pathToRoot = "../.."
 
 # Standard script below
+from SCons import Script
 
 import sys
 sys.path.append(pathToRoot)
-from BuildSupport import *
+import BuildSupport
 
-env = Environment()
-makeSimpleProgram(env, pathToRoot, program, srcDir)
+env = Script.Environment()
+BuildSupport.makeSimpleProgram(env, pathToRoot, program, srcDir)
