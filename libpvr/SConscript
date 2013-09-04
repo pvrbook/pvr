@@ -79,36 +79,12 @@ Script.Depends(pyInstall, pyLibInstall)
 Script.Depends(pyInstall, pyFilesInstall)
 
 # ------------------------------------------------------------------------------
-# Py package
-# ------------------------------------------------------------------------------
-
-# @TODO: looks kind of broken?
-pkgEnv = env.Clone()
-pkgDir = os.path.join(BuildSupport.installDir(pkgEnv), BuildSupport.pythonVer() + "_package")
-pkgFile = os.path.join(pkgDir, BuildSupport.pvrName, "_" + BuildSupport.pvrName + ".so")
-pkgBuilder = Script.Builder(action = BuildSupport.makePyPackage,
-                     suffix = "", src_suffix = ".so")
-pkgEnv.Append(BUILDERS = {"MakePyPackage" : pkgBuilder})
-pyPackage = pkgEnv.MakePyPackage(pkgFile, pyLibInstall)
-pyFilesPackageInstall = pkgEnv.Install(os.path.join(pkgDir, BuildSupport.pvrName), pyFiles)
-Script.Depends(pyPackage, pyLibInstall)
-Script.Depends(pyPackage, pyFilesInstall)
-Script.Depends(pyPackage, pyFilesPackageInstall)
-
-# ------------------------------------------------------------------------------
-# Default targets
-# ------------------------------------------------------------------------------
-
-
-
-# ------------------------------------------------------------------------------
 # Aliases
 # ------------------------------------------------------------------------------
 
 env.Alias("lib", [headerInstall, dyLibInstall])
 env.Alias("pylib", [pyLibInstall, pyFilesInstall])
 env.Alias("pyinstall", pyInstall)
-env.Alias("pypackage", pyPackage)
 
 # ------------------------------------------------------------------------------
 # Help

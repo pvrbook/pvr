@@ -357,19 +357,6 @@ def installPyLib(env, lib, files):
 
 # ------------------------------------------------------------------------------
 
-# @TODO: no RecursiveLDD.py in the distribution
-def makePyPackage(target, source, env):
-    srcName = str(source[0])
-    # srcDir = os.path.dirname(srcName)
-    # tgtDir = os.path.dirname(str(target[0]))
-    # pyFiles = Script.Glob(os.path.os.path.join(srcDir, "*.py"))
-    cmd = "touch %s" % srcName
-    # cmd = "RecursiveLdd.py "
-    # cmd += srcName + " " + tgtDir
-    os.system(cmd)
-
-# ------------------------------------------------------------------------------
-
 def makeSimpleProgram(env, pathToRoot, program, srcDir):
     setupEnv(env, pathToRoot)
     addLibPVR(env, pathToRoot)
