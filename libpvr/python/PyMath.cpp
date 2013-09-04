@@ -32,8 +32,6 @@
 
 // System includes
 
-#include "Common.h"
-
 // Library includes
 
 #include <pvr/Math.h>
