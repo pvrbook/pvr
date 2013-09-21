@@ -345,7 +345,6 @@ def defineBoostPythonModule(name, files, env):
 
 def installPyLib(env, lib, files):
     setupBuildOutput(env)
-    os.environ['PVR_PYTHON_PATH'] = "/opt/local/lib/python2.7"
     if "PVR_PYTHON_PATH" not in os.environ.keys():
         print "$PVR_PYTHON_PATH was not set. Can't install."
     installDir = os.environ["PVR_PYTHON_PATH"]

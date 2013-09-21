@@ -4,7 +4,7 @@
 
 from math import radians, degrees
 
-import pvr, imath
+import pvr
 
 # ------------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ def makeCamera(filename, mult = 1.0):
     code = "\n".join(open(filename).readlines())
     cam = eval(code)
     # Get static parameters
-    res = imath.V2i(int(cam["resx"] * mult), int(cam["resy"] * mult))
+    res = pvr.V2i(int(cam["resx"] * mult), int(cam["resy"] * mult))
     # Get (potentially) time varying parameters
     t0 = cam
     t1 = cam
@@ -60,7 +60,7 @@ def makeLights(filename, renderer, mult = 1.0):
         # Name
         pvr.logPrint("Adding light " + lParms["name"])
         # Parms
-        res = imath.V2i(int(lParms["resx"] * mult), int(lParms["resy"] * mult))
+        res = pvr.V2i(int(lParms["resx"] * mult), int(lParms["resy"] * mult))
         pos = pvr.Vector(lParms["tx"], lParms["ty"], lParms["tz"])
         euler = pvr.Euler(radians(lParms["rx"]), 
                       radians(lParms["ry"]), 

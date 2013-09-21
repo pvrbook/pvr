@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+import os
+
 from pvr import *
 
 # Modeling classes
@@ -61,5 +63,8 @@ renderer.printSceneInfo()
 renderer.execute()
 
 # Save image to disk
+if not os.path.exists("out"):
+    os.mkdir("out")
+renderer.saveImage("out/image.exr")
 renderer.saveImage("out/image.png")
 

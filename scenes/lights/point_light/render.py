@@ -11,9 +11,6 @@ from math import sin, cos
 
 import pvr
 
-
-import imath
-
 # ------------------------------------------------------------------------------
 # Settings
 # ------------------------------------------------------------------------------
@@ -58,30 +55,30 @@ renderer.setCamera(camera)
 c = pvr.CompositeVolume()
 
 for i in range(0, 25):
-    s = imath.V3f(uniform(0.4, 0.8))
+    s = pvr.V3f(uniform(0.4, 0.8))
     r = pvr.Euler(random() * 180, random() * 180, random() * 180)
     rho = uniform(0.5, 1.0) * 1.6
     phi = uniform(-3.14, 3.14)
     theta = uniform(0.0, 3.14)
-    t = imath.V3f(rho * cos(phi) * sin(theta),
+    t = pvr.V3f(rho * cos(phi) * sin(theta),
             rho * cos(theta),
             rho * sin(phi) * sin(theta))
     lsToWs = pvr.trsTransform(t, r, s)
     volume = pvr.ConstantVolume(lsToWs)
-    volume.addAttribute("scattering", imath.V3f(1, 2, 4) * 4)
+    volume.addAttribute("scattering", pvr.V3f(1, 2, 4) * 4)
     c.add(volume)
 
-volume = pvr.ConstantVolume(pvr.trsTransform(imath.V3f(0.0), pvr.Euler(), imath.V3f(10.0)))
-volume.addAttribute("scattering", imath.V3f(0.1))
+volume = pvr.ConstantVolume(pvr.trsTransform(pvr.V3f(0.0), pvr.Euler(), pvr.V3f(10.0)))
+volume.addAttribute("scattering", pvr.V3f(0.1))
 c.add(volume)
 
 renderer.addVolume(c)
 
 # Lights
 lightParms = {
-    "position" : imath.V3f(0.0), 
+    "position" : pvr.V3f(0.0), 
     "intensity" : pvr.Color(2.0),
-    "rotation" : imath.V3f(0.0, 90.0, 0.0),
+    "rotation" : pvr.V3f(0.0, 90.0, 0.0),
     "fov" : 170.0,
     "num_samples" : 128
 }

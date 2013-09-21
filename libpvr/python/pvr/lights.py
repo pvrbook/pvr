@@ -4,41 +4,41 @@
 
 from math import radians
 
-import pvr, imath
+import pvr
 
 # ------------------------------------------------------------------------------
 
 __stdKeyLight = {
-    "position" : imath.V3f(-10, 10, 10),
-    "rotation" : imath.V3f(-35.0, -45.0, 0.0),
+    "position" : pvr.V3f(-10, 10, 10),
+    "rotation" : pvr.V3f(-35.0, -45.0, 0.0),
     "fov" : 20.0, 
     "intensity" : pvr.Color(0.5)
     }
 
 __stdFillLight = {
-    "position" : imath.V3f(10, 5, 10),
-    "rotation" : imath.V3f(-19, 45.0, 0.0),
+    "position" : pvr.V3f(10, 5, 10),
+    "rotation" : pvr.V3f(-19, 45.0, 0.0),
     "fov" : 20.0, 
     "intensity" : pvr.Color(0.06)
     }
 
 __stdRimLight = {
-    "position" : imath.V3f(10, 10, -10),
-    "rotation" : imath.V3f(-35, 135, 0.0),
+    "position" : pvr.V3f(10, 10, -10),
+    "rotation" : pvr.V3f(-35, 135, 0.0),
     "fov" : 20.0, 
     "intensity" : pvr.Color(0.125)
     }
 
 __stdBehindLight = {
-    "position" : imath.V3f(0, 0, -20),
-    "rotation" : imath.V3f(0, 180, 0.0),
+    "position" : pvr.V3f(0, 0, -20),
+    "rotation" : pvr.V3f(0, 180, 0.0),
     "fov" : 20.0, 
     "intensity" : pvr.Color(1.0)
     }
 
 __stdRightLight = {
-    "position" : imath.V3f(10, 0, 0),
-    "rotation" : imath.V3f(0.0, 90.0, 0.0),
+    "position" : pvr.V3f(10, 0, 0),
+    "rotation" : pvr.V3f(0.0, 90.0, 0.0),
     "fov" : 20.0, 
     "intensity" : pvr.Color(1.0)
     }
@@ -55,7 +55,9 @@ OCCLUDER_MAP = {
     pvr.OtfTransmittanceMapOccluder : lambda renderer, cam, numSamples, _, __:
         pvr.OtfTransmittanceMapOccluder(renderer, cam, numSamples),
     pvr.VoxelOccluder: lambda renderer, _, __, parms, resMult:
-        pvr.VoxelOccluder(renderer, parms['position'], int(256* resMult)),
+        pvr.VoxelOccluder(renderer, parms['position'], int(256 * resMult)),
+    pvr.OtfVoxelOccluder: lambda renderer, _, __, parms, resMult:
+        pvr.OtfVoxelOccluder(renderer, parms['position'], int(256 * resMult)), 
     pvr.RaymarchOccluder : lambda renderer, _, __, ___, ____:
         pvr.RaymarchOccluder(renderer),
 }
@@ -67,7 +69,7 @@ def makePointLight(renderer, parms, resMult, occlType):
     light.setPosition(parms["position"])
     cam.setPosition(parms["position"])
     # Resolution
-    resolution = imath.V2i(int(2048 * resMult), int(1024 * resMult))
+    resolution = pvr.V2i(int(2048 * resMult), int(1024 * resMult))
     cam.setResolution(resolution)
     # Intensity
     light.setIntensity(parms["intensity"])
@@ -77,7 +79,7 @@ def makePointLight(renderer, parms, resMult, occlType):
 
     # Occluder
     occluder = OCCLUDER_MAP.get(occlType, lambda *args: pvr.NullOccluder())(
-            renderer, cam, numSamples, parms, resMult)
+        renderer, cam, numSamples, parms, resMult)
 
     light.setOccluder(occluder)
     return light
@@ -96,7 +98,7 @@ def makeSpotLight(renderer, parms, resMult, occlType):
     # FOV
     cam.setVerticalFOV(parms["fov"])
     # Resolution
-    resolution = imath.V2i(int(1024 * resMult), int(1024 * resMult))
+    resolution = pvr.V2i(int(1024 * resMult), int(1024 * resMult))
     cam.setResolution(resolution)
     # Intensity
     light.setIntensity(parms["intensity"])
@@ -113,6 +115,7 @@ def makeSpotLight(renderer, parms, resMult, occlType):
     return light
 
 # ------------------------------------------------------------------------------
+
 LIGHT_MAP = {
     pvr.SpotLight : makeSpotLight,
     pvr.PointLight: makePointLight,
@@ -120,7 +123,7 @@ LIGHT_MAP = {
 
 def makeLight(renderer, parms, resMult, occlType, lightType):
     try:
-        LIGHT_MAP[lightType](renderer, parms, resMult, occlType)
+        return LIGHT_MAP[lightType](renderer, parms, resMult, occlType)
     except KeyError:
         print "Unrecognized light type (%s) in makeLight()" % lightType
 
