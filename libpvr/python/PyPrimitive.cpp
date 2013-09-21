@@ -58,6 +58,8 @@
 #include <pvr/Primitives/Rasterization/Line.h>
 #include <pvr/Primitives/Rasterization/PyroclasticLine.h>
 
+#include "Common.h"
+
 //----------------------------------------------------------------------------//
 // Helper functions
 //----------------------------------------------------------------------------//

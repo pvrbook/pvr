@@ -41,6 +41,8 @@
 #include <pvr/Volumes/ConstantVolume.h>
 #include <pvr/Volumes/VoxelVolume.h>
 
+#include "Common.h"
+
 //----------------------------------------------------------------------------//
 // Helper functions
 //----------------------------------------------------------------------------//

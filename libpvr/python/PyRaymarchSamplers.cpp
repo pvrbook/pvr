@@ -40,6 +40,8 @@
 #include <pvr/RaymarchSamplers/DensitySampler.h>
 #include <pvr/RaymarchSamplers/PhysicalSampler.h>
 
+#include "Common.h"
+
 //----------------------------------------------------------------------------//
 // Helper functions
 //----------------------------------------------------------------------------//

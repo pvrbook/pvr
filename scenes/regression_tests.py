@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import os, sys
+import os, platform, sys
 from optparse import OptionParser
 
 # Settings ------------
@@ -42,9 +42,15 @@ def runTest(dir):
     print ""
     scriptPath = os.path.join(dir, "render.py")
     if os.path.exists(scriptPath):
-        cmd = "cd " + dir
-        os.system(cmd)
-        result = os.system("render.py")
+        result = None
+        if platform.system() == 'Windows':
+            cmd = "cd " + dir
+            os.system(cmd)
+            result = os.system("render.py")
+        else:
+            cmd = "cd " + dir + "; "
+            cmd += "./render.py"
+            result = os.system(cmd)
         if result != 0:
             raise TestFail(dir, "Bad return code")
 
