@@ -105,10 +105,10 @@ sudo emacs /System/Library/Frameworks/Python.framework/Versions/2.6/Headers/pypo
 Some Gentoo files are named different from what is assumed in the pvr
 installation scripts, minor modifications are required:
 
-First we need to define the installation directory.  The following
-example assumes that python2.7 is installed and will place everything into
-pvr_dir/libpvr/install/linux2/g++/m64/release/python26/pvr:
+The following example assumes python2.7 installation and will place everything
+into pvr_dir/libpvr/install/linux2/g++/m64/release/python26/pvr.
 
+First we need to define the directory where the python library will be installed:
 $ cd pvr_dir/libpvr
 $ export PVR_PYTHON_PATH="."
 
@@ -119,5 +119,8 @@ $ sudo ln -s ./libboost_python-2.7.so ./libboost_python.so
 $ sudo ln -s ./libpython2.7.so ./libpython2.6.so
 $ sudo ln -s pvr_dir/libpvr.so ./libpvr.so
 
+Now things should get built.  Proceed as described in "Building PVR" section.
+
+Finally, after the pvr pylib is built and installed, create a symlink to it:
 $ cd /usr/lib/python2.7
 $ sudo ln -s pvr_dir/libpvr/install/linux2/g++/m64/release/python26/pvr/ ./pvr
