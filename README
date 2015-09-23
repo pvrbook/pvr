@@ -98,3 +98,24 @@ sudo emacs /System/Library/Frameworks/Python.framework/Versions/2.6/Headers/pypo
  #endif
 +#endif
 
+##############################
+### Building on GNU/Gentoo ###
+##############################
+
+Some Gentoo files are named different from what is assumed in the pvr
+installation scripts, minor modifications are required:
+
+First we need to define the installation directory.  The following
+example will place everything into
+pvr_dir/libpvr/install/linux2/g++/m64/release/python26/pvr:
+
+$ cd pvr_dir/libpvr
+$ export PVR_PYTHON_PATH="."
+
+Next we need to create a few symbolic links to satisfy dependencies:
+$ cd /usr/lib
+$ sudo ln -s ./libboost_python-2.7.so ./libboost_python.so
+$ sudo ln -s ./libpython2.7.so ./libpython2.6.so
+
+$ cd /usr/lib/python2.7
+$ sudo ln -s /home/madjestic/Projects/pvr/libpvr.so ./libpvr.so
